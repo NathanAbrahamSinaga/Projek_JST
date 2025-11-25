@@ -315,7 +315,7 @@
             {
                 name: "Eksperimen 1", role: "Tugas: Data Mentah (Raw)",
                 features: "followers_count, friends_count, post_count",
-                origin: "Data Asli (Raw)",
+                origin: "Data asli (tanpa transformasi)",
                 guide: `
                     <h4>1. Misi Kamu</h4>
                     <p>Kamu adalah patokan (Baseline). Tugasmu cuma satu: Cek apakah Perceptron bisa pintar cuma dengan dikasih data mentah (Followers, Friends, Post) tanpa diapa-apain.</p>
@@ -335,7 +335,7 @@
             {
                 name: "Eksperimen 2", role: "Tugas: Profil & Umur",
                 features: "account_age_years, verified, default_profile_image",
-                origin: "Python: df['account_age_years']",
+                origin: "account_age_years = tahun sekarang - created_at",
                 guide: `
                     <h4>1. Misi Kamu</h4>
                     <p>Kamu fokus deteksi akun bodong dari profilnya. Gak perlu liat follower. Cukup liat umur akun dan fotonya.</p>
@@ -355,7 +355,7 @@
             {
                 name: "Eksperimen 3", role: "Tugas: Bahasa & Background",
                 features: "lang, profile_use_background_image, verified",
-                origin: "Python: Encoding & Biner",
+                origin: "lang = label encoding dari kode bahasa",
                 guide: `
                     <h4>1. Misi Kamu</h4>
                     <p>Kamu pakai data sisa yang gak dipakai orang lain: Bahasa (Lang) dan Gambar Background. Kita mau tes apakah fitur "remeh" ini berguna.</p>
@@ -375,7 +375,7 @@
             {
                 name: "Eksperimen 4", role: "Tugas: Rasio (Matematika)",
                 features: "ratio_fol_friend, verified",
-                origin: "Rumus: followers / (friends + 1)",
+                origin: "ratio_fol_friend = followers_count / (friends_count + 1)",
                 guide: `
                     <h4>1. Misi Kamu</h4>
                     <p>Kamu pakai fitur pintar. Jangan pakai data mentah. Pakai hasil bagi: <strong>Followers dibagi Friends</strong>.</p>
@@ -395,7 +395,7 @@
             {
                 name: "Eksperimen 5", role: "Tugas: Deteksi Spam",
                 features: "posts_per_year, verified",
-                origin: "Rumus: post_count / account_age_years",
+                origin: "posts_per_year = post_count / account_age_years",
                 guide: `
                     <h4>1. Misi Kamu</h4>
                     <p>Tugasmu menangkap "Tukang Nyepam". Kita pakai rumus: Jumlah Post dibagi Umur Akun.</p>
@@ -415,7 +415,7 @@
             {
                 name: "Eksperimen 6", role: "Tugas: Logaritma (Log)",
                 features: "log_followers, log_friends",
-                origin: "Rumus: np.log10(column + 1)",
+                origin: "log_followers = log10(followers_count + 1)<br>log_friends = log10(friends_count + 1)",
                 guide: `
                     <h4>1. Misi Kamu</h4>
                     <p>Merapikan data yang berantakan. Follower orang kan beda jauh, ada yang 0 ada yang 10 juta. Kamu pakai rumus <strong>Log10</strong> biar angkanya jadi kecil semua (skala 0-7).</p>
@@ -435,7 +435,7 @@
             {
                 name: "Eksperimen 7", role: "Tugas: Data Biner (0/1)",
                 features: "default_profile_image, profile_use_background_image, verified",
-                origin: "Data Asli (Hanya kolom 0/1)",
+                origin: "Data asli (kolom biner: 0 atau 1)",
                 guide: `
                     <h4>1. Misi Kamu</h4>
                     <p>Kamu yang paling unik. Kamu gak main angka. Datamu cuma: Ya atau Tidak (1 atau 0). Simpel banget.</p>
@@ -455,7 +455,7 @@
             {
                 name: "Eksperimen 8", role: "Tugas: Impact Score",
                 features: "impact_score, verified",
-                origin: "Rumus: account_age_years * friends_count",
+                origin: "impact_score = account_age_years * friends_count",
                 guide: `
                     <h4>1. Misi Kamu</h4>
                     <p>Kamu pakai rumus perkalian: <strong>Umur dikali Jumlah Teman</strong>. Tujuannya cari akun senior yang aktif.</p>
@@ -475,7 +475,7 @@
             {
                 name: "Eksperimen 9", role: "Tugas: Combo (Campuran)",
                 features: "followers_count, account_age_years, verified, profile_use_background_image",
-                origin: "Gabungan 4 Fitur Terbaik",
+                origin: "Gabungan fitur dari eksperimen sebelumnya",
                 guide: `
                     <h4>1. Misi Kamu</h4>
                     <p>Kamu pakai semua jenis jurus. Ada angka jutaan (Follower), angka satuan (Umur), sama angka biner (Verified). Paling lengkap.</p>
@@ -618,7 +618,7 @@
                                 <div style="color: #0ea5e9;">${data.features}</div>
                             </div>
                             <div class="spec-item">
-                                <label>Rumus Python</label>
+                                <label>Rumus</label>
                                 <div class="formula-box">${data.origin}</div>
                             </div>
                         </div>
