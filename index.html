@@ -6,18 +6,18 @@
     <title>JST Dashboard - Sigmoid</title>
     <style>
         :root {
-            --primary: #0f172a;       /* Slate 900 */
-            --sidebar-bg: #1e293b;    /* Slate 800 */
-            --accent: #0ea5e9;        /* Sky 500 */
-            --bg: #f8fafc;            /* Slate 50 */
+            --primary: #0f172a;        /* Slate 900 */
+            --sidebar-bg: #1e293b;     /* Slate 800 */
+            --accent: #0ea5e9;         /* Sky 500 */
+            --bg: #f8fafc;             /* Slate 50 */
             --text: #334155;
             --white: #ffffff;
-            --header-table: #0284c7;  /* Biru Header Tabel */
+            --header-table: #0284c7;   /* Biru Header Tabel */
             
             /* Warna Tombol Resource */
-            --btn-drive: #3b82f6;     /* Blue */
-            --btn-sheet: #10b981;     /* Emerald */
-            --btn-colab: #f59e0b;     /* Amber */
+            --btn-drive: #3b82f6;      /* Blue */
+            --btn-sheet: #10b981;      /* Emerald */
+            --btn-colab: #f59e0b;      /* Amber */
         }
 
         body {
@@ -295,8 +295,9 @@
 
     <div class="mobile-header">
         <button class="menu-toggle" onclick="toggleSidebar()">☰ Menu</button>
-        <div class="mobile-title">Bruh</div>
-        <div style="width: 30px;"></div> </div>
+        <div class="mobile-title">JST Dashboard</div>
+        <div style="width: 30px;"></div>
+    </div>
 
     <div class="overlay" onclick="toggleSidebar()"></div>
 
@@ -308,12 +309,12 @@
 
     <div class="main">
         <div id="contentDisplay">
-            </div>
+        </div>
     </div>
 
     <script>
         // --- DATA ---
-        // Updated: activ is now "Sigmoid" for everyone
+        // UPDATED: Setiap orang sekarang menggunakan fitur yang SAMA/KONSISTEN di semua eksperimen
         const teamData = [
             {
                 name: "Orang 1", role: "Tugas: Data Mentah (Raw)",
@@ -330,9 +331,9 @@
                     <p>Mainkan <strong>Learning Rate (LR)</strong> kamu. Kalau pakai LR 0.1 hasilnya error, coba kecilin jadi 0.001 atau 0.0001. Cari settingan yang paling stabil.</p>
                 `,
                 experiments: [
-                    { id: "1.A", cols: "3 Fitur (Raw)", activ: "Sigmoid", lr: "0.1", epoch: "100", note: "Cek error: Apa yang terjadi kalau LR besar?" },
-                    { id: "1.B", cols: "3 Fitur (Raw)", activ: "Sigmoid", lr: "0.001", epoch: "100", note: "Kecilin LR biar perhitungan lebih stabil." },
-                    { id: "1.C", cols: "3 Fitur (Raw)", activ: "Sigmoid", lr: "0.0001", epoch: "500", note: "LR kecil banget + Epoch banyak = Lebih teliti." }
+                    { id: "1.A", cols: "followers_count, friends_count, post_count", activ: "Sigmoid", lr: "0.1", epoch: "100", note: "Cek error: Apa yang terjadi kalau LR besar?" },
+                    { id: "1.B", cols: "followers_count, friends_count, post_count", activ: "Sigmoid", lr: "0.001", epoch: "100", note: "Kecilin LR biar perhitungan lebih stabil." },
+                    { id: "1.C", cols: "followers_count, friends_count, post_count", activ: "Sigmoid", lr: "0.0001", epoch: "500", note: "LR kecil banget + Epoch banyak = Lebih teliti." }
                 ]
             },
             {
@@ -347,12 +348,12 @@
                     <p>Akun fake biasanya: (1) Baru dibuat / umurnya muda, (2) Belum verified, (3) Malas ganti foto profil (masih gambar telur/default). Kalau ada ciri-ciri ini, harusnya fake.</p>
                     
                     <h4>3. Instruksi Penting</h4>
-                    <p>Data kamu angkanya kecil (umur paling cuma 0-15 tahun). Jadi harusnya model kamu cepat belajarnya. Coba bandingkan hasil kalau Verified dihapus, ngaruh gak?</p>
+                    <p>Data kamu angkanya kecil (umur paling cuma 0-15 tahun). Jadi harusnya model kamu cepat belajarnya. Coba bandingkan hasil kalau LR diubah-ubah.</p>
                 `,
                 experiments: [
-                    { id: "2.A", cols: "3 Fitur (Age, Verif, DefImg)", activ: "Sigmoid", lr: "0.01", epoch: "100", note: "Pakai settingan standar dulu." },
-                    { id: "2.B", cols: "3 Fitur (Age, Verif, DefImg)", activ: "Sigmoid", lr: "0.001", epoch: "300", note: "Tambah epoch biar belajarnya lebih lama." },
-                    { id: "2.C", cols: "2 Fitur (Age, DefImg)", activ: "Sigmoid", lr: "0.01", epoch: "300", note: "Hapus Verified, kita tes kekuatan fitur foto profil." }
+                    { id: "2.A", cols: "account_age_years, verified, default_profile_image", activ: "Sigmoid", lr: "0.01", epoch: "100", note: "Pakai settingan standar dulu." },
+                    { id: "2.B", cols: "account_age_years, verified, default_profile_image", activ: "Sigmoid", lr: "0.001", epoch: "300", note: "Tambah epoch biar belajarnya lebih lama." },
+                    { id: "2.C", cols: "account_age_years, verified, default_profile_image", activ: "Sigmoid", lr: "0.1", epoch: "100", note: "Coba LR lebih besar, lihat perubahan akurasi." }
                 ]
             },
             {
@@ -367,12 +368,12 @@
                     <p>Akun bot kadang pakai bahasa aneh-aneh (hasil encoding angka). Terus, akun bot biasanya profilnya polosan (gak ada gambar background). Coba buktikan teori ini.</p>
                     
                     <h4>3. Instruksi Penting</h4>
-                    <p>Data bahasa itu angka acak (encoding). Mungkin hasilnya jelek, tapi gak apa-apa. Itu namanya penemuan. Catat aja hasilnya jujur.</p>
+                    <p>Data bahasa itu angka acak (encoding). Mungkin hasilnya jelek, tapi gak apa-apa. Itu namanya penemuan. Catat aja hasilnya jujur dengan fitur yang konsisten.</p>
                 `,
                 experiments: [
-                    { id: "3.A", cols: "3 Fitur (Lang, BG, Verif)", activ: "Sigmoid", lr: "0.01", epoch: "100", note: "Tes data bahasa yang sudah diubah jadi angka." },
-                    { id: "3.B", cols: "3 Fitur (Lang, BG, Verif)", activ: "Sigmoid", lr: "0.001", epoch: "500", note: "Coba learning rate kecil biar lebih teliti." },
-                    { id: "3.C", cols: "2 Fitur (BG, Verif)", activ: "Sigmoid", lr: "0.01", epoch: "200", note: "Hapus bahasa. Fokus cuma di background & verified." }
+                    { id: "3.A", cols: "lang, profile_use_background_image, verified", activ: "Sigmoid", lr: "0.01", epoch: "100", note: "Tes data bahasa yang sudah diubah jadi angka." },
+                    { id: "3.B", cols: "lang, profile_use_background_image, verified", activ: "Sigmoid", lr: "0.001", epoch: "500", note: "Coba learning rate kecil biar lebih teliti." },
+                    { id: "3.C", cols: "lang, profile_use_background_image, verified", activ: "Sigmoid", lr: "0.1", epoch: "200", note: "Uji dengan LR lebih agresif." }
                 ]
             },
             {
@@ -387,12 +388,12 @@
                     <p>Artis/Akun Asli: Follower banyak, following dikit = Rasionya Tinggi.<br>Bot/Fake: Follower dikit, following banyak (ngarep follback) = Rasionya Rendah/Nol.</p>
                     
                     <h4>3. Instruksi Penting</h4>
-                    <p>Ini fitur jagoan. Angkanya desimal kecil, jadi enak buat komputer hitung. Harusnya akurasi kamu lebih tinggi dari Orang 1. Buktikan!</p>
+                    <p>Ini fitur jagoan. Angkanya desimal kecil, jadi enak buat komputer hitung. Harusnya akurasi kamu lebih tinggi dari Orang 1. Buktikan dengan variasi LR!</p>
                 `,
                 experiments: [
-                    { id: "4.A", cols: "2 Fitur (Rasio + Verif)", activ: "Sigmoid", lr: "0.1", epoch: "100", note: "Berani pakai LR besar karena datanya sudah bagus." },
-                    { id: "4.B", cols: "2 Fitur (Rasio + Verif)", activ: "Sigmoid", lr: "0.01", epoch: "200", note: "Settingan standar buat cari akurasi terbaik." },
-                    { id: "4.C", cols: "2 Fitur (Rasio + Verif)", activ: "Sigmoid", lr: "0.001", epoch: "500", note: "Settingan presisi tinggi (lama tapi teliti)." }
+                    { id: "4.A", cols: "ratio_fol_friend, verified", activ: "Sigmoid", lr: "0.1", epoch: "100", note: "Berani pakai LR besar karena datanya sudah bagus." },
+                    { id: "4.B", cols: "ratio_fol_friend, verified", activ: "Sigmoid", lr: "0.01", epoch: "200", note: "Settingan standar buat cari akurasi terbaik." },
+                    { id: "4.C", cols: "ratio_fol_friend, verified", activ: "Sigmoid", lr: "0.001", epoch: "500", note: "Settingan presisi tinggi (lama tapi teliti)." }
                 ]
             },
             {
@@ -410,9 +411,9 @@
                     <p>Hati-hati! Hasil baginya bisa angka raksasa (ribuan). Kalau inputnya gede, <strong>Learning Rate WAJIB KECIL</strong>. Kalau LR besar, nanti grafiknya loncat-loncat gak jelas.</p>
                 `,
                 experiments: [
-                    { id: "5.A", cols: "2 Fitur (Post/Year + Verif)", activ: "Sigmoid", lr: "0.001", epoch: "200", note: "Mulai dengan LR kecil biar aman." },
-                    { id: "5.B", cols: "2 Fitur (Post/Year + Verif)", activ: "Sigmoid", lr: "0.0001", epoch: "500", note: "Kecilin lagi LR-nya buat atasi data outlier." },
-                    { id: "5.C", cols: "2 Fitur (Post/Year + Verif)", activ: "Sigmoid", lr: "0.01", epoch: "200", note: "Coba LR besar, lihat apakah akurasinya hancur?" }
+                    { id: "5.A", cols: "posts_per_year, verified", activ: "Sigmoid", lr: "0.001", epoch: "200", note: "Mulai dengan LR kecil biar aman." },
+                    { id: "5.B", cols: "posts_per_year, verified", activ: "Sigmoid", lr: "0.0001", epoch: "500", note: "Kecilin lagi LR-nya buat atasi data outlier." },
+                    { id: "5.C", cols: "posts_per_year, verified", activ: "Sigmoid", lr: "0.01", epoch: "200", note: "Coba LR besar, lihat apakah akurasinya hancur?" }
                 ]
             },
             {
@@ -427,32 +428,32 @@
                     <p>Komputer lebih suka angka kecil. Dengan Log, angka 1 juta cuma dianggap 6. Jadi komputer gak kaget liat angka follower yang beda jauh.</p>
                     
                     <h4>3. Instruksi Penting</h4>
-                    <p>Bandingkan hasilmu sama Orang 1. Harusnya dengan fitur Log ini, akurasi kamu naik jauh dan trainingnya lebih cepat.</p>
+                    <p>Bandingkan hasilmu sama Orang 1. Harusnya dengan fitur Log ini, akurasi kamu naik jauh dan trainingnya lebih cepat. Konsisten gunakan 2 fitur log ini!</p>
                 `,
                 experiments: [
-                    { id: "6.A", cols: "2 Fitur (LogFol, LogFr)", activ: "Sigmoid", lr: "0.1", epoch: "100", note: "Data Log aman pakai LR besar." },
-                    { id: "6.B", cols: "2 Fitur (LogFol, LogFr)", activ: "Sigmoid", lr: "0.01", epoch: "300", note: "Cari settingan paling pas." },
-                    { id: "6.C", cols: "3 Fitur (+ account_age_years)", activ: "Sigmoid", lr: "0.01", epoch: "300", note: "Gabungin Log sama Umur, hasilnya gimana?" }
+                    { id: "6.A", cols: "log_followers, log_friends", activ: "Sigmoid", lr: "0.1", epoch: "100", note: "Data Log aman pakai LR besar." },
+                    { id: "6.B", cols: "log_followers, log_friends", activ: "Sigmoid", lr: "0.01", epoch: "300", note: "Cari settingan paling pas." },
+                    { id: "6.C", cols: "log_followers, log_friends", activ: "Sigmoid", lr: "0.001", epoch: "500", note: "LR kecil untuk presisi maksimal." }
                 ]
             },
             {
                 name: "Orang 7", role: "Tugas: Data Biner (0/1)",
-                features: "default_profile_image, profile_use_bg, verified",
+                features: "default_profile_image, profile_use_background_image, verified",
                 origin: "Data Asli (Hanya kolom 0/1)",
                 guide: `
                     <h4>1. Misi Kamu</h4>
                     <p>Kamu yang paling unik. Kamu gak main angka. Datamu cuma: Ya atau Tidak (1 atau 0). Simpel banget.</p>
                     
                     <h4>2. Logika Simpel</h4>
-                    <p>Kita mau tes: Bisa gak sih nebak akun palsu cuma dari tampilan luarnya? (Pakai foto profil gak? Verified gak?) Tanpa tau jumlah followernya.</p>
+                    <p>Kita mau tes: Bisa gak sih nebak akun palsu cuma dari tampilan luarnya? (Pakai foto profil gak? Verified gak? Pakai background gak?) Tanpa tau jumlah followernya.</p>
                     
                     <h4>3. Instruksi Penting</h4>
-                    <p>Karena datanya enteng (cuma 0 dan 1), harusnya komputer belajarnya cepat. Gak butuh ribuan epoch.</p>
+                    <p>Karena datanya enteng (cuma 0 dan 1), harusnya komputer belajarnya cepat. Konsisten pakai 3 fitur biner ini di semua eksperimen!</p>
                 `,
                 experiments: [
-                    { id: "7.A", cols: "3 Fitur (Semua Biner)", activ: "Sigmoid", lr: "0.1", epoch: "50", note: "Epoch dikit aja cukup harusnya." },
-                    { id: "7.B", cols: "3 Fitur (Semua Biner)", activ: "Sigmoid", lr: "0.01", epoch: "200", note: "Standar training biar lebih pasti." },
-                    { id: "7.C", cols: "2 Fitur (Hapus Verified)", activ: "Sigmoid", lr: "0.01", epoch: "200", note: "Coba tebak cuma dari gambar profil & background." }
+                    { id: "7.A", cols: "default_profile_image, profile_use_background_image, verified", activ: "Sigmoid", lr: "0.1", epoch: "50", note: "Epoch dikit aja cukup harusnya." },
+                    { id: "7.B", cols: "default_profile_image, profile_use_background_image, verified", activ: "Sigmoid", lr: "0.01", epoch: "200", note: "Standar training biar lebih pasti." },
+                    { id: "7.C", cols: "default_profile_image, profile_use_background_image, verified", activ: "Sigmoid", lr: "0.001", epoch: "300", note: "LR paling kecil untuk stabilitas." }
                 ]
             },
             {
@@ -467,12 +468,12 @@
                     <p>Kalau akun tua (10 tahun) dan temannya banyak, skornya tinggi = Asli.<br>Kalau akun baru (0 tahun), dikali berapapun hasilnya nol = Fake/Baru.</p>
                     
                     <h4>3. Instruksi Penting</h4>
-                    <p><strong>AWAS!</strong> Hasil perkalian bisa gede banget. Kalau input gede, Learning Rate (LR) harus super kecil (mikro). Kalau LR kamu kegedean, nanti error.</p>
+                    <p><strong>AWAS!</strong> Hasil perkalian bisa gede banget. Kalau input gede, Learning Rate (LR) harus super kecil (mikro). Kalau LR kamu kegedean, nanti error. Konsisten pakai 2 fitur ini!</p>
                 `,
                 experiments: [
-                    { id: "8.A", cols: "2 Fitur (Impact, Verif)", activ: "Sigmoid", lr: "0.0001", epoch: "500", note: "Wajib LR kecil karena angkanya hasil kali." },
-                    { id: "8.B", cols: "2 Fitur (Impact, Verif)", activ: "Sigmoid", lr: "0.00001", epoch: "1000", note: "LR makin kecil buat presisi." },
-                    { id: "8.C", cols: "2 Fitur (Impact, Verif)", activ: "Sigmoid", lr: "0.001", epoch: "200", note: "Coba LR agak besar, buktikan kalau error." }
+                    { id: "8.A", cols: "impact_score, verified", activ: "Sigmoid", lr: "0.0001", epoch: "500", note: "Wajib LR kecil karena angkanya hasil kali." },
+                    { id: "8.B", cols: "impact_score, verified", activ: "Sigmoid", lr: "0.00001", epoch: "1000", note: "LR makin kecil buat presisi." },
+                    { id: "8.C", cols: "impact_score, verified", activ: "Sigmoid", lr: "0.001", epoch: "200", note: "Coba LR agak besar, buktikan kalau error." }
                 ]
             },
             {
@@ -487,16 +488,15 @@
                     <p>Masalahnya: Angka follower yang jutaan bisa "menutupi" angka umur yang kecil. Komputer jadi cuma peduli sama follower doang.</p>
                     
                     <h4>3. Instruksi Penting</h4>
-                    <p>Biar adil, pakai Learning Rate kecil dan Epoch yang banyak. Biarkan komputer belajar pelan-pelan buat menghargai fitur-fitur kecil kayak Verified dan Umur.</p>
+                    <p>Biar adil, pakai Learning Rate kecil dan Epoch yang banyak. Biarkan komputer belajar pelan-pelan buat menghargai fitur-fitur kecil kayak Verified dan Umur. Konsisten pakai 4 fitur ini!</p>
                 `,
                 experiments: [
-                    { id: "9.A", cols: "4 Fitur (Combo)", activ: "Sigmoid", lr: "0.0001", epoch: "500", note: "LR kecil biar fitur follower gak mendominasi." },
-                    { id: "9.B", cols: "4 Fitur (Combo)", activ: "Sigmoid", lr: "0.00001", epoch: "1000", note: "Training lama biar fitur kecil kebaca." },
-                    { id: "9.C", cols: "4 Fitur (Combo)", activ: "Sigmoid", lr: "0.001", epoch: "200", note: "Cek baseline, seberapa dominan si follower?" }
+                    { id: "9.A", cols: "followers_count, account_age_years, verified, profile_use_background_image", activ: "Sigmoid", lr: "0.0001", epoch: "500", note: "LR kecil biar fitur follower gak mendominasi." },
+                    { id: "9.B", cols: "followers_count, account_age_years, verified, profile_use_background_image", activ: "Sigmoid", lr: "0.00001", epoch: "1000", note: "Training lama biar fitur kecil kebaca." },
+                    { id: "9.C", cols: "followers_count, account_age_years, verified, profile_use_background_image", activ: "Sigmoid", lr: "0.001", epoch: "200", note: "Cek baseline, seberapa dominan si follower?" }
                 ]
             }
         ];
-
         const navContainer = document.getElementById('navContainer');
         const contentDisplay = document.getElementById('contentDisplay');
         const sidebar = document.getElementById('sidebar');
@@ -529,7 +529,8 @@
 
             contentDisplay.innerHTML = `
                 <div class="header-section" style="text-align:center; margin-top:20px;">
-                    <h1>Dashboard</h1>
+                    <h1>Dashboard JST - Sigmoid</h1>
+                    <p style="color: #64748b; margin-top: 10px;">Deteksi Akun Fake Twitter Menggunakan Perceptron</p>
                 </div>
 
                 <div class="card" style="max-width:800px; margin: 0 auto;">
@@ -546,11 +547,11 @@
                         </a>
 
                         <a href="https://colab.research.google.com/drive/18iz594b7AD-c5psdtHJpcd0Dna63B_9z?usp=drive_link" target="_blank" class="resource-btn btn-colab">
-                            Pre-prosessing Data (Code)
+                            Pre-processing Data
                         </a>
 
                         <a href="https://colab.research.google.com/drive/1GlS7e-dRspQWtzFv6NbQpWdSemhsgqyH?usp=drive_link" target="_blank" class="resource-btn btn-model">
-                            Referensi Kode Eksperimen
+                            Referensi Kode
                         </a>
                     </div>
                 </div>
@@ -569,7 +570,6 @@
 
             const data = teamData[index];
 
-            // Updated Table Header from "Fungsi" to "Fungsi Aktivasi"
             contentDisplay.innerHTML = `
                 <div class="header-section">
                     <h1>${data.name}</h1>
@@ -578,11 +578,20 @@
 
                 <div class="card">
                     <div class="tabs">
-                        <button class="tab-btn active" onclick="switchTab(event, 'tugas')">📋 Tabel Eksperimen</button>
-                        <button class="tab-btn" onclick="switchTab(event, 'panduan')">📖 Panduan</button>
+                        <button class="tab-btn active" onclick="switchTab(event, 'tugas')">Tabel Eksperimen</button>
+                        <button class="tab-btn" onclick="switchTab(event, 'panduan')">Panduan</button>
                     </div>
 
                     <div id="tugas" class="tab-content active">
+                        <div style="padding: 15px; background: #f0f9ff; border-left: 4px solid var(--accent); border-radius: 4px; margin-bottom: 20px;">
+                            <p style="margin: 0; color: #0f172a; font-weight: 600;">
+                                Fitur: <code style="background: white; padding: 2px 8px; border-radius: 3px; color: #d946ef;">${data.features}</code>
+                            </p>
+                            <p style="margin: 8px 0 0 0; color: #64748b; font-size: 0.9rem;">
+                                Hanya LR dan Epoch yang diubah-ubah untuk melihat pengaruhnya
+                            </p>
+                        </div>
+                        
                         <div class="table-container">
                             <table>
                                 <thead>
@@ -599,10 +608,10 @@
                                     ${data.experiments.map(exp => `
                                         <tr>
                                             <td><strong>${exp.id}</strong></td>
-                                            <td>${exp.cols}</td>
+                                            <td style="font-size: 0.85rem;">${exp.cols}</td>
                                             <td><span class="badge badge-step">${exp.activ}</span></td>
-                                            <td><code>${exp.lr}</code></td>
-                                            <td>${exp.epoch}</td>
+                                            <td><code style="background: #fef3c7; padding: 4px 8px; border-radius: 3px;">${exp.lr}</code></td>
+                                            <td><strong>${exp.epoch}</strong></td>
                                             <td>${exp.note}</td>
                                         </tr>
                                     `).join('')}
@@ -615,7 +624,7 @@
                         <div class="spec-grid" style="margin-top:0; margin-bottom:20px;">
                             <div class="spec-item">
                                 <label>Fitur Digunakan</label>
-                                <div>${data.features}</div>
+                                <div style="color: #0ea5e9;">${data.features}</div>
                             </div>
                             <div class="spec-item">
                                 <label>Rumus Python</label>
@@ -624,6 +633,7 @@
                         </div>
                         
                         <div class="guide-text">${data.guide}</div>
+                        
                     </div>
                 </div>
             `;
