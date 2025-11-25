@@ -6,18 +6,18 @@
     <title>JST Dashboard - Sigmoid</title>
     <style>
         :root {
-            --primary: #0f172a;        /* Slate 900 */
-            --sidebar-bg: #1e293b;     /* Slate 800 */
-            --accent: #0ea5e9;         /* Sky 500 */
-            --bg: #f8fafc;             /* Slate 50 */
+            --primary: #0f172a;       /* Slate 900 */
+            --sidebar-bg: #1e293b;    /* Slate 800 */
+            --accent: #0ea5e9;        /* Sky 500 */
+            --bg: #f8fafc;            /* Slate 50 */
             --text: #334155;
             --white: #ffffff;
-            --header-table: #0284c7;   /* Biru Header Tabel */
+            --header-table: #0284c7;  /* Biru Header Tabel */
             
             /* Warna Tombol Resource */
-            --btn-drive: #3b82f6;      /* Blue */
-            --btn-sheet: #10b981;      /* Emerald */
-            --btn-colab: #f59e0b;      /* Amber */
+            --btn-drive: #3b82f6;     /* Blue */
+            --btn-sheet: #10b981;     /* Emerald */
+            --btn-colab: #f59e0b;     /* Amber */
         }
 
         body {
@@ -169,7 +169,7 @@
 
         .tabs {
             display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0;
-            overflow-x: auto; /* Agar tab bisa discroll horizontal di HP */
+            overflow-x: auto;
             white-space: nowrap;
         }
         .tab-btn {
@@ -189,10 +189,10 @@
         /* TABLE STYLING */
         .table-container { 
             overflow-x: auto; 
-            -webkit-overflow-scrolling: touch; /* Smooth scroll di iOS */
+            -webkit-overflow-scrolling: touch;
             margin-bottom: 15px;
         }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem; min-width: 600px; /* Min width biar tabel ga hancur */ }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem; min-width: 600px; }
         
         th, td { 
             padding: 12px; text-align: left; border: 1px solid #cbd5e1; 
@@ -255,22 +255,21 @@
             
             .mobile-header { display: flex; }
 
-            /* Sidebar jadi off-canvas (tersembunyi) */
             .sidebar { 
                 position: fixed; 
                 top: 0; left: 0; bottom: 0;
                 width: 260px;
-                transform: translateX(-100%); /* Sembunyi ke kiri */
+                transform: translateX(-100%);
                 box-shadow: 4px 0 10px rgba(0,0,0,0.2);
             }
             .sidebar.active {
-                transform: translateX(0); /* Muncul */
+                transform: translateX(0);
             }
 
             .main { 
                 width: 100%; 
-                padding: 15px; /* Padding lebih kecil */
-                padding-top: 80px; /* Kasih jarak buat header */
+                padding: 15px;
+                padding-top: 80px;
                 box-sizing: border-box;
             }
 
@@ -285,7 +284,6 @@
 
             .resource-grid { grid-template-columns: 1fr; }
             
-            /* Text adjustments for mobile */
             .guide-text { font-size: 0.95rem; }
             .nav-item { padding: 12px 10px; }
         }
@@ -313,8 +311,6 @@
     </div>
 
     <script>
-        // --- DATA ---
-        // UPDATED: Setiap orang sekarang menggunakan fitur yang SAMA/KONSISTEN di semua eksperimen
         const teamData = [
             {
                 name: "Orang 1", role: "Tugas: Data Mentah (Raw)",
@@ -497,18 +493,17 @@
                 ]
             }
         ];
+
         const navContainer = document.getElementById('navContainer');
         const contentDisplay = document.getElementById('contentDisplay');
         const sidebar = document.getElementById('sidebar');
         const overlay = document.querySelector('.overlay');
 
-        // --- FUNGSI TOGGLE MENU HP ---
         function toggleSidebar() {
             sidebar.classList.toggle('active');
             overlay.classList.toggle('active');
         }
 
-        // Fungsi Render Menu Navigasi Samping
         function renderNav() {
             navContainer.innerHTML = '';
             teamData.forEach((member, index) => {
@@ -520,11 +515,9 @@
             });
         }
 
-        // Fungsi Render Halaman HOME (Dashboard Utama)
         function renderHome() {
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             
-            // Tutup menu kalau di HP
             if(window.innerWidth <= 850) toggleSidebar();
 
             contentDisplay.innerHTML = `
@@ -558,12 +551,10 @@
             `;
         }
 
-        // Fungsi Load Halaman Anggota
         function loadMember(index) {
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.nav-item')[index].classList.add('active');
             
-            // Tutup menu otomatis kalau di HP
             if(window.innerWidth <= 850 && sidebar.classList.contains('active')) {
                 toggleSidebar();
             }
@@ -585,7 +576,7 @@
                     <div id="tugas" class="tab-content active">
                         <div style="padding: 15px; background: #f0f9ff; border-left: 4px solid var(--accent); border-radius: 4px; margin-bottom: 20px;">
                             <p style="margin: 0; color: #0f172a; font-weight: 600;">
-                                Fitur: <code style="background: white; padding: 2px 8px; border-radius: 3px; color: #d946ef;">${data.features}</code>
+                                Fitur Konsisten: <code style="background: white; padding: 2px 8px; border-radius: 3px; color: #d946ef;">${data.features}</code>
                             </p>
                             <p style="margin: 8px 0 0 0; color: #64748b; font-size: 0.9rem;">
                                 Hanya LR dan Epoch yang diubah-ubah untuk melihat pengaruhnya
@@ -633,7 +624,6 @@
                         </div>
                         
                         <div class="guide-text">${data.guide}</div>
-                        
                     </div>
                 </div>
             `;
@@ -647,7 +637,6 @@
             evt.target.classList.add('active');
         }
 
-        // Inisialisasi Awal
         renderNav();
         renderHome();
     </script>
