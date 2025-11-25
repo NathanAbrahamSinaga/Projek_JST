@@ -31,7 +31,38 @@
             overflow: hidden;
         }
 
-        /* SIDEBAR */
+        /* --- MOBILE HEADER (Visible only on mobile) --- */
+        .mobile-header {
+            display: none;
+            background-color: var(--sidebar-bg);
+            color: white;
+            padding: 15px 20px;
+            align-items: center;
+            justify-content: space-between;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1001;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .menu-toggle {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .mobile-title {
+            font-weight: bold;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+        }
+
+        /* --- SIDEBAR --- */
         .sidebar {
             width: 280px;
             background-color: var(--sidebar-bg);
@@ -42,7 +73,21 @@
             overflow-y: auto;
             border-right: 1px solid #0f172a;
             flex-shrink: 0;
+            height: 100%;
+            transition: transform 0.3s ease;
+            z-index: 1002;
         }
+
+        /* OVERLAY GELAP UNTUK MOBILE */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            backdrop-filter: blur(2px);
+        }
+        .overlay.active { display: block; }
 
         /* HOME BUTTON STYLE */
         .sidebar h2 {
@@ -54,7 +99,7 @@
             padding-bottom: 15px;
             border-bottom: 1px solid #334155;
             color: #e2e8f0;
-            cursor: pointer; /* Menandakan bisa diklik */
+            cursor: pointer;
             transition: color 0.3s;
         }
 
@@ -80,7 +125,6 @@
         .nav-item:hover {
             background-color: rgba(255,255,255,0.1);
             color: white;
-            border-color: rgba(255,255,255,0.1);
         }
 
         .nav-item.active {
@@ -90,13 +134,14 @@
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
         }
 
-        /* MAIN CONTENT */
+        /* --- MAIN CONTENT --- */
         .main {
             flex: 1;
             padding: 30px 40px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
+            position: relative;
         }
 
         .header-section { margin-bottom: 20px; }
@@ -124,11 +169,14 @@
 
         .tabs {
             display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0;
+            overflow-x: auto; /* Agar tab bisa discroll horizontal di HP */
+            white-space: nowrap;
         }
         .tab-btn {
             padding: 10px 20px; background: none; border: none; font-size: 0.95rem;
             font-weight: 600; color: #64748b; cursor: pointer;
             border-bottom: 3px solid transparent; transition: all 0.3s;
+            flex-shrink: 0;
         }
         .tab-btn:hover { color: var(--accent); background: #f1f5f9; }
         .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
@@ -139,8 +187,12 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
         /* TABLE STYLING */
-        .table-container { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem; }
+        .table-container { 
+            overflow-x: auto; 
+            -webkit-overflow-scrolling: touch; /* Smooth scroll di iOS */
+            margin-bottom: 15px;
+        }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem; min-width: 600px; /* Min width biar tabel ga hancur */ }
         
         th, td { 
             padding: 12px; text-align: left; border: 1px solid #cbd5e1; 
@@ -177,37 +229,80 @@
             padding: 20px; border-radius: 8px; margin-top: 20px;
         }
         .spec-item label { display: block; font-size: 0.75rem; text-transform: uppercase; color: #64748b; font-weight: bold; margin-bottom: 5px; }
-        .spec-item div { font-size: 1rem; font-weight: 600; color: #0f172a; font-family: 'Consolas', monospace; }
+        .spec-item div { font-size: 1rem; font-weight: 600; color: #0f172a; font-family: 'Consolas', monospace; word-break: break-all; }
         .formula-box { background: #fff; padding: 8px 12px; border-radius: 4px; border: 1px solid #cbd5e1; color: #d946ef !important; }
 
-        /* RESOURCE BUTTONS (NEW) */
-        .resource-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 20px; }
+        /* RESOURCE BUTTONS */
+        .resource-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 20px; }
         .resource-btn {
             display: flex; align-items: center; justify-content: center;
             padding: 20px; border-radius: 8px; color: white; text-decoration: none;
             font-weight: 600; font-size: 1rem; transition: transform 0.2s, box-shadow 0.2s;
             box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            text-align: center;
         }
         .resource-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
         .btn-drive { background-color: var(--btn-drive); }
         .btn-sheet { background-color: var(--btn-sheet); }
         .btn-colab { background-color: var(--btn-colab); }
 
-        @media (max-width: 800px) { 
-            body { flex-direction: column; overflow: auto; } 
-            .sidebar { width: 100%; height: auto; } 
-            .spec-grid { grid-template-columns: 1fr; } 
+        /* --- RESPONSIVE / MOBILE CSS --- */
+        @media (max-width: 850px) {
+            body { 
+                flex-direction: column; 
+            }
+            
+            .mobile-header { display: flex; }
+
+            /* Sidebar jadi off-canvas (tersembunyi) */
+            .sidebar { 
+                position: fixed; 
+                top: 0; left: 0; bottom: 0;
+                width: 260px;
+                transform: translateX(-100%); /* Sembunyi ke kiri */
+                box-shadow: 4px 0 10px rgba(0,0,0,0.2);
+            }
+            .sidebar.active {
+                transform: translateX(0); /* Muncul */
+            }
+
+            .main { 
+                width: 100%; 
+                padding: 15px; /* Padding lebih kecil */
+                padding-top: 80px; /* Kasih jarak buat header */
+                box-sizing: border-box;
+            }
+
+            .header-section h1 { font-size: 1.5rem; }
+            .card { padding: 15px; }
+
+            .spec-grid { 
+                grid-template-columns: 1fr; 
+                gap: 10px;
+                padding: 15px;
+            }
+
             .resource-grid { grid-template-columns: 1fr; }
+            
+            /* Text adjustments for mobile */
+            .guide-text { font-size: 0.95rem; }
+            .nav-item { padding: 12px 10px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="sidebar">
+    <div class="mobile-header">
+        <button class="menu-toggle" onclick="toggleSidebar()">☰ Menu</button>
+        <div class="mobile-title">TIM EXPERIMENT</div>
+        <div style="width: 30px;"></div> </div>
+
+    <div class="overlay" onclick="toggleSidebar()"></div>
+
+    <div class="sidebar" id="sidebar">
         <h2 onclick="renderHome()" title="Klik untuk ke Home">Home</h2>
         
         <div id="navContainer"></div>
-    
     </div>
 
     <div class="main">
@@ -216,7 +311,7 @@
     </div>
 
     <script>
-        // DATA UPDATED: BAHASA SEDERHANA & TO THE POINT
+        // --- DATA ---
         const teamData = [
             {
                 name: "Orang 1", role: "Tugas: Data Mentah (Raw)",
@@ -402,6 +497,14 @@
 
         const navContainer = document.getElementById('navContainer');
         const contentDisplay = document.getElementById('contentDisplay');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.querySelector('.overlay');
+
+        // --- FUNGSI TOGGLE MENU HP ---
+        function toggleSidebar() {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
 
         // Fungsi Render Menu Navigasi Samping
         function renderNav() {
@@ -417,12 +520,14 @@
 
         // Fungsi Render Halaman HOME (Dashboard Utama)
         function renderHome() {
-            // Hapus class active dari sidebar
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            
+            // Tutup menu kalau di HP
+            if(window.innerWidth <= 850) toggleSidebar();
 
             contentDisplay.innerHTML = `
-                <div class="header-section" style="text-align:center; margin-top:50px;">
-                    <h1>Wadidaw</h1>
+                <div class="header-section" style="text-align:center; margin-top:20px;">
+                    <h1>Wadidaw Dashboard</h1>
                 </div>
 
                 <div class="card" style="max-width:800px; margin: 0 auto;">
@@ -434,10 +539,10 @@
                             Folder Drive
                         </a>
                         <a href="https://docs.google.com/spreadsheets/d/1T8Jiwwq4u_H1ooMkZDy2o1fbBeg582MnYPK7fgI1644/edit?usp=drive_link" target="_blank" class="resource-btn btn-sheet">
-                            Google Shee
+                            Google Sheet
                         </a>
                         <a href="https://colab.research.google.com/drive/18iz594b7AD-c5psdtHJpcd0Dna63B_9z?usp=drive_link" target="_blank" class="resource-btn btn-colab">
-                            Pre-prosessing Data Colab
+                            Colab (Code)
                         </a>
                     </div>
                 </div>
@@ -448,6 +553,11 @@
         function loadMember(index) {
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.nav-item')[index].classList.add('active');
+            
+            // Tutup menu otomatis kalau di HP
+            if(window.innerWidth <= 850 && sidebar.classList.contains('active')) {
+                toggleSidebar();
+            }
 
             const data = teamData[index];
 
@@ -460,7 +570,7 @@
                 <div class="card">
                     <div class="tabs">
                         <button class="tab-btn active" onclick="switchTab(event, 'tugas')">📋 Tabel Eksperimen</button>
-                        <button class="tab-btn" onclick="switchTab(event, 'panduan')">📖 Panduan Simpel</button>
+                        <button class="tab-btn" onclick="switchTab(event, 'panduan')">📖 Panduan</button>
                     </div>
 
                     <div id="tugas" class="tab-content active">
@@ -468,12 +578,12 @@
                             <table>
                                 <thead>
                                     <tr>
-                                        <th style="width:50px">No</th>
+                                        <th style="width:40px">No</th>
                                         <th>Kolom / Fitur</th>
-                                        <th>Fungsi Aktivasi</th>
-                                        <th>Learning Rate</th>
+                                        <th>Fungsi</th>
+                                        <th>LR</th>
                                         <th>Epoch</th>
-                                        <th>Catatan Hipotesis</th>
+                                        <th style="min-width:150px">Catatan Hipotesis</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -491,18 +601,18 @@
                             </table>
                         </div>
                         <p style="margin-top:15px; font-size:0.85rem; color:#64748b; font-style:italic;">
-                            *Catat hasil akurasi (Training & Testing) di Google Sheet laporan ya.
+                            *Geser tabel ke kiri jika di HP.
                         </p>
                     </div>
 
                     <div id="panduan" class="tab-content">
                         <div class="spec-grid" style="margin-top:0; margin-bottom:20px;">
                             <div class="spec-item">
-                                <label>Fitur Yang Digunakan</label>
+                                <label>Fitur Digunakan</label>
                                 <div>${data.features}</div>
                             </div>
                             <div class="spec-item">
-                                <label>Asal Data / Rumus Python</label>
+                                <label>Rumus Python</label>
                                 <div class="formula-box">${data.origin}</div>
                             </div>
                         </div>
@@ -523,7 +633,7 @@
 
         // Inisialisasi Awal
         renderNav();
-        renderHome(); // Load halaman home saat pertama kali dibuka
+        renderHome();
     </script>
 </body>
 </html>
