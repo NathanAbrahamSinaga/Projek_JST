@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JST</title>
+    <title>JST Dashboard - Sigmoid</title>
     <style>
         :root {
             --primary: #0f172a;       /* Slate 900 */
@@ -313,6 +313,7 @@
 
     <script>
         // --- DATA ---
+        // Updated: activ is now "Sigmoid" for everyone
         const teamData = [
             {
                 name: "Orang 1", role: "Tugas: Data Mentah (Raw)",
@@ -329,9 +330,9 @@
                     <p>Mainkan <strong>Learning Rate (LR)</strong> kamu. Kalau pakai LR 0.1 hasilnya error, coba kecilin jadi 0.001 atau 0.0001. Cari settingan yang paling stabil.</p>
                 `,
                 experiments: [
-                    { id: "1.A", cols: "3 Fitur (Raw)", activ: "Step Function", lr: "0.1", epoch: "100", note: "Cek error: Apa yang terjadi kalau LR besar?" },
-                    { id: "1.B", cols: "3 Fitur (Raw)", activ: "Step Function", lr: "0.001", epoch: "100", note: "Kecilin LR biar perhitungan lebih stabil." },
-                    { id: "1.C", cols: "3 Fitur (Raw)", activ: "Step Function", lr: "0.0001", epoch: "500", note: "LR kecil banget + Epoch banyak = Lebih teliti." }
+                    { id: "1.A", cols: "3 Fitur (Raw)", activ: "Sigmoid", lr: "0.1", epoch: "100", note: "Cek error: Apa yang terjadi kalau LR besar?" },
+                    { id: "1.B", cols: "3 Fitur (Raw)", activ: "Sigmoid", lr: "0.001", epoch: "100", note: "Kecilin LR biar perhitungan lebih stabil." },
+                    { id: "1.C", cols: "3 Fitur (Raw)", activ: "Sigmoid", lr: "0.0001", epoch: "500", note: "LR kecil banget + Epoch banyak = Lebih teliti." }
                 ]
             },
             {
@@ -349,9 +350,9 @@
                     <p>Data kamu angkanya kecil (umur paling cuma 0-15 tahun). Jadi harusnya model kamu cepat belajarnya. Coba bandingkan hasil kalau Verified dihapus, ngaruh gak?</p>
                 `,
                 experiments: [
-                    { id: "2.A", cols: "3 Fitur (Age, Verif, DefImg)", activ: "Step Function", lr: "0.01", epoch: "100", note: "Pakai settingan standar dulu." },
-                    { id: "2.B", cols: "3 Fitur (Age, Verif, DefImg)", activ: "Step Function", lr: "0.001", epoch: "300", note: "Tambah epoch biar belajarnya lebih lama." },
-                    { id: "2.C", cols: "2 Fitur (Age, DefImg)", activ: "Step Function", lr: "0.01", epoch: "300", note: "Hapus Verified, kita tes kekuatan fitur foto profil." }
+                    { id: "2.A", cols: "3 Fitur (Age, Verif, DefImg)", activ: "Sigmoid", lr: "0.01", epoch: "100", note: "Pakai settingan standar dulu." },
+                    { id: "2.B", cols: "3 Fitur (Age, Verif, DefImg)", activ: "Sigmoid", lr: "0.001", epoch: "300", note: "Tambah epoch biar belajarnya lebih lama." },
+                    { id: "2.C", cols: "2 Fitur (Age, DefImg)", activ: "Sigmoid", lr: "0.01", epoch: "300", note: "Hapus Verified, kita tes kekuatan fitur foto profil." }
                 ]
             },
             {
@@ -369,9 +370,9 @@
                     <p>Data bahasa itu angka acak (encoding). Mungkin hasilnya jelek, tapi gak apa-apa. Itu namanya penemuan. Catat aja hasilnya jujur.</p>
                 `,
                 experiments: [
-                    { id: "3.A", cols: "3 Fitur (Lang, BG, Verif)", activ: "Step Function", lr: "0.01", epoch: "100", note: "Tes data bahasa yang sudah diubah jadi angka." },
-                    { id: "3.B", cols: "3 Fitur (Lang, BG, Verif)", activ: "Step Function", lr: "0.001", epoch: "500", note: "Coba learning rate kecil biar lebih teliti." },
-                    { id: "3.C", cols: "2 Fitur (BG, Verif)", activ: "Step Function", lr: "0.01", epoch: "200", note: "Hapus bahasa. Fokus cuma di background & verified." }
+                    { id: "3.A", cols: "3 Fitur (Lang, BG, Verif)", activ: "Sigmoid", lr: "0.01", epoch: "100", note: "Tes data bahasa yang sudah diubah jadi angka." },
+                    { id: "3.B", cols: "3 Fitur (Lang, BG, Verif)", activ: "Sigmoid", lr: "0.001", epoch: "500", note: "Coba learning rate kecil biar lebih teliti." },
+                    { id: "3.C", cols: "2 Fitur (BG, Verif)", activ: "Sigmoid", lr: "0.01", epoch: "200", note: "Hapus bahasa. Fokus cuma di background & verified." }
                 ]
             },
             {
@@ -389,9 +390,9 @@
                     <p>Ini fitur jagoan. Angkanya desimal kecil, jadi enak buat komputer hitung. Harusnya akurasi kamu lebih tinggi dari Orang 1. Buktikan!</p>
                 `,
                 experiments: [
-                    { id: "4.A", cols: "2 Fitur (Rasio + Verif)", activ: "Step Function", lr: "0.1", epoch: "100", note: "Berani pakai LR besar karena datanya sudah bagus." },
-                    { id: "4.B", cols: "2 Fitur (Rasio + Verif)", activ: "Step Function", lr: "0.01", epoch: "200", note: "Settingan standar buat cari akurasi terbaik." },
-                    { id: "4.C", cols: "2 Fitur (Rasio + Verif)", activ: "Step Function", lr: "0.001", epoch: "500", note: "Settingan presisi tinggi (lama tapi teliti)." }
+                    { id: "4.A", cols: "2 Fitur (Rasio + Verif)", activ: "Sigmoid", lr: "0.1", epoch: "100", note: "Berani pakai LR besar karena datanya sudah bagus." },
+                    { id: "4.B", cols: "2 Fitur (Rasio + Verif)", activ: "Sigmoid", lr: "0.01", epoch: "200", note: "Settingan standar buat cari akurasi terbaik." },
+                    { id: "4.C", cols: "2 Fitur (Rasio + Verif)", activ: "Sigmoid", lr: "0.001", epoch: "500", note: "Settingan presisi tinggi (lama tapi teliti)." }
                 ]
             },
             {
@@ -409,9 +410,9 @@
                     <p>Hati-hati! Hasil baginya bisa angka raksasa (ribuan). Kalau inputnya gede, <strong>Learning Rate WAJIB KECIL</strong>. Kalau LR besar, nanti grafiknya loncat-loncat gak jelas.</p>
                 `,
                 experiments: [
-                    { id: "5.A", cols: "2 Fitur (Post/Year + Verif)", activ: "Step Function", lr: "0.001", epoch: "200", note: "Mulai dengan LR kecil biar aman." },
-                    { id: "5.B", cols: "2 Fitur (Post/Year + Verif)", activ: "Step Function", lr: "0.0001", epoch: "500", note: "Kecilin lagi LR-nya buat atasi data outlier." },
-                    { id: "5.C", cols: "2 Fitur (Post/Year + Verif)", activ: "Step Function", lr: "0.01", epoch: "200", note: "Coba LR besar, lihat apakah akurasinya hancur?" }
+                    { id: "5.A", cols: "2 Fitur (Post/Year + Verif)", activ: "Sigmoid", lr: "0.001", epoch: "200", note: "Mulai dengan LR kecil biar aman." },
+                    { id: "5.B", cols: "2 Fitur (Post/Year + Verif)", activ: "Sigmoid", lr: "0.0001", epoch: "500", note: "Kecilin lagi LR-nya buat atasi data outlier." },
+                    { id: "5.C", cols: "2 Fitur (Post/Year + Verif)", activ: "Sigmoid", lr: "0.01", epoch: "200", note: "Coba LR besar, lihat apakah akurasinya hancur?" }
                 ]
             },
             {
@@ -429,9 +430,9 @@
                     <p>Bandingkan hasilmu sama Orang 1. Harusnya dengan fitur Log ini, akurasi kamu naik jauh dan trainingnya lebih cepat.</p>
                 `,
                 experiments: [
-                    { id: "6.A", cols: "2 Fitur (LogFol, LogFr)", activ: "Step Function", lr: "0.1", epoch: "100", note: "Data Log aman pakai LR besar." },
-                    { id: "6.B", cols: "2 Fitur (LogFol, LogFr)", activ: "Step Function", lr: "0.01", epoch: "300", note: "Cari settingan paling pas." },
-                    { id: "6.C", cols: "3 Fitur (+ account_age_years)", activ: "Step Function", lr: "0.01", epoch: "300", note: "Gabungin Log sama Umur, hasilnya gimana?" }
+                    { id: "6.A", cols: "2 Fitur (LogFol, LogFr)", activ: "Sigmoid", lr: "0.1", epoch: "100", note: "Data Log aman pakai LR besar." },
+                    { id: "6.B", cols: "2 Fitur (LogFol, LogFr)", activ: "Sigmoid", lr: "0.01", epoch: "300", note: "Cari settingan paling pas." },
+                    { id: "6.C", cols: "3 Fitur (+ account_age_years)", activ: "Sigmoid", lr: "0.01", epoch: "300", note: "Gabungin Log sama Umur, hasilnya gimana?" }
                 ]
             },
             {
@@ -449,9 +450,9 @@
                     <p>Karena datanya enteng (cuma 0 dan 1), harusnya komputer belajarnya cepat. Gak butuh ribuan epoch.</p>
                 `,
                 experiments: [
-                    { id: "7.A", cols: "3 Fitur (Semua Biner)", activ: "Step Function", lr: "0.1", epoch: "50", note: "Epoch dikit aja cukup harusnya." },
-                    { id: "7.B", cols: "3 Fitur (Semua Biner)", activ: "Step Function", lr: "0.01", epoch: "200", note: "Standar training biar lebih pasti." },
-                    { id: "7.C", cols: "2 Fitur (Hapus Verified)", activ: "Step Function", lr: "0.01", epoch: "200", note: "Coba tebak cuma dari gambar profil & background." }
+                    { id: "7.A", cols: "3 Fitur (Semua Biner)", activ: "Sigmoid", lr: "0.1", epoch: "50", note: "Epoch dikit aja cukup harusnya." },
+                    { id: "7.B", cols: "3 Fitur (Semua Biner)", activ: "Sigmoid", lr: "0.01", epoch: "200", note: "Standar training biar lebih pasti." },
+                    { id: "7.C", cols: "2 Fitur (Hapus Verified)", activ: "Sigmoid", lr: "0.01", epoch: "200", note: "Coba tebak cuma dari gambar profil & background." }
                 ]
             },
             {
@@ -469,9 +470,9 @@
                     <p><strong>AWAS!</strong> Hasil perkalian bisa gede banget. Kalau input gede, Learning Rate (LR) harus super kecil (mikro). Kalau LR kamu kegedean, nanti error.</p>
                 `,
                 experiments: [
-                    { id: "8.A", cols: "2 Fitur (Impact, Verif)", activ: "Step Function", lr: "0.0001", epoch: "500", note: "Wajib LR kecil karena angkanya hasil kali." },
-                    { id: "8.B", cols: "2 Fitur (Impact, Verif)", activ: "Step Function", lr: "0.00001", epoch: "1000", note: "LR makin kecil buat presisi." },
-                    { id: "8.C", cols: "2 Fitur (Impact, Verif)", activ: "Step Function", lr: "0.001", epoch: "200", note: "Coba LR agak besar, buktikan kalau error." }
+                    { id: "8.A", cols: "2 Fitur (Impact, Verif)", activ: "Sigmoid", lr: "0.0001", epoch: "500", note: "Wajib LR kecil karena angkanya hasil kali." },
+                    { id: "8.B", cols: "2 Fitur (Impact, Verif)", activ: "Sigmoid", lr: "0.00001", epoch: "1000", note: "LR makin kecil buat presisi." },
+                    { id: "8.C", cols: "2 Fitur (Impact, Verif)", activ: "Sigmoid", lr: "0.001", epoch: "200", note: "Coba LR agak besar, buktikan kalau error." }
                 ]
             },
             {
@@ -489,9 +490,9 @@
                     <p>Biar adil, pakai Learning Rate kecil dan Epoch yang banyak. Biarkan komputer belajar pelan-pelan buat menghargai fitur-fitur kecil kayak Verified dan Umur.</p>
                 `,
                 experiments: [
-                    { id: "9.A", cols: "4 Fitur (Combo)", activ: "Step Function", lr: "0.0001", epoch: "500", note: "LR kecil biar fitur follower gak mendominasi." },
-                    { id: "9.B", cols: "4 Fitur (Combo)", activ: "Step Function", lr: "0.00001", epoch: "1000", note: "Training lama biar fitur kecil kebaca." },
-                    { id: "9.C", cols: "4 Fitur (Combo)", activ: "Step Function", lr: "0.001", epoch: "200", note: "Cek baseline, seberapa dominan si follower?" }
+                    { id: "9.A", cols: "4 Fitur (Combo)", activ: "Sigmoid", lr: "0.0001", epoch: "500", note: "LR kecil biar fitur follower gak mendominasi." },
+                    { id: "9.B", cols: "4 Fitur (Combo)", activ: "Sigmoid", lr: "0.00001", epoch: "1000", note: "Training lama biar fitur kecil kebaca." },
+                    { id: "9.C", cols: "4 Fitur (Combo)", activ: "Sigmoid", lr: "0.001", epoch: "200", note: "Cek baseline, seberapa dominan si follower?" }
                 ]
             }
         ];
@@ -519,7 +520,6 @@
             });
         }
 
-        // Fungsi Render Halaman HOME (Dashboard Utama)
         // Fungsi Render Halaman HOME (Dashboard Utama)
         function renderHome() {
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
@@ -569,6 +569,7 @@
 
             const data = teamData[index];
 
+            // Updated Table Header from "Fungsi" to "Fungsi Aktivasi"
             contentDisplay.innerHTML = `
                 <div class="header-section">
                     <h1>${data.name}</h1>
@@ -588,7 +589,7 @@
                                     <tr>
                                         <th style="width:40px">No</th>
                                         <th>Kolom / Fitur</th>
-                                        <th>Fungsi</th>
+                                        <th>Fungsi Aktivasi</th>
                                         <th>LR</th>
                                         <th>Epoch</th>
                                         <th style="min-width:150px">Catatan Hipotesis</th>
