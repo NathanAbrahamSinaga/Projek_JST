@@ -245,6 +245,7 @@
         .btn-drive { background-color: var(--btn-drive); }
         .btn-sheet { background-color: var(--btn-sheet); }
         .btn-colab { background-color: var(--btn-colab); }
+        .btn-model { background-color: #8b5cf6; }
 
         /* --- RESPONSIVE / MOBILE CSS --- */
         @media (max-width: 850px) {
@@ -519,6 +520,7 @@
         }
 
         // Fungsi Render Halaman HOME (Dashboard Utama)
+        // Fungsi Render Halaman HOME (Dashboard Utama)
         function renderHome() {
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             
@@ -538,11 +540,17 @@
                         <a href="https://drive.google.com/drive/folders/12ICQwZu6MfudLYK72PSVKb_29z8def21?usp=drive_link" target="_blank" class="resource-btn btn-drive">
                             Folder Drive
                         </a>
+
                         <a href="https://docs.google.com/spreadsheets/d/1T8Jiwwq4u_H1ooMkZDy2o1fbBeg582MnYPK7fgI1644/edit?usp=drive_link" target="_blank" class="resource-btn btn-sheet">
                             Google Sheet
                         </a>
+
                         <a href="https://colab.research.google.com/drive/18iz594b7AD-c5psdtHJpcd0Dna63B_9z?usp=drive_link" target="_blank" class="resource-btn btn-colab">
-                            Pre-prosessing data (Code)
+                            Pre-prosessing Data (Code)
+                        </a>
+
+                        <a href="https://colab.research.google.com/drive/1GlS7e-dRspQWtzFv6NbQpWdSemhsgqyH?usp=drive_link" target="_blank" class="resource-btn btn-model">
+                            Referensi Kode Eksperimen
                         </a>
                     </div>
                 </div>
