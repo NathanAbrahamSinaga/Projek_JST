@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Eksperimen Tim - PBL Perceptron</title>
+    <style>
+        :root {
+            --primary: #0f172a;       /* Slate 900 */
+            --sidebar-bg: #1e293b;    /* Slate 800 */
+            --accent: #0ea5e9;        /* Sky 500 */
+            --bg: #f8fafc;            /* Slate 50 */
+            --text: #334155;
+            --white: #ffffff;
+            --header-table: #0284c7;  /* Biru Header Tabel */
+            
+            /* Warna Tombol Resource */
+            --btn-drive: #3b82f6;     /* Blue */
+            --btn-sheet: #10b981;     /* Emerald */
+            --btn-colab: #f59e0b;     /* Amber */
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 280px;
+            background-color: var(--sidebar-bg);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            overflow-y: auto;
+            border-right: 1px solid #0f172a;
+            flex-shrink: 0;
+        }
+
+        /* HOME BUTTON STYLE */
+        .sidebar h2 {
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #334155;
+            color: #e2e8f0;
+            cursor: pointer; /* Menandakan bisa diklik */
+            transition: color 0.3s;
+        }
+
+        .sidebar h2:hover {
+            color: var(--accent);
+            text-shadow: 0 0 10px rgba(14, 165, 233, 0.3);
+        }
+
+        .nav-item {
+            padding: 14px 15px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #cbd5e1;
+            border: 1px solid transparent;
+        }
+
+        .nav-item:hover {
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            border-color: rgba(255,255,255,0.1);
+        }
+
+        .nav-item.active {
+            background-color: var(--accent);
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+        }
+
+        /* MAIN CONTENT */
+        .main {
+            flex: 1;
+            padding: 30px 40px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header-section { margin-bottom: 20px; }
+        .header-section h1 { margin: 0; font-size: 1.8rem; color: var(--primary); }
+        .header-section .role-badge {
+            display: inline-block;
+            background-color: var(--accent);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+        /* CARD & TABS */
+        .card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .tabs {
+            display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0;
+        }
+        .tab-btn {
+            padding: 10px 20px; background: none; border: none; font-size: 0.95rem;
+            font-weight: 600; color: #64748b; cursor: pointer;
+            border-bottom: 3px solid transparent; transition: all 0.3s;
+        }
+        .tab-btn:hover { color: var(--accent); background: #f1f5f9; }
+        .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+        
+        .tab-content { display: none; animation: fadeIn 0.4s ease; }
+        .tab-content.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* TABLE STYLING */
+        .table-container { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem; }
+        
+        th, td { 
+            padding: 12px; text-align: left; border: 1px solid #cbd5e1; 
+        }
+        
+        th { 
+            background-color: var(--header-table); 
+            color: white; 
+            font-weight: 600; 
+            vertical-align: middle;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            text-align: center;
+        }
+        
+        td { text-align: center; }
+        td:last-child { text-align: left; }
+
+        tr:nth-child(even) { background-color: #f8fafc; }
+        tr:hover { background-color: #f0f9ff; }
+
+        /* BADGES */
+        .badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 0.75rem; }
+        .badge-step { background: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe; } 
+        
+        /* GUIDE STYLES */
+        .guide-text { line-height: 1.6; color: #334155; font-size: 1rem; }
+        .guide-text h4 { margin-top: 15px; margin-bottom: 8px; color: var(--accent); font-size: 1.05rem; font-weight: 700; }
+        .guide-text p { margin-bottom: 15px; }
+        
+        .spec-grid {
+            display: grid; grid-template-columns: 1fr 1.5fr; gap: 20px;
+            background-color: #f0f9ff; border: 1px solid #bae6fd;
+            padding: 20px; border-radius: 8px; margin-top: 20px;
+        }
+        .spec-item label { display: block; font-size: 0.75rem; text-transform: uppercase; color: #64748b; font-weight: bold; margin-bottom: 5px; }
+        .spec-item div { font-size: 1rem; font-weight: 600; color: #0f172a; font-family: 'Consolas', monospace; }
+        .formula-box { background: #fff; padding: 8px 12px; border-radius: 4px; border: 1px solid #cbd5e1; color: #d946ef !important; }
+
+        /* RESOURCE BUTTONS (NEW) */
+        .resource-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 20px; }
+        .resource-btn {
+            display: flex; align-items: center; justify-content: center;
+            padding: 20px; border-radius: 8px; color: white; text-decoration: none;
+            font-weight: 600; font-size: 1rem; transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+        .resource-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        .btn-drive { background-color: var(--btn-drive); }
+        .btn-sheet { background-color: var(--btn-sheet); }
+        .btn-colab { background-color: var(--btn-colab); }
+
+        @media (max-width: 800px) { 
+            body { flex-direction: column; overflow: auto; } 
+            .sidebar { width: 100%; height: auto; } 
+            .spec-grid { grid-template-columns: 1fr; } 
+            .resource-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <h2 onclick="renderHome()" title="Klik untuk ke Home">Home</h2>
+        
+        <div id="navContainer"></div>
+    
+    </div>
+
+    <div class="main">
+        <div id="contentDisplay">
+            </div>
+    </div>
+
+    <script>
+        // DATA UPDATED: BAHASA SEDERHANA & TO THE POINT
+        const teamData = [
+            {
+                name: "Orang 1", role: "Tugas: Data Mentah (Raw)",
+                features: "followers_count, friends_count, post_count",
+                origin: "Data Asli (Raw)",
+                guide: `
+                    <h4>1. Misi Kamu</h4>
+                    <p>Kamu adalah patokan (Baseline). Tugasmu cuma satu: Cek apakah Perceptron bisa pintar cuma dengan dikasih data mentah (Followers, Friends, Post) tanpa diapa-apain.</p>
+                    
+                    <h4>2. Logika Simpel</h4>
+                    <p>Kalau followernya banyak, harusnya akun asli kan? Tapi hati-hati, datanya gede banget (bisa jutaan). Komputer kadang bingung hitung angka segede itu.</p>
+                    
+                    <h4>3. Instruksi Penting</h4>
+                    <p>Mainkan <strong>Learning Rate (LR)</strong> kamu. Kalau pakai LR 0.1 hasilnya error, coba kecilin jadi 0.001 atau 0.0001. Cari settingan yang paling stabil.</p>
+                `,
+                experiments: [
+                    { id: "1.A", cols: "3 Fitur (Raw)", activ: "Step Function", lr: "0.1", epoch: "100", note: "Cek error: Apa yang terjadi kalau LR besar?" },
+                    { id: "1.B", cols: "3 Fitur (Raw)", activ: "Step Function", lr: "0.001", epoch: "100", note: "Kecilin LR biar perhitungan lebih stabil." },
+                    { id: "1.C", cols: "3 Fitur (Raw)", activ: "Step Function", lr: "0.0001", epoch: "500", note: "LR kecil banget + Epoch banyak = Lebih teliti." }
+                ]
+            },
+            {
+                name: "Orang 2", role: "Tugas: Profil & Umur",
+                features: "account_age_years, verified, default_profile_image",
+                origin: "Python: df['account_age_years']",
+                guide: `
+                    <h4>1. Misi Kamu</h4>
+                    <p>Kamu fokus deteksi akun bodong dari profilnya. Gak perlu liat follower. Cukup liat umur akun dan fotonya.</p>
+                    
+                    <h4>2. Logika Simpel</h4>
+                    <p>Akun fake biasanya: (1) Baru dibuat / umurnya muda, (2) Belum verified, (3) Malas ganti foto profil (masih gambar telur/default). Kalau ada ciri-ciri ini, harusnya fake.</p>
+                    
+                    <h4>3. Instruksi Penting</h4>
+                    <p>Data kamu angkanya kecil (umur paling cuma 0-15 tahun). Jadi harusnya model kamu cepat belajarnya. Coba bandingkan hasil kalau Verified dihapus, ngaruh gak?</p>
+                `,
+                experiments: [
+                    { id: "2.A", cols: "3 Fitur (Age, Verif, DefImg)", activ: "Step Function", lr: "0.01", epoch: "100", note: "Pakai settingan standar dulu." },
+                    { id: "2.B", cols: "3 Fitur (Age, Verif, DefImg)", activ: "Step Function", lr: "0.001", epoch: "300", note: "Tambah epoch biar belajarnya lebih lama." },
+                    { id: "2.C", cols: "2 Fitur (Age, DefImg)", activ: "Step Function", lr: "0.01", epoch: "300", note: "Hapus Verified, kita tes kekuatan fitur foto profil." }
+                ]
+            },
+            {
+                name: "Orang 3", role: "Tugas: Bahasa & Background",
+                features: "lang, profile_use_background_image, verified",
+                origin: "Python: Encoding & Biner",
+                guide: `
+                    <h4>1. Misi Kamu</h4>
+                    <p>Kamu pakai data sisa yang gak dipakai orang lain: Bahasa (Lang) dan Gambar Background. Kita mau tes apakah fitur "remeh" ini berguna.</p>
+                    
+                    <h4>2. Logika Simpel</h4>
+                    <p>Akun bot kadang pakai bahasa aneh-aneh (hasil encoding angka). Terus, akun bot biasanya profilnya polosan (gak ada gambar background). Coba buktikan teori ini.</p>
+                    
+                    <h4>3. Instruksi Penting</h4>
+                    <p>Data bahasa itu angka acak (encoding). Mungkin hasilnya jelek, tapi gak apa-apa. Itu namanya penemuan. Catat aja hasilnya jujur.</p>
+                `,
+                experiments: [
+                    { id: "3.A", cols: "3 Fitur (Lang, BG, Verif)", activ: "Step Function", lr: "0.01", epoch: "100", note: "Tes data bahasa yang sudah diubah jadi angka." },
+                    { id: "3.B", cols: "3 Fitur (Lang, BG, Verif)", activ: "Step Function", lr: "0.001", epoch: "500", note: "Coba learning rate kecil biar lebih teliti." },
+                    { id: "3.C", cols: "2 Fitur (BG, Verif)", activ: "Step Function", lr: "0.01", epoch: "200", note: "Hapus bahasa. Fokus cuma di background & verified." }
+                ]
+            },
+            {
+                name: "Orang 4", role: "Tugas: Rasio (Matematika)",
+                features: "ratio_fol_friend, verified",
+                origin: "Rumus: followers / (friends + 1)",
+                guide: `
+                    <h4>1. Misi Kamu</h4>
+                    <p>Kamu pakai fitur pintar. Jangan pakai data mentah. Pakai hasil bagi: <strong>Followers dibagi Friends</strong>.</p>
+                    
+                    <h4>2. Logika Simpel</h4>
+                    <p>Artis/Akun Asli: Follower banyak, following dikit = Rasionya Tinggi.<br>Bot/Fake: Follower dikit, following banyak (ngarep follback) = Rasionya Rendah/Nol.</p>
+                    
+                    <h4>3. Instruksi Penting</h4>
+                    <p>Ini fitur jagoan. Angkanya desimal kecil, jadi enak buat komputer hitung. Harusnya akurasi kamu lebih tinggi dari Orang 1. Buktikan!</p>
+                `,
+                experiments: [
+                    { id: "4.A", cols: "2 Fitur (Rasio + Verif)", activ: "Step Function", lr: "0.1", epoch: "100", note: "Berani pakai LR besar karena datanya sudah bagus." },
+                    { id: "4.B", cols: "2 Fitur (Rasio + Verif)", activ: "Step Function", lr: "0.01", epoch: "200", note: "Settingan standar buat cari akurasi terbaik." },
+                    { id: "4.C", cols: "2 Fitur (Rasio + Verif)", activ: "Step Function", lr: "0.001", epoch: "500", note: "Settingan presisi tinggi (lama tapi teliti)." }
+                ]
+            },
+            {
+                name: "Orang 5", role: "Tugas: Deteksi Spam",
+                features: "posts_per_year, verified",
+                origin: "Rumus: post_count / account_age_years",
+                guide: `
+                    <h4>1. Misi Kamu</h4>
+                    <p>Tugasmu menangkap "Tukang Nyepam". Kita pakai rumus: Jumlah Post dibagi Umur Akun.</p>
+                    
+                    <h4>2. Logika Simpel</h4>
+                    <p>Kalau ada akun baru seumur jagung (0.1 tahun) tapi post-nya udah 50.000, itu pasti bot nyepam. Manusia gak mungkin ngetweet secepat itu.</p>
+                    
+                    <h4>3. Instruksi Penting</h4>
+                    <p>Hati-hati! Hasil baginya bisa angka raksasa (ribuan). Kalau inputnya gede, <strong>Learning Rate WAJIB KECIL</strong>. Kalau LR besar, nanti grafiknya loncat-loncat gak jelas.</p>
+                `,
+                experiments: [
+                    { id: "5.A", cols: "2 Fitur (Post/Year + Verif)", activ: "Step Function", lr: "0.001", epoch: "200", note: "Mulai dengan LR kecil biar aman." },
+                    { id: "5.B", cols: "2 Fitur (Post/Year + Verif)", activ: "Step Function", lr: "0.0001", epoch: "500", note: "Kecilin lagi LR-nya buat atasi data outlier." },
+                    { id: "5.C", cols: "2 Fitur (Post/Year + Verif)", activ: "Step Function", lr: "0.01", epoch: "200", note: "Coba LR besar, lihat apakah akurasinya hancur?" }
+                ]
+            },
+            {
+                name: "Orang 6", role: "Tugas: Logaritma (Log)",
+                features: "log_followers, log_friends",
+                origin: "Rumus: np.log10(column + 1)",
+                guide: `
+                    <h4>1. Misi Kamu</h4>
+                    <p>Merapikan data yang berantakan. Follower orang kan beda jauh, ada yang 0 ada yang 10 juta. Kamu pakai rumus <strong>Log10</strong> biar angkanya jadi kecil semua (skala 0-7).</p>
+                    
+                    <h4>2. Logika Simpel</h4>
+                    <p>Komputer lebih suka angka kecil. Dengan Log, angka 1 juta cuma dianggap 6. Jadi komputer gak kaget liat angka follower yang beda jauh.</p>
+                    
+                    <h4>3. Instruksi Penting</h4>
+                    <p>Bandingkan hasilmu sama Orang 1. Harusnya dengan fitur Log ini, akurasi kamu naik jauh dan trainingnya lebih cepat.</p>
+                `,
+                experiments: [
+                    { id: "6.A", cols: "2 Fitur (LogFol, LogFr)", activ: "Step Function", lr: "0.1", epoch: "100", note: "Data Log aman pakai LR besar." },
+                    { id: "6.B", cols: "2 Fitur (LogFol, LogFr)", activ: "Step Function", lr: "0.01", epoch: "300", note: "Cari settingan paling pas." },
+                    { id: "6.C", cols: "3 Fitur (+ account_age_years)", activ: "Step Function", lr: "0.01", epoch: "300", note: "Gabungin Log sama Umur, hasilnya gimana?" }
+                ]
+            },
+            {
+                name: "Orang 7", role: "Tugas: Data Biner (0/1)",
+                features: "default_profile_image, profile_use_bg, verified",
+                origin: "Data Asli (Hanya kolom 0/1)",
+                guide: `
+                    <h4>1. Misi Kamu</h4>
+                    <p>Kamu yang paling unik. Kamu gak main angka. Datamu cuma: Ya atau Tidak (1 atau 0). Simpel banget.</p>
+                    
+                    <h4>2. Logika Simpel</h4>
+                    <p>Kita mau tes: Bisa gak sih nebak akun palsu cuma dari tampilan luarnya? (Pakai foto profil gak? Verified gak?) Tanpa tau jumlah followernya.</p>
+                    
+                    <h4>3. Instruksi Penting</h4>
+                    <p>Karena datanya enteng (cuma 0 dan 1), harusnya komputer belajarnya cepat. Gak butuh ribuan epoch.</p>
+                `,
+                experiments: [
+                    { id: "7.A", cols: "3 Fitur (Semua Biner)", activ: "Step Function", lr: "0.1", epoch: "50", note: "Epoch dikit aja cukup harusnya." },
+                    { id: "7.B", cols: "3 Fitur (Semua Biner)", activ: "Step Function", lr: "0.01", epoch: "200", note: "Standar training biar lebih pasti." },
+                    { id: "7.C", cols: "2 Fitur (Hapus Verified)", activ: "Step Function", lr: "0.01", epoch: "200", note: "Coba tebak cuma dari gambar profil & background." }
+                ]
+            },
+            {
+                name: "Orang 8", role: "Tugas: Impact Score",
+                features: "impact_score, verified",
+                origin: "Rumus: account_age_years * friends_count",
+                guide: `
+                    <h4>1. Misi Kamu</h4>
+                    <p>Kamu pakai rumus perkalian: <strong>Umur dikali Jumlah Teman</strong>. Tujuannya cari akun senior yang aktif.</p>
+                    
+                    <h4>2. Logika Simpel</h4>
+                    <p>Kalau akun tua (10 tahun) dan temannya banyak, skornya tinggi = Asli.<br>Kalau akun baru (0 tahun), dikali berapapun hasilnya nol = Fake/Baru.</p>
+                    
+                    <h4>3. Instruksi Penting</h4>
+                    <p><strong>AWAS!</strong> Hasil perkalian bisa gede banget. Kalau input gede, Learning Rate (LR) harus super kecil (mikro). Kalau LR kamu kegedean, nanti error.</p>
+                `,
+                experiments: [
+                    { id: "8.A", cols: "2 Fitur (Impact, Verif)", activ: "Step Function", lr: "0.0001", epoch: "500", note: "Wajib LR kecil karena angkanya hasil kali." },
+                    { id: "8.B", cols: "2 Fitur (Impact, Verif)", activ: "Step Function", lr: "0.00001", epoch: "1000", note: "LR makin kecil buat presisi." },
+                    { id: "8.C", cols: "2 Fitur (Impact, Verif)", activ: "Step Function", lr: "0.001", epoch: "200", note: "Coba LR agak besar, buktikan kalau error." }
+                ]
+            },
+            {
+                name: "Orang 9", role: "Tugas: Combo (Campuran)",
+                features: "followers_count, account_age_years, verified, profile_use_background_image",
+                origin: "Gabungan 4 Fitur Terbaik",
+                guide: `
+                    <h4>1. Misi Kamu</h4>
+                    <p>Kamu pakai semua jenis jurus. Ada angka jutaan (Follower), angka satuan (Umur), sama angka biner (Verified). Paling lengkap.</p>
+                    
+                    <h4>2. Tantangan</h4>
+                    <p>Masalahnya: Angka follower yang jutaan bisa "menutupi" angka umur yang kecil. Komputer jadi cuma peduli sama follower doang.</p>
+                    
+                    <h4>3. Instruksi Penting</h4>
+                    <p>Biar adil, pakai Learning Rate kecil dan Epoch yang banyak. Biarkan komputer belajar pelan-pelan buat menghargai fitur-fitur kecil kayak Verified dan Umur.</p>
+                `,
+                experiments: [
+                    { id: "9.A", cols: "4 Fitur (Combo)", activ: "Step Function", lr: "0.0001", epoch: "500", note: "LR kecil biar fitur follower gak mendominasi." },
+                    { id: "9.B", cols: "4 Fitur (Combo)", activ: "Step Function", lr: "0.00001", epoch: "1000", note: "Training lama biar fitur kecil kebaca." },
+                    { id: "9.C", cols: "4 Fitur (Combo)", activ: "Step Function", lr: "0.001", epoch: "200", note: "Cek baseline, seberapa dominan si follower?" }
+                ]
+            }
+        ];
+
+        const navContainer = document.getElementById('navContainer');
+        const contentDisplay = document.getElementById('contentDisplay');
+
+        // Fungsi Render Menu Navigasi Samping
+        function renderNav() {
+            navContainer.innerHTML = '';
+            teamData.forEach((member, index) => {
+                const div = document.createElement('div');
+                div.className = 'nav-item';
+                div.innerHTML = `<span>${member.name}</span> <small style="opacity:0.7">${member.role.split(':')[1]}</small>`;
+                div.onclick = () => loadMember(index);
+                navContainer.appendChild(div);
+            });
+        }
+
+        // Fungsi Render Halaman HOME (Dashboard Utama)
+        function renderHome() {
+            // Hapus class active dari sidebar
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+
+            contentDisplay.innerHTML = `
+                <div class="header-section" style="text-align:center; margin-top:50px;">
+                    <h1>Wadidaw</h1>
+                </div>
+
+                <div class="card" style="max-width:800px; margin: 0 auto;">
+                    <h3 style="margin-top:0; border-bottom:1px solid #e2e8f0; padding-bottom:15px; color:var(--primary);">
+                        Link Penting
+                    </h3>
+                    <div class="resource-grid">
+                        <a href="https://drive.google.com/drive/folders/12ICQwZu6MfudLYK72PSVKb_29z8def21?usp=drive_link" target="_blank" class="resource-btn btn-drive">
+                            Folder Drive
+                        </a>
+                        <a href="https://docs.google.com/spreadsheets/d/1T8Jiwwq4u_H1ooMkZDy2o1fbBeg582MnYPK7fgI1644/edit?usp=drive_link" target="_blank" class="resource-btn btn-sheet">
+                            Google Shee
+                        </a>
+                        <a href="https://colab.research.google.com/drive/18iz594b7AD-c5psdtHJpcd0Dna63B_9z?usp=drive_link" target="_blank" class="resource-btn btn-colab">
+                            Pre-prosessing Data Colab
+                        </a>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Fungsi Load Halaman Anggota
+        function loadMember(index) {
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-item')[index].classList.add('active');
+
+            const data = teamData[index];
+
+            contentDisplay.innerHTML = `
+                <div class="header-section">
+                    <h1>${data.name}</h1>
+                    <span class="role-badge">${data.role}</span>
+                </div>
+
+                <div class="card">
+                    <div class="tabs">
+                        <button class="tab-btn active" onclick="switchTab(event, 'tugas')">📋 Tabel Eksperimen</button>
+                        <button class="tab-btn" onclick="switchTab(event, 'panduan')">📖 Panduan Simpel</button>
+                    </div>
+
+                    <div id="tugas" class="tab-content active">
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th style="width:50px">No</th>
+                                        <th>Kolom / Fitur</th>
+                                        <th>Fungsi Aktivasi</th>
+                                        <th>Learning Rate</th>
+                                        <th>Epoch</th>
+                                        <th>Catatan Hipotesis</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${data.experiments.map(exp => `
+                                        <tr>
+                                            <td><strong>${exp.id}</strong></td>
+                                            <td>${exp.cols}</td>
+                                            <td><span class="badge badge-step">${exp.activ}</span></td>
+                                            <td><code>${exp.lr}</code></td>
+                                            <td>${exp.epoch}</td>
+                                            <td>${exp.note}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                        <p style="margin-top:15px; font-size:0.85rem; color:#64748b; font-style:italic;">
+                            *Catat hasil akurasi (Training & Testing) di Google Sheet laporan ya.
+                        </p>
+                    </div>
+
+                    <div id="panduan" class="tab-content">
+                        <div class="spec-grid" style="margin-top:0; margin-bottom:20px;">
+                            <div class="spec-item">
+                                <label>Fitur Yang Digunakan</label>
+                                <div>${data.features}</div>
+                            </div>
+                            <div class="spec-item">
+                                <label>Asal Data / Rumus Python</label>
+                                <div class="formula-box">${data.origin}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="guide-text">${data.guide}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function switchTab(evt, tabName) {
+            const parent = evt.target.closest('.card');
+            parent.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            parent.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            parent.querySelector(`#${tabName}`).classList.add('active');
+            evt.target.classList.add('active');
+        }
+
+        // Inisialisasi Awal
+        renderNav();
+        renderHome(); // Load halaman home saat pertama kali dibuka
+    </script>
+</body>
+</html>

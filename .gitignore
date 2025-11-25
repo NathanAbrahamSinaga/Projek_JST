@@ -1,0 +1,8 @@
+# Ignore semuanya
+*
+
+# Tapi jangan ignore folder .gitignore sendiri
+!.gitignore
+
+# Jangan ignore index.html
+!index.html
