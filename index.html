@@ -18,6 +18,7 @@
             --btn-drive: #3b82f6;     /* Blue */
             --btn-sheet: #10b981;     /* Emerald */
             --btn-colab: #f59e0b;     /* Amber */
+            --btn-canva: #f87171;     /* Rose */
         }
 
         body {
@@ -313,185 +314,26 @@
     <script>
         const teamData = [
             {
-                name: "Eksperimen 1", role: "Tugas: Data Mentah (Raw)",
-                features: "followers_count, friends_count, post_count",
-                origin: "Data asli (tanpa transformasi)",
+                name: "",
+                features: "",
+                origin: "",
                 guide: `
-                    <h4>1. Misi Kamu</h4>
-                    <p>Kamu adalah patokan (Baseline). Tugasmu cuma satu: Cek apakah Perceptron bisa pintar cuma dengan dikasih data mentah (Followers, Friends, Post) tanpa diapa-apain.</p>
+                    <h4>Coming Soon</h4>
+                    <p>Lorem</p>
                     
-                    <h4>2. Logika Simpel</h4>
-                    <p>Kalau followernya banyak, harusnya akun asli kan? Tapi hati-hati, datanya gede banget (bisa jutaan). Komputer kadang bingung hitung angka segede itu.</p>
+                    <h4>Lorem</h4>
+                    <p>Ipsum</p>
                     
-                    <h4>3. Instruksi Penting</h4>
-                    <p>Mainkan <strong>Learning Rate (LR)</strong> kamu. Kalau pakai LR 0.1 hasilnya error, coba kecilin jadi 0.001 atau 0.0001. Cari settingan yang paling stabil.</p>
+                    <h4>Ipsum</h4>
+                    <p>Ipsum</p>
                 `,
                 experiments: [
-                    { id: "1.A", cols: "followers_count, friends_count, post_count", activ: "Sigmoid", lr: "0.1", epoch: "100", note: "Cek error: Apa yang terjadi kalau LR besar?" },
-                    { id: "1.B", cols: "followers_count, friends_count, post_count", activ: "Sigmoid", lr: "0.001", epoch: "100", note: "Kecilin LR biar perhitungan lebih stabil." },
-                    { id: "1.C", cols: "followers_count, friends_count, post_count", activ: "Sigmoid", lr: "0.0001", epoch: "500", note: "LR kecil banget + Epoch banyak = Lebih teliti." }
+                    { id: "asdf", cols: "asdf", activ: "asdf", lr: "asdf", epoch: "asdf", note: "asdf" },
+                    { id: "asfd", cols: "asdf", activ: "asdf", lr: "asdf", epoch: "asdf", note: "asdf"},
+                    { id: "asdf", cols: "asdf", activ: "asdf", lr: "asdf", epoch: "asdf", note: "asdf" }
                 ]
             },
-            {
-                name: "Eksperimen 2", role: "Tugas: Profil & Umur",
-                features: "account_age_years, verified, default_profile_image",
-                origin: "account_age_years = tahun sekarang - created_at",
-                guide: `
-                    <h4>1. Misi Kamu</h4>
-                    <p>Kamu fokus deteksi akun bodong dari profilnya. Gak perlu liat follower. Cukup liat umur akun dan fotonya.</p>
-                    
-                    <h4>2. Logika Simpel</h4>
-                    <p>Akun fake biasanya: (1) Baru dibuat / umurnya muda, (2) Belum verified, (3) Malas ganti foto profil (masih gambar telur/default). Kalau ada ciri-ciri ini, harusnya fake.</p>
-                    
-                    <h4>3. Instruksi Penting</h4>
-                    <p>Data kamu angkanya kecil (umur paling cuma 0-15 tahun). Jadi harusnya model kamu cepat belajarnya. Coba bandingkan hasil kalau LR diubah-ubah.</p>
-                `,
-                experiments: [
-                    { id: "2.A", cols: "account_age_years, verified, default_profile_image", activ: "Sigmoid", lr: "0.01", epoch: "100", note: "Pakai settingan standar dulu." },
-                    { id: "2.B", cols: "account_age_years, verified, default_profile_image", activ: "Sigmoid", lr: "0.001", epoch: "300", note: "Tambah epoch biar belajarnya lebih lama." },
-                    { id: "2.C", cols: "account_age_years, verified, default_profile_image", activ: "Sigmoid", lr: "0.1", epoch: "100", note: "Coba LR lebih besar, lihat perubahan akurasi." }
-                ]
-            },
-            {
-                name: "Eksperimen 3", role: "Tugas: Bahasa & Background",
-                features: "lang, profile_use_background_image, verified",
-                origin: "lang = label encoding dari kode bahasa",
-                guide: `
-                    <h4>1. Misi Kamu</h4>
-                    <p>Kamu pakai data sisa yang gak dipakai orang lain: Bahasa (Lang) dan Gambar Background. Kita mau tes apakah fitur "remeh" ini berguna.</p>
-                    
-                    <h4>2. Logika Simpel</h4>
-                    <p>Akun bot kadang pakai bahasa aneh-aneh (hasil encoding angka). Terus, akun bot biasanya profilnya polosan (gak ada gambar background). Coba buktikan teori ini.</p>
-                    
-                    <h4>3. Instruksi Penting</h4>
-                    <p>Data bahasa itu angka acak (encoding). Mungkin hasilnya jelek, tapi gak apa-apa. Itu namanya penemuan. Catat aja hasilnya jujur dengan fitur yang konsisten.</p>
-                `,
-                experiments: [
-                    { id: "3.A", cols: "lang, profile_use_background_image, verified", activ: "Sigmoid", lr: "0.01", epoch: "100", note: "Tes data bahasa yang sudah diubah jadi angka." },
-                    { id: "3.B", cols: "lang, profile_use_background_image, verified", activ: "Sigmoid", lr: "0.001", epoch: "500", note: "Coba learning rate kecil biar lebih teliti." },
-                    { id: "3.C", cols: "lang, profile_use_background_image, verified", activ: "Sigmoid", lr: "0.1", epoch: "200", note: "Uji dengan LR lebih agresif." }
-                ]
-            },
-            {
-                name: "Eksperimen 4", role: "Tugas: Rasio (Matematika)",
-                features: "ratio_fol_friend, verified",
-                origin: "ratio_fol_friend = followers_count / (friends_count + 1)",
-                guide: `
-                    <h4>1. Misi Kamu</h4>
-                    <p>Kamu pakai fitur pintar. Jangan pakai data mentah. Pakai hasil bagi: <strong>Followers dibagi Friends</strong>.</p>
-                    
-                    <h4>2. Logika Simpel</h4>
-                    <p>Artis/Akun Asli: Follower banyak, following dikit = Rasionya Tinggi.<br>Bot/Fake: Follower dikit, following banyak (ngarep follback) = Rasionya Rendah/Nol.</p>
-                    
-                    <h4>3. Instruksi Penting</h4>
-                    <p>Ini fitur jagoan. Angkanya desimal kecil, jadi enak buat komputer hitung. Harusnya akurasi kamu lebih tinggi dari Orang 1. Buktikan dengan variasi LR!</p>
-                `,
-                experiments: [
-                    { id: "4.A", cols: "ratio_fol_friend, verified", activ: "Sigmoid", lr: "0.1", epoch: "100", note: "Berani pakai LR besar karena datanya sudah bagus." },
-                    { id: "4.B", cols: "ratio_fol_friend, verified", activ: "Sigmoid", lr: "0.01", epoch: "200", note: "Settingan standar buat cari akurasi terbaik." },
-                    { id: "4.C", cols: "ratio_fol_friend, verified", activ: "Sigmoid", lr: "0.001", epoch: "500", note: "Settingan presisi tinggi (lama tapi teliti)." }
-                ]
-            },
-            {
-                name: "Eksperimen 5", role: "Tugas: Deteksi Spam",
-                features: "posts_per_year, verified",
-                origin: "posts_per_year = post_count / account_age_years",
-                guide: `
-                    <h4>1. Misi Kamu</h4>
-                    <p>Tugasmu menangkap "Tukang Nyepam". Kita pakai rumus: Jumlah Post dibagi Umur Akun.</p>
-                    
-                    <h4>2. Logika Simpel</h4>
-                    <p>Kalau ada akun baru seumur jagung (0.1 tahun) tapi post-nya udah 50.000, itu pasti bot nyepam. Manusia gak mungkin ngetweet secepat itu.</p>
-                    
-                    <h4>3. Instruksi Penting</h4>
-                    <p>Hati-hati! Hasil baginya bisa angka raksasa (ribuan). Kalau inputnya gede, <strong>Learning Rate WAJIB KECIL</strong>. Kalau LR besar, nanti grafiknya loncat-loncat gak jelas.</p>
-                `,
-                experiments: [
-                    { id: "5.A", cols: "posts_per_year, verified", activ: "Sigmoid", lr: "0.001", epoch: "200", note: "Mulai dengan LR kecil biar aman." },
-                    { id: "5.B", cols: "posts_per_year, verified", activ: "Sigmoid", lr: "0.0001", epoch: "500", note: "Kecilin lagi LR-nya buat atasi data outlier." },
-                    { id: "5.C", cols: "posts_per_year, verified", activ: "Sigmoid", lr: "0.01", epoch: "200", note: "Coba LR besar, lihat apakah akurasinya hancur?" }
-                ]
-            },
-            {
-                name: "Eksperimen 6", role: "Tugas: Logaritma (Log)",
-                features: "log_followers, log_friends",
-                origin: "log_followers = log10(followers_count + 1)<br>log_friends = log10(friends_count + 1)",
-                guide: `
-                    <h4>1. Misi Kamu</h4>
-                    <p>Merapikan data yang berantakan. Follower orang kan beda jauh, ada yang 0 ada yang 10 juta. Kamu pakai rumus <strong>Log10</strong> biar angkanya jadi kecil semua (skala 0-7).</p>
-                    
-                    <h4>2. Logika Simpel</h4>
-                    <p>Komputer lebih suka angka kecil. Dengan Log, angka 1 juta cuma dianggap 6. Jadi komputer gak kaget liat angka follower yang beda jauh.</p>
-                    
-                    <h4>3. Instruksi Penting</h4>
-                    <p>Bandingkan hasilmu sama Orang 1. Harusnya dengan fitur Log ini, akurasi kamu naik jauh dan trainingnya lebih cepat. Konsisten gunakan 2 fitur log ini!</p>
-                `,
-                experiments: [
-                    { id: "6.A", cols: "log_followers, log_friends", activ: "Sigmoid", lr: "0.1", epoch: "100", note: "Data Log aman pakai LR besar." },
-                    { id: "6.B", cols: "log_followers, log_friends", activ: "Sigmoid", lr: "0.01", epoch: "300", note: "Cari settingan paling pas." },
-                    { id: "6.C", cols: "log_followers, log_friends", activ: "Sigmoid", lr: "0.001", epoch: "500", note: "LR kecil untuk presisi maksimal." }
-                ]
-            },
-            {
-                name: "Eksperimen 7", role: "Tugas: Data Biner (0/1)",
-                features: "default_profile_image, profile_use_background_image, verified",
-                origin: "Data asli (kolom biner: 0 atau 1)",
-                guide: `
-                    <h4>1. Misi Kamu</h4>
-                    <p>Kamu yang paling unik. Kamu gak main angka. Datamu cuma: Ya atau Tidak (1 atau 0). Simpel banget.</p>
-                    
-                    <h4>2. Logika Simpel</h4>
-                    <p>Kita mau tes: Bisa gak sih nebak akun palsu cuma dari tampilan luarnya? (Pakai foto profil gak? Verified gak? Pakai background gak?) Tanpa tau jumlah followernya.</p>
-                    
-                    <h4>3. Instruksi Penting</h4>
-                    <p>Karena datanya enteng (cuma 0 dan 1), harusnya komputer belajarnya cepat. Konsisten pakai 3 fitur biner ini di semua eksperimen!</p>
-                `,
-                experiments: [
-                    { id: "7.A", cols: "default_profile_image, profile_use_background_image, verified", activ: "Sigmoid", lr: "0.1", epoch: "50", note: "Epoch dikit aja cukup harusnya." },
-                    { id: "7.B", cols: "default_profile_image, profile_use_background_image, verified", activ: "Sigmoid", lr: "0.01", epoch: "200", note: "Standar training biar lebih pasti." },
-                    { id: "7.C", cols: "default_profile_image, profile_use_background_image, verified", activ: "Sigmoid", lr: "0.001", epoch: "300", note: "LR paling kecil untuk stabilitas." }
-                ]
-            },
-            {
-                name: "Eksperimen 8", role: "Tugas: Impact Score",
-                features: "impact_score, verified",
-                origin: "impact_score = account_age_years * friends_count",
-                guide: `
-                    <h4>1. Misi Kamu</h4>
-                    <p>Kamu pakai rumus perkalian: <strong>Umur dikali Jumlah Teman</strong>. Tujuannya cari akun senior yang aktif.</p>
-                    
-                    <h4>2. Logika Simpel</h4>
-                    <p>Kalau akun tua (10 tahun) dan temannya banyak, skornya tinggi = Asli.<br>Kalau akun baru (0 tahun), dikali berapapun hasilnya nol = Fake/Baru.</p>
-                    
-                    <h4>3. Instruksi Penting</h4>
-                    <p><strong>AWAS!</strong> Hasil perkalian bisa gede banget. Kalau input gede, Learning Rate (LR) harus super kecil (mikro). Kalau LR kamu kegedean, nanti error. Konsisten pakai 2 fitur ini!</p>
-                `,
-                experiments: [
-                    { id: "8.A", cols: "impact_score, verified", activ: "Sigmoid", lr: "0.0001", epoch: "500", note: "Wajib LR kecil karena angkanya hasil kali." },
-                    { id: "8.B", cols: "impact_score, verified", activ: "Sigmoid", lr: "0.00001", epoch: "1000", note: "LR makin kecil buat presisi." },
-                    { id: "8.C", cols: "impact_score, verified", activ: "Sigmoid", lr: "0.001", epoch: "200", note: "Coba LR agak besar, buktikan kalau error." }
-                ]
-            },
-            {
-                name: "Eksperimen 9", role: "Tugas: Combo (Campuran)",
-                features: "followers_count, account_age_years, verified, profile_use_background_image",
-                origin: "Gabungan fitur dari eksperimen sebelumnya",
-                guide: `
-                    <h4>1. Misi Kamu</h4>
-                    <p>Kamu pakai semua jenis jurus. Ada angka jutaan (Follower), angka satuan (Umur), sama angka biner (Verified). Paling lengkap.</p>
-                    
-                    <h4>2. Tantangan</h4>
-                    <p>Masalahnya: Angka follower yang jutaan bisa "menutupi" angka umur yang kecil. Komputer jadi cuma peduli sama follower doang.</p>
-                    
-                    <h4>3. Instruksi Penting</h4>
-                    <p>Biar adil, pakai Learning Rate kecil dan Epoch yang banyak. Biarkan komputer belajar pelan-pelan buat menghargai fitur-fitur kecil kayak Verified dan Umur. Konsisten pakai 4 fitur ini!</p>
-                `,
-                experiments: [
-                    { id: "9.A", cols: "followers_count, account_age_years, verified, profile_use_background_image", activ: "Sigmoid", lr: "0.0001", epoch: "500", note: "LR kecil biar fitur follower gak mendominasi." },
-                    { id: "9.B", cols: "followers_count, account_age_years, verified, profile_use_background_image", activ: "Sigmoid", lr: "0.00001", epoch: "1000", note: "Training lama biar fitur kecil kebaca." },
-                    { id: "9.C", cols: "followers_count, account_age_years, verified, profile_use_background_image", activ: "Sigmoid", lr: "0.001", epoch: "200", note: "Cek baseline, seberapa dominan si follower?" }
-                ]
-            }
+    
         ];
 
         const navContainer = document.getElementById('navContainer');
