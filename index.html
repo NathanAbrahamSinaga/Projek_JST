@@ -3,22 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JST</title>
+    <title>JST Dashboard</title>
     <style>
         :root {
-            --primary: #0f172a;       /* Slate 900 */
-            --sidebar-bg: #1e293b;    /* Slate 800 */
-            --accent: #0ea5e9;        /* Sky 500 */
-            --bg: #f8fafc;            /* Slate 50 */
+            --primary: #0f172a;
+            --sidebar-bg: #1e293b;
+            --accent: #0ea5e9;
+            --bg: #f8fafc;
             --text: #334155;
             --white: #ffffff;
-            --header-table: #0284c7;  /* Biru Header Tabel */
-            
-            /* Warna Tombol Resource */
-            --btn-drive: #3b82f6;     /* Blue */
-            --btn-sheet: #10b981;     /* Emerald */
-            --btn-colab: #f59e0b;     /* Amber */
-            --btn-canva: #f87171;     /* Rose */
+            --header-table: #0284c7;
+            --btn-drive: #3b82f6;
+            --btn-sheet: #10b981;
+            --btn-colab: #f59e0b;
+            --btn-canva: #f87171;
+            --btn-model: #8b5cf6;
         }
 
         body {
@@ -32,7 +31,6 @@
             overflow: hidden;
         }
 
-        /* --- MOBILE HEADER (Visible only on mobile) --- */
         .mobile-header {
             display: none;
             background-color: var(--sidebar-bg);
@@ -63,7 +61,6 @@
             letter-spacing: 1px;
         }
 
-        /* --- SIDEBAR --- */
         .sidebar {
             width: 280px;
             background-color: var(--sidebar-bg);
@@ -79,7 +76,6 @@
             z-index: 1002;
         }
 
-        /* OVERLAY GELAP UNTUK MOBILE */
         .overlay {
             display: none;
             position: fixed;
@@ -90,7 +86,6 @@
         }
         .overlay.active { display: block; }
 
-        /* HOME BUTTON STYLE */
         .sidebar h2 {
             font-size: 1.1rem;
             text-transform: uppercase;
@@ -135,7 +130,6 @@
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
         }
 
-        /* --- MAIN CONTENT --- */
         .main {
             flex: 1;
             padding: 30px 40px;
@@ -158,7 +152,6 @@
             margin-top: 8px;
         }
 
-        /* CARD & TABS */
         .card {
             background: var(--white);
             border-radius: 12px;
@@ -187,7 +180,6 @@
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* TABLE STYLING */
         .table-container { 
             overflow-x: auto; 
             -webkit-overflow-scrolling: touch;
@@ -215,11 +207,9 @@
         tr:nth-child(even) { background-color: #f8fafc; }
         tr:hover { background-color: #f0f9ff; }
 
-        /* BADGES */
         .badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 0.75rem; }
         .badge-step { background: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe; } 
         
-        /* GUIDE STYLES */
         .guide-text { line-height: 1.6; color: #334155; font-size: 1rem; }
         .guide-text h4 { margin-top: 15px; margin-bottom: 8px; color: var(--accent); font-size: 1.05rem; font-weight: 700; }
         .guide-text p { margin-bottom: 15px; }
@@ -233,7 +223,6 @@
         .spec-item div { font-size: 1rem; font-weight: 600; color: #0f172a; font-family: 'Consolas', monospace; word-break: break-all; }
         .formula-box { background: #fff; padding: 8px 12px; border-radius: 4px; border: 1px solid #cbd5e1; color: #d946ef !important; }
 
-        /* RESOURCE BUTTONS */
         .resource-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 20px; }
         .resource-btn {
             display: flex; align-items: center; justify-content: center;
@@ -246,9 +235,9 @@
         .btn-drive { background-color: var(--btn-drive); }
         .btn-sheet { background-color: var(--btn-sheet); }
         .btn-colab { background-color: var(--btn-colab); }
-        .btn-model { background-color: #8b5cf6; }
+        .btn-model { background-color: var(--btn-model); }
+        .btn-canva { background-color: var(--btn-canva); }
 
-        /* --- RESPONSIVE / MOBILE CSS --- */
         @media (max-width: 850px) {
             body { 
                 flex-direction: column; 
@@ -314,26 +303,16 @@
     <script>
         const teamData = [
             {
-                name: "",
-                features: "",
-                origin: "",
+                name: "Unknown",
+                role: "Role: Coming Soon",
+                features: "Belum Ditentukan",
+                origin: "Belum Ditentukan",
                 guide: `
-                    <h4>Coming Soon</h4>
-                    <p>Lorem</p>
-                    
-                    <h4>Lorem</h4>
-                    <p>Ipsum</p>
-                    
-                    <h4>Ipsum</h4>
-                    <p>Ipsum</p>
+                    <h4>Status: Coming Soon</h4>
+                    <p>Halaman ini sedang dalam pengembangan. Data eksperimen belum tersedia.</p>
                 `,
-                experiments: [
-                    { id: "asdf", cols: "asdf", activ: "asdf", lr: "asdf", epoch: "asdf", note: "asdf" },
-                    { id: "asfd", cols: "asdf", activ: "asdf", lr: "asdf", epoch: "asdf", note: "asdf"},
-                    { id: "asdf", cols: "asdf", activ: "asdf", lr: "asdf", epoch: "asdf", note: "asdf" }
-                ]
-            },
-    
+                experiments: []
+            }
         ];
 
         const navContainer = document.getElementById('navContainer');
@@ -351,7 +330,7 @@
             teamData.forEach((member, index) => {
                 const div = document.createElement('div');
                 div.className = 'nav-item';
-                div.innerHTML = `<span>${member.name}</span> <small style="opacity:0.7">${member.role.split(':')[1]}</small>`;
+                div.innerHTML = `<span>${member.name}</span> <small style="opacity:0.7">${member.role.split(':')[1] || 'Anggota'}</small>`;
                 div.onclick = () => loadMember(index);
                 navContainer.appendChild(div);
             });
@@ -373,20 +352,24 @@
                         Link Penting
                     </h3>
                     <div class="resource-grid">
-                        <a href="https://drive.google.com/drive/folders/12ICQwZu6MfudLYK72PSVKb_29z8def21?usp=drive_link" target="_blank" class="resource-btn btn-drive">
+                        <a href="#" target="_blank" class="resource-btn btn-drive">
                             Folder Drive
                         </a>
 
-                        <a href="https://docs.google.com/spreadsheets/d/1T8Jiwwq4u_H1ooMkZDy2o1fbBeg582MnYPK7fgI1644/edit?usp=drive_link" target="_blank" class="resource-btn btn-sheet">
+                        <a href="#" target="_blank" class="resource-btn btn-sheet">
                             Google Sheet
                         </a>
 
-                        <a href="https://colab.research.google.com/drive/18iz594b7AD-c5psdtHJpcd0Dna63B_9z?usp=drive_link" target="_blank" class="resource-btn btn-colab">
+                        <a href="#" target="_blank" class="resource-btn btn-colab">
                             Pre-processing Data
                         </a>
 
-                        <a href="https://colab.research.google.com/drive/1GlS7e-dRspQWtzFv6NbQpWdSemhsgqyH?usp=drive_link" target="_blank" class="resource-btn btn-model">
+                        <a href="#" target="_blank" class="resource-btn btn-model">
                             Referensi Kode
+                        </a>
+                        
+                        <a href="#" target="_blank" class="resource-btn btn-canva">
+                            Presentasi Canva
                         </a>
                     </div>
                 </div>
@@ -402,6 +385,19 @@
             }
 
             const data = teamData[index];
+
+            const experimentsHTML = data.experiments.length > 0 ? 
+                data.experiments.map(exp => `
+                    <tr>
+                        <td><strong>${exp.id}</strong></td>
+                        <td style="font-size: 0.85rem;">${exp.cols}</td>
+                        <td><span class="badge badge-step">${exp.activ}</span></td>
+                        <td><code style="background: #fef3c7; padding: 4px 8px; border-radius: 3px;">${exp.lr}</code></td>
+                        <td><strong>${exp.epoch}</strong></td>
+                        <td>${exp.note}</td>
+                    </tr>
+                `).join('') : 
+                `<tr><td colspan="6" style="text-align:center; padding: 20px; color: #64748b;">Belum ada data eksperimen.</td></tr>`;
 
             contentDisplay.innerHTML = `
                 <div class="header-section">
@@ -438,16 +434,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    ${data.experiments.map(exp => `
-                                        <tr>
-                                            <td><strong>${exp.id}</strong></td>
-                                            <td style="font-size: 0.85rem;">${exp.cols}</td>
-                                            <td><span class="badge badge-step">${exp.activ}</span></td>
-                                            <td><code style="background: #fef3c7; padding: 4px 8px; border-radius: 3px;">${exp.lr}</code></td>
-                                            <td><strong>${exp.epoch}</strong></td>
-                                            <td>${exp.note}</td>
-                                        </tr>
-                                    `).join('')}
+                                    ${experimentsHTML}
                                 </tbody>
                             </table>
                         </div>
