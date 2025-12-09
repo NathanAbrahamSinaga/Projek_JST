@@ -18,6 +18,7 @@
             --btn-colab: #f59e0b;
             --btn-canva: #f87171;
             --btn-model: #8b5cf6;
+            --btn-learn: #ec4899;
         }
 
         body {
@@ -237,6 +238,129 @@
         .btn-colab { background-color: var(--btn-colab); }
         .btn-model { background-color: var(--btn-model); }
         .btn-canva { background-color: var(--btn-canva); }
+        .btn-learn { 
+            background: linear-gradient(135deg, #ec4899 0%, #f43f5e 100%);
+            font-size: 1.3rem;
+            padding: 25px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .learning-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .learning-section {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+
+        .learning-section h3 {
+            margin: 0 0 20px 0;
+            color: var(--primary);
+            font-size: 1.4rem;
+            border-bottom: 3px solid var(--accent);
+            padding-bottom: 10px;
+        }
+
+        .pdf-download {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 30px;
+            text-decoration: none;
+            display: block;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: transform 0.2s;
+        }
+
+        .pdf-download:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -5px rgba(59, 130, 246, 0.4);
+        }
+
+        .roadmap-item {
+            background: #f8fafc;
+            border-left: 4px solid var(--accent);
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .roadmap-item:hover {
+            background: #f0f9ff;
+            transform: translateX(5px);
+        }
+
+        .roadmap-item::after {
+            content: '↓';
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.5rem;
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        .roadmap-item:last-child::after {
+            content: '';
+        }
+
+        .roadmap-number {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .roadmap-link {
+            display: block;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 10px;
+            padding: 10px 15px;
+            background: white;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .roadmap-link:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        .section-label {
+            display: inline-block;
+            background: #fef3c7;
+            color: #92400e;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
 
         @media (max-width: 850px) {
             body { 
@@ -276,6 +400,15 @@
             
             .guide-text { font-size: 0.95rem; }
             .nav-item { padding: 12px 10px; }
+
+            .learning-layout {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .roadmap-item::after {
+                bottom: -20px;
+            }
         }
     </style>
 </head>
@@ -371,6 +504,119 @@
                             Presentasi Canva (tolong juha)
                         </a>
                     </div>
+
+                    <div style="margin-top: 30px;">
+                        <a href="javascript:void(0)" onclick="renderLearning()" class="resource-btn btn-learn">
+                            TOLONG BELAJAR
+                        </a>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderLearning() {
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            
+            if(window.innerWidth <= 850 && sidebar.classList.contains('active')) {
+                toggleSidebar();
+            }
+
+            contentDisplay.innerHTML = `
+                <div class="header-section" style="text-align:center;">
+                    <h1>Panduan Belajar JST</h1>
+                    <p style="color: #64748b; margin-top: 10px;">Roadmap</p>
+                </div>
+
+                <div class="learning-layout">
+                    <div class="learning-section">
+                        <span class="section-label">Bahasa Indonesia</span>
+                        <h3>Tutorial Dasar JST</h3>
+                        
+                        <a href="https://drive.google.com/file/d/1EGJnQFNFaH4Bs9II3sM1RVhBIT3JWBsy/view?usp=drive_link" target="_blank" class="pdf-download" style="margin-bottom: 25px;">
+                            Materi MLP dari dosen
+                        </a>
+                        
+                        <div class="roadmap-item">
+                            <div>
+                                <span class="roadmap-number">1</span>
+                                <strong>Pengenalan Neural Network</strong>
+                            </div>
+                            <a href="https://youtu.be/x2D-glFuKEA?si=gXHIDDFRsfJkTM9z" target="_blank" class="roadmap-link">
+                                Tonton Video Part 1
+                            </a>
+                        </div>
+
+                        <div class="roadmap-item">
+                            <div>
+                                <span class="roadmap-number">2</span>
+                                <strong>Training dan Backpropagation</strong>
+                            </div>
+                            <a href="https://youtu.be/qePUhs34qA8?si=ie7kl57JrEw74MOr" target="_blank" class="roadmap-link">
+                                Tonton Video Part 2
+                            </a>
+                        </div>
+
+                        <div class="roadmap-item">
+                            <div>
+                                <span class="roadmap-number">3</span>
+                                <strong>Implementasi Praktis</strong>
+                            </div>
+                            <a href="https://youtu.be/Wg1kKLY7Lcg?si=F0G89ZHHTdKXMTrg" target="_blank" class="roadmap-link">
+                                Tonton Video Part 3
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="learning-section">
+                        <span class="section-label">English (Visual Terbaik)</span>
+                        <h3>3Blue1Brown Series</h3>
+                        
+                        <div class="roadmap-item">
+                            <div>
+                                <span class="roadmap-number">1</span>
+                                <strong>What is a Neural Network?</strong>
+                            </div>
+                            <a href="https://youtu.be/aircAruvnKk?si=Bt4NukDi3kv5t928" target="_blank" class="roadmap-link">
+                                Watch Chapter 1
+                            </a>
+                        </div>
+
+                        <div class="roadmap-item">
+                            <div>
+                                <span class="roadmap-number">2</span>
+                                <strong>Gradient Descent</strong>
+                            </div>
+                            <a href="https://youtu.be/IHZwWFHWa-w?si=gcA0-7zBDy-tW3bR" target="_blank" class="roadmap-link">
+                                Watch Chapter 2
+                            </a>
+                        </div>
+
+                        <div class="roadmap-item">
+                            <div>
+                                <span class="roadmap-number">3</span>
+                                <strong>Backpropagation</strong>
+                            </div>
+                            <a href="https://youtu.be/Ilg3gGewQ5U?si=GiHceikzuAS3Ft6H" target="_blank" class="roadmap-link">
+                                Watch Chapter 3
+                            </a>
+                        </div>
+
+                        <div class="roadmap-item">
+                            <div>
+                                <span class="roadmap-number">4</span>
+                                <strong>Backpropagation Calculus</strong>
+                            </div>
+                            <a href="https://youtu.be/tIeHLnjs5U8?si=bOhGNBlHkIK7PvLH" target="_blank" class="roadmap-link">
+                                Watch Chapter 4
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 30px; padding: 20px; background: #fef3c7; border-radius: 8px;">
+                    <p style="margin: 0; color: #92400e; font-weight: 600; font-size: 1.05rem;">
+                        Tips: Tonton video Indonesia dulu untuk pemahaman dasar, lalu lanjut ke 3Blue1Brown untuk visualisasi yang lebih mendalam!
+                    </p>
                 </div>
             `;
         }
