@@ -498,16 +498,42 @@
     </div>
 
     <script>
+        const experimentConfigs = [
+            { lr: "0.01", epoch: "50" },
+            { lr: "0.01", epoch: "100" },
+            { lr: "0.05", epoch: "50" },
+            { lr: "0.05", epoch: "100" },
+            { lr: "0.001", epoch: "200" },
+            { lr: "0.005", epoch: "150" },
+            { lr: "0.1", epoch: "30" },
+            { lr: "0.0005", epoch: "300" },
+            { lr: "0.02", epoch: "75" },
+            { lr: "0.01", epoch: "150" }
+        ];
+
         const generateExperiments = (colName) => {
             const exps = [];
-            // 10 ReLU Experiments (Fixed LR/Epoch)
-            for(let i=1; i<=10; i++) {
-                exps.push({id: i, cols: colName, activ: "ReLU", lr: "0.01", epoch: "100"});
-            }
-            // 10 Sigmoid Experiments (Fixed LR/Epoch)
-            for(let i=11; i<=20; i++) {
-                exps.push({id: i, cols: colName, activ: "Sigmoid", lr: "0.01", epoch: "100"});
-            }
+            
+            experimentConfigs.forEach((cfg, index) => {
+                exps.push({
+                    id: index + 1,
+                    cols: colName,
+                    activ: "ReLU",
+                    lr: cfg.lr,
+                    epoch: cfg.epoch
+                });
+            });
+
+            experimentConfigs.forEach((cfg, index) => {
+                exps.push({
+                    id: index + 11,
+                    cols: colName,
+                    activ: "Sigmoid",
+                    lr: cfg.lr,
+                    epoch: cfg.epoch
+                });
+            });
+
             return exps;
         };
 
@@ -519,7 +545,7 @@
                 origin: "Dataset Asli (7 Kolom)",
                 guide: `
                     <h4>Strategi:</h4>
-                    <p>Menggunakan fitur murni dari dataset tanpa melakukan feature engineering tambahan. Dilakukan 20 eksperimen (10 ReLU, 10 Sigmoid) dengan parameter yang terkontrol (LR 0.01, Epoch 100).</p>
+                    <p>Menggunakan fitur murni dari dataset tanpa melakukan feature engineering tambahan. Dilakukan 20 eksperimen (10 ReLU, 10 Sigmoid) dengan pola parameter yang variatif.</p>
                 `,
                 experiments: generateExperiments("Raw Features")
             },
@@ -530,7 +556,7 @@
                 origin: "CI = T - 0.55(1 - H/100)(T - 14)",
                 guide: `
                     <h4>Strategi:</h4>
-                    <p>Fokus pada aspek termal. Menguji apakah fitur turunan suhu dan kelembaban lebih efektif daripada data mentah dengan konfigurasi standar.</p>
+                    <p>Fokus pada aspek termal. Menguji apakah fitur turunan suhu dan kelembaban lebih efektif daripada data mentah.</p>
                 `,
                 experiments: generateExperiments("Thermal Features")
             },
@@ -541,7 +567,7 @@
                 origin: "WindPower = WindSpeed²",
                 guide: `
                     <h4>Strategi:</h4>
-                    <p>Hipotesis bahwa kondisi cuaca sangat dipengaruhi oleh angin. Menggunakan fitur WindPower pada 20 eksperimen terstandarisasi.</p>
+                    <p>Hipotesis bahwa kondisi cuaca sangat dipengaruhi oleh angin. Menggunakan fitur WindPower pada eksperimen variatif.</p>
                 `,
                 experiments: generateExperiments("Wind Features")
             },
@@ -552,7 +578,7 @@
                 origin: "PressureTemp = P / (T + 273.15)",
                 guide: `
                     <h4>Strategi:</h4>
-                    <p>Menggunakan hukum gas ideal. 20 Eksperimen (10 ReLU/10 Sigmoid) dijalankan untuk validasi fitur densitas udara dengan parameter tetap.</p>
+                    <p>Menggunakan hukum gas ideal. 20 Eksperimen (10 ReLU/10 Sigmoid) dijalankan untuk validasi fitur densitas udara.</p>
                 `,
                 experiments: generateExperiments("Physics Features")
             },
@@ -563,7 +589,7 @@
                 origin: "Gabungan Semua Kolom",
                 guide: `
                     <h4>Strategi:</h4>
-                    <p>Memasukkan semua 21 fitur. Eksperimen ini menguji kemampuan model menangani input dimensi tinggi dengan parameter pelatihan yang konstan.</p>
+                    <p>Memasukkan semua 21 fitur. Eksperimen ini menguji kemampuan model menangani input dimensi tinggi.</p>
                 `,
                 experiments: generateExperiments("All 21 Features")
             },
@@ -585,7 +611,7 @@
                 origin: "Top 3 Korelasi Tertinggi",
                 guide: `
                     <h4>Strategi:</h4>
-                    <p>Hanya menggunakan 3 fitur utama. 20 Eksperimen ini bertujuan membuktikan efisiensi model minimalis dengan LR dan Epoch standar.</p>
+                    <p>Hanya menggunakan 3 fitur utama. Eksperimen ini bertujuan membuktikan efisiensi model minimalis.</p>
                 `,
                 experiments: generateExperiments("Top 3 Features")
             },
@@ -596,7 +622,7 @@
                 origin: "pd.get_dummies()",
                 guide: `
                     <h4>Strategi:</h4>
-                    <p>Hanya menggunakan data kategorikal. Menguji kemampuan model belajar dari input biner/sparse saja dengan 20 kali percobaan.</p>
+                    <p>Hanya menggunakan data kategorikal. Menguji kemampuan model belajar dari input biner/sparse saja.</p>
                 `,
                 experiments: generateExperiments("Categorical Only")
             },
@@ -831,7 +857,7 @@
                                         Fitur: <code style="background: white; padding: 2px 8px; border-radius: 3px; color: #d946ef;">${data.features}</code>
                                     </p>
                                     <p style="margin: 5px 0 0 0; color: #64748b; font-size: 0.9rem;">
-                                        Total 20 Eksperimen (10 ReLU + 10 Sigmoid) dengan LR & Epoch tetap.
+                                        Total 20 Eksperimen (10 ReLU + 10 Sigmoid) dengan pola parameter seragam.
                                     </p>
                                 </div>
                                 <div style="background:white; padding:5px 10px; border-radius:4px; border:1px solid #cbd5e1; font-weight:bold; color:var(--text);">
