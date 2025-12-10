@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JST Dashboard</title>
+    <title>JST Dashboard - Final Project</title>
     <style>
         :root {
             --primary: #0f172a;
@@ -210,6 +210,7 @@
 
         .badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 0.75rem; }
         .badge-step { background: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe; } 
+        .badge-sig { background: #fce7f3; color: #9d174d; border: 1px solid #fbcfe8; }
         
         .guide-text { line-height: 1.6; color: #334155; font-size: 1rem; }
         .guide-text h4 { margin-top: 15px; margin-bottom: 8px; color: var(--accent); font-size: 1.05rem; font-weight: 700; }
@@ -239,21 +240,21 @@
         .btn-model { background-color: var(--btn-model); }
         .btn-canva { background-color: var(--btn-canva); }
         .btn-learn {
-            background: linear-gradient(135deg, #28232d, #10141d); /* Deep purple to dark electric blue */
+            background: linear-gradient(135deg, #28232d, #10141d);
             color: white;
             font-size: 1.4rem;
             padding: 25px;
             font-weight: 900;
             letter-spacing: 2px;
             text-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
-            box-shadow:
+            box-shadow: 
                 0 0 15px rgba(106, 17, 203, 0.5),
                 0 0 25px rgba(37, 117, 252, 0.4),
                 0 0 35px rgba(106, 17, 203, 0.3);
             position: relative;
             overflow: hidden;
             animation: 
-                pulse 1.5s infinite alternate,
+                pulse 1.5s infinite alternate, 
                 rainbowGlowDark 4s linear infinite,
                 shake 5s ease-in-out infinite;
             border: 2px dashed rgba(255, 255, 255, 0.2);
@@ -263,39 +264,39 @@
 
         .btn-learn:hover {
             transform: scale(1.1) rotate(-1deg) !important;
-            box-shadow:
+            box-shadow: 
                 0 0 25px rgba(37, 31, 34, 0.8),
                 0 0 40px rgba(44, 43, 46, 0.7),
                 0 0 55px rgba(30, 144, 255, 0.6);
             animation: none !important;
-            background: linear-gradient(90deg, #8a2be2, #4b0082, #1e3a8a, #0d1b2a); /* Indigo to deep navy */
+            background: linear-gradient(90deg, #8a2be2, #4b0082, #1e3a8a, #0d1b2a);
             letter-spacing: 5px;
             text-shadow: 0 0 12px rgba(255, 255, 255, 0.9), 0 0 20px rgba(138, 43, 226, 0.7);
         }
 
         @keyframes rainbowGlowDark {
             0% { 
-                box-shadow:
+                box-shadow: 
                     0 0 15px rgba(138, 43, 226, 0.6),
                     0 0 25px rgba(106, 17, 203, 0.5);
             }
             25% { 
-                box-shadow:
+                box-shadow: 
                     0 0 15px rgba(255, 105, 180, 0.6),
                     0 0 25px rgba(199, 21, 133, 0.5);
             }
             50% { 
-                box-shadow:
+                box-shadow: 
                     0 0 15px rgba(30, 144, 255, 0.6),
                     0 0 25px rgba(25, 25, 112, 0.4);
             }
             75% { 
-                box-shadow:
+                box-shadow: 
                     0 0 15px rgba(34, 139, 34, 0.6),
                     0 0 25px rgba(0, 100, 0, 0.4);
             }
             100% { 
-                box-shadow:
+                box-shadow: 
                     0 0 15px rgba(138, 43, 226, 0.6),
                     0 0 25px rgba(106, 17, 203, 0.5);
             }
@@ -308,11 +309,10 @@
             75% { transform: rotate(-1.5deg); }
         }
 
-        /* Opsional: animasi pulse yang lebih halus */
         @keyframes pulse {
             0% { box-shadow: 0 0 15px rgba(106, 17, 203, 0.5), 0 0 25px rgba(37, 117, 252, 0.4); }
             100% { box-shadow: 0 0 20px rgba(106, 17, 203, 0.7), 0 0 35px rgba(37, 117, 252, 0.6); }
-}
+        }
 
         .learning-layout {
             display: grid;
@@ -500,15 +500,310 @@
     <script>
         const teamData = [
             {
-                name: "Unknown",
-                role: "Role: Coming Soon",
-                features: "Belum Ditentukan",
-                origin: "Belum Ditentukan",
+                name: "Anggota 1 (Raw)",
+                role: "Role: Original Features",
+                features: "Temp, Hum, Press, WindSpeed, WindDir, Precip, Cloud",
+                origin: "Dataset Asli (7 Kolom)",
                 guide: `
-                    <h4>Status: Coming Soon</h4>
-                    <p>Halaman ini sedang dalam pengembangan. Data eksperimen belum tersedia.</p>
+                    <h4>Strategi:</h4>
+                    <p>Menggunakan fitur murni dari dataset tanpa melakukan feature engineering tambahan. Total 20 eksperimen dilakukan dengan memvariasikan fungsi aktivasi (10 ReLU, 10 Sigmoid) serta Hyperparameter Learning Rate dan Epoch.</p>
                 `,
-                experiments: []
+                experiments: [
+                    // 10 ReLU Experiments
+                    {id: 1, cols: "Raw", activ: "ReLU", lr: "0.01", epoch: "50", note: "Baseline"},
+                    {id: 2, cols: "Raw", activ: "ReLU", lr: "0.01", epoch: "100", note: "Epoch Increase"},
+                    {id: 3, cols: "Raw", activ: "ReLU", lr: "0.005", epoch: "100", note: "Lower LR"},
+                    {id: 4, cols: "Raw", activ: "ReLU", lr: "0.001", epoch: "200", note: "Slow Learn"},
+                    {id: 5, cols: "Raw", activ: "ReLU", lr: "0.05", epoch: "50", note: "Aggressive"},
+                    {id: 6, cols: "Raw", activ: "ReLU", lr: "0.1", epoch: "30", note: "Fast Converge"},
+                    {id: 7, cols: "Raw", activ: "ReLU", lr: "0.01", epoch: "20", note: "Early Stop"},
+                    {id: 8, cols: "Raw", activ: "ReLU", lr: "0.0001", epoch: "500", note: "Deep Explore"},
+                    {id: 9, cols: "Raw", activ: "ReLU", lr: "0.02", epoch: "75", note: "Tweak LR"},
+                    {id: 10, cols: "Raw", activ: "ReLU", lr: "0.01", epoch: "150", note: "Stability Test"},
+                    // 10 Sigmoid Experiments
+                    {id: 11, cols: "Raw", activ: "Sigmoid", lr: "0.01", epoch: "50", note: "Sigmoid Base"},
+                    {id: 12, cols: "Raw", activ: "Sigmoid", lr: "0.01", epoch: "100", note: "Sig + Epoch"},
+                    {id: 13, cols: "Raw", activ: "Sigmoid", lr: "0.05", epoch: "50", note: "High LR Sig"},
+                    {id: 14, cols: "Raw", activ: "Sigmoid", lr: "0.1", epoch: "50", note: "Very High LR"},
+                    {id: 15, cols: "Raw", activ: "Sigmoid", lr: "0.005", epoch: "200", note: "Smooth Conv"},
+                    {id: 16, cols: "Raw", activ: "Sigmoid", lr: "0.001", epoch: "300", note: "Slow Sigmoid"},
+                    {id: 17, cols: "Raw", activ: "Sigmoid", lr: "0.02", epoch: "80", note: "Mid Adjustment"},
+                    {id: 18, cols: "Raw", activ: "Sigmoid", lr: "0.01", epoch: "20", note: "Quick Check"},
+                    {id: 19, cols: "Raw", activ: "Sigmoid", lr: "0.01", epoch: "150", note: "Deep Sigmoid"},
+                    {id: 20, cols: "Raw", activ: "Sigmoid", lr: "0.005", epoch: "100", note: "Final Check"}
+                ]
+            },
+            {
+                name: "Anggota 2 (Thermal)",
+                role: "Role: Comfort Engineering",
+                features: "Temp, Humidity, ComfortIndex, TempHumidity",
+                origin: "CI = T - 0.55(1 - H/100)(T - 14)",
+                guide: `
+                    <h4>Strategi:</h4>
+                    <p>Fokus pada aspek termal. 20 Eksperimen (10 ReLU, 10 Sigmoid) untuk menguji apakah fitur turunan suhu dan kelembaban lebih efektif daripada data mentah.</p>
+                `,
+                experiments: [
+                    // 10 ReLU
+                    {id: 1, cols: "Thermal", activ: "ReLU", lr: "0.01", epoch: "50", note: "Base Thermal"},
+                    {id: 2, cols: "Thermal", activ: "ReLU", lr: "0.005", epoch: "150", note: "Fine Tuning"},
+                    {id: 3, cols: "Thermal", activ: "ReLU", lr: "0.001", epoch: "200", note: "Precision"},
+                    {id: 4, cols: "Thermal", activ: "ReLU", lr: "0.02", epoch: "50", note: "Boost LR"},
+                    {id: 5, cols: "Thermal", activ: "ReLU", lr: "0.1", epoch: "30", note: "Fast Learn"},
+                    {id: 6, cols: "Thermal", activ: "ReLU", lr: "0.01", epoch: "100", note: "Epoch 100"},
+                    {id: 7, cols: "Thermal", activ: "ReLU", lr: "0.0005", epoch: "400", note: "Long Run"},
+                    {id: 8, cols: "Thermal", activ: "ReLU", lr: "0.01", epoch: "25", note: "Short Run"},
+                    {id: 9, cols: "Thermal", activ: "ReLU", lr: "0.05", epoch: "60", note: "Aggressive"},
+                    {id: 10, cols: "Thermal", activ: "ReLU", lr: "0.002", epoch: "120", note: "Mid Range"},
+                    // 10 Sigmoid
+                    {id: 11, cols: "Thermal", activ: "Sigmoid", lr: "0.01", epoch: "50", note: "Sig Base"},
+                    {id: 12, cols: "Thermal", activ: "Sigmoid", lr: "0.05", epoch: "50", note: "Sig Boost"},
+                    {id: 13, cols: "Thermal", activ: "Sigmoid", lr: "0.1", epoch: "40", note: "Sig Fast"},
+                    {id: 14, cols: "Thermal", activ: "Sigmoid", lr: "0.005", epoch: "100", note: "Sig Stable"},
+                    {id: 15, cols: "Thermal", activ: "Sigmoid", lr: "0.01", epoch: "150", note: "Sig Deep"},
+                    {id: 16, cols: "Thermal", activ: "Sigmoid", lr: "0.001", epoch: "250", note: "Sig Slow"},
+                    {id: 17, cols: "Thermal", activ: "Sigmoid", lr: "0.02", epoch: "80", note: "Sig Tweak"},
+                    {id: 18, cols: "Thermal", activ: "Sigmoid", lr: "0.002", epoch: "120", note: "Sig Fine"},
+                    {id: 19, cols: "Thermal", activ: "Sigmoid", lr: "0.01", epoch: "200", note: "Sig Long"},
+                    {id: 20, cols: "Thermal", activ: "Sigmoid", lr: "0.05", epoch: "100", note: "Sig Aggro"}
+                ]
+            },
+            {
+                name: "Anggota 3 (Wind)",
+                role: "Role: Wind Engineering",
+                features: "WindSpeed, WindDirection, WindPower",
+                origin: "WindPower = WindSpeed²",
+                guide: `
+                    <h4>Strategi:</h4>
+                    <p>Hipotesis bahwa kondisi cuaca sangat dipengaruhi oleh angin. 20 Eksperimen dilakukan untuk melihat performa fitur WindPower pada berbagai fungsi aktivasi.</p>
+                `,
+                experiments: [
+                    // 10 ReLU
+                    {id: 1, cols: "Wind", activ: "ReLU", lr: "0.01", epoch: "50", note: "Wind Base"},
+                    {id: 2, cols: "Wind", activ: "ReLU", lr: "0.01", epoch: "120", note: "More Epochs"},
+                    {id: 3, cols: "Wind", activ: "ReLU", lr: "0.001", epoch: "100", note: "Small Steps"},
+                    {id: 4, cols: "Wind", activ: "ReLU", lr: "0.05", epoch: "40", note: "Big Steps"},
+                    {id: 5, cols: "Wind", activ: "ReLU", lr: "0.005", epoch: "80", note: "Mid LR"},
+                    {id: 6, cols: "Wind", activ: "ReLU", lr: "0.1", epoch: "30", note: "Rush"},
+                    {id: 7, cols: "Wind", activ: "ReLU", lr: "0.0001", epoch: "300", note: "Crawl"},
+                    {id: 8, cols: "Wind", activ: "ReLU", lr: "0.02", epoch: "60", note: "Adjusted"},
+                    {id: 9, cols: "Wind", activ: "ReLU", lr: "0.01", epoch: "200", note: "Deep Wind"},
+                    {id: 10, cols: "Wind", activ: "ReLU", lr: "0.015", epoch: "90", note: "Custom"},
+                    // 10 Sigmoid
+                    {id: 11, cols: "Wind", activ: "Sigmoid", lr: "0.01", epoch: "50", note: "Sig Base"},
+                    {id: 12, cols: "Wind", activ: "Sigmoid", lr: "0.05", epoch: "60", note: "Sig Power"},
+                    {id: 13, cols: "Wind", activ: "Sigmoid", lr: "0.1", epoch: "40", note: "Sig Rush"},
+                    {id: 14, cols: "Wind", activ: "Sigmoid", lr: "0.005", epoch: "150", note: "Sig Smooth"},
+                    {id: 15, cols: "Wind", activ: "Sigmoid", lr: "0.001", epoch: "200", note: "Sig Detail"},
+                    {id: 16, cols: "Wind", activ: "Sigmoid", lr: "0.02", epoch: "100", note: "Sig Mid"},
+                    {id: 17, cols: "Wind", activ: "Sigmoid", lr: "0.01", epoch: "100", note: "Sig Epoch+"},
+                    {id: 18, cols: "Wind", activ: "Sigmoid", lr: "0.002", epoch: "120", note: "Sig LowLR"},
+                    {id: 19, cols: "Wind", activ: "Sigmoid", lr: "0.01", epoch: "250", note: "Sig MaxEp"},
+                    {id: 20, cols: "Wind", activ: "Sigmoid", lr: "0.03", epoch: "70", note: "Sig Custom"}
+                ]
+            },
+            {
+                name: "Anggota 4 (Pressure)",
+                role: "Role: Physics Engineering",
+                features: "AirPressure, Temperature, PressureTemp",
+                origin: "PressureTemp = P / (T + 273.15)",
+                guide: `
+                    <h4>Strategi:</h4>
+                    <p>Menggunakan hukum gas ideal. 20 Eksperimen (10 ReLU/10 Sigmoid) dijalankan untuk validasi fitur densitas udara.</p>
+                `,
+                experiments: [
+                    // 10 ReLU
+                    {id: 1, cols: "Physics", activ: "ReLU", lr: "0.01", epoch: "50", note: "Base Phys"},
+                    {id: 2, cols: "Physics", activ: "ReLU", lr: "0.005", epoch: "100", note: "Stable"},
+                    {id: 3, cols: "Physics", activ: "ReLU", lr: "0.001", epoch: "200", note: "Detailed"},
+                    {id: 4, cols: "Physics", activ: "ReLU", lr: "0.1", epoch: "40", note: "Fast"},
+                    {id: 5, cols: "Physics", activ: "ReLU", lr: "0.02", epoch: "60", note: "Boosted"},
+                    {id: 6, cols: "Physics", activ: "ReLU", lr: "0.01", epoch: "150", note: "Deep Learn"},
+                    {id: 7, cols: "Physics", activ: "ReLU", lr: "0.0005", epoch: "300", note: "Long Haul"},
+                    {id: 8, cols: "Physics", activ: "ReLU", lr: "0.05", epoch: "50", note: "Aggressive"},
+                    {id: 9, cols: "Physics", activ: "ReLU", lr: "0.01", epoch: "25", note: "Quick"},
+                    {id: 10, cols: "Physics", activ: "ReLU", lr: "0.015", epoch: "80", note: "Tuned"},
+                    // 10 Sigmoid
+                    {id: 11, cols: "Physics", activ: "Sigmoid", lr: "0.01", epoch: "50", note: "Sig Base"},
+                    {id: 12, cols: "Physics", activ: "Sigmoid", lr: "0.02", epoch: "100", note: "Sig Boost"},
+                    {id: 13, cols: "Physics", activ: "Sigmoid", lr: "0.005", epoch: "150", note: "Sig Stable"},
+                    {id: 14, cols: "Physics", activ: "Sigmoid", lr: "0.05", epoch: "60", note: "Sig High"},
+                    {id: 15, cols: "Physics", activ: "Sigmoid", lr: "0.1", epoch: "30", note: "Sig Fast"},
+                    {id: 16, cols: "Physics", activ: "Sigmoid", lr: "0.001", epoch: "250", note: "Sig Slow"},
+                    {id: 17, cols: "Physics", activ: "Sigmoid", lr: "0.01", epoch: "100", note: "Sig Std"},
+                    {id: 18, cols: "Physics", activ: "Sigmoid", lr: "0.002", epoch: "120", note: "Sig Fine"},
+                    {id: 19, cols: "Physics", activ: "Sigmoid", lr: "0.01", epoch: "200", note: "Sig Deep"},
+                    {id: 20, cols: "Physics", activ: "Sigmoid", lr: "0.03", epoch: "75", note: "Sig Tuned"}
+                ]
+            },
+            {
+                name: "Anggota 5 (Full)",
+                role: "Role: All Features",
+                features: "Raw + All Engineered (21 Fitur Total)",
+                origin: "Gabungan Semua Kolom",
+                guide: `
+                    <h4>Strategi:</h4>
+                    <p>Memasukkan semua 21 fitur. 20 Eksperimen dilakukan untuk melihat bagaimana model menangani input dimensi tinggi dengan variasi aktivasi dan learning rate.</p>
+                `,
+                experiments: [
+                    // 10 ReLU
+                    {id: 1, cols: "All 21", activ: "ReLU", lr: "0.01", epoch: "50", note: "Heavy Base"},
+                    {id: 2, cols: "All 21", activ: "ReLU", lr: "0.001", epoch: "100", note: "Safe Learn"},
+                    {id: 3, cols: "All 21", activ: "ReLU", lr: "0.005", epoch: "80", note: "Mid Pace"},
+                    {id: 4, cols: "All 21", activ: "ReLU", lr: "0.0005", epoch: "200", note: "Careful"},
+                    {id: 5, cols: "All 21", activ: "ReLU", lr: "0.02", epoch: "50", note: "Push LR"},
+                    {id: 6, cols: "All 21", activ: "ReLU", lr: "0.01", epoch: "150", note: "Convergence"},
+                    {id: 7, cols: "All 21", activ: "ReLU", lr: "0.05", epoch: "40", note: "Risky"},
+                    {id: 8, cols: "All 21", activ: "ReLU", lr: "0.002", epoch: "120", note: "Tuned"},
+                    {id: 9, cols: "All 21", activ: "ReLU", lr: "0.01", epoch: "250", note: "Long Run"},
+                    {id: 10, cols: "All 21", activ: "ReLU", lr: "0.001", epoch: "300", note: "Very Long"},
+                    // 10 Sigmoid
+                    {id: 11, cols: "All 21", activ: "Sigmoid", lr: "0.01", epoch: "50", note: "Sig Base"},
+                    {id: 12, cols: "All 21", activ: "Sigmoid", lr: "0.05", epoch: "60", note: "Sig Push"},
+                    {id: 13, cols: "All 21", activ: "Sigmoid", lr: "0.1", epoch: "40", note: "Sig Fast"},
+                    {id: 14, cols: "All 21", activ: "Sigmoid", lr: "0.005", epoch: "100", note: "Sig Stable"},
+                    {id: 15, cols: "All 21", activ: "Sigmoid", lr: "0.001", epoch: "200", note: "Sig Slow"},
+                    {id: 16, cols: "All 21", activ: "Sigmoid", lr: "0.01", epoch: "120", note: "Sig Mid"},
+                    {id: 17, cols: "All 21", activ: "Sigmoid", lr: "0.02", epoch: "80", note: "Sig Tweak"},
+                    {id: 18, cols: "All 21", activ: "Sigmoid", lr: "0.01", epoch: "200", note: "Sig Deep"},
+                    {id: 19, cols: "All 21", activ: "Sigmoid", lr: "0.002", epoch: "150", note: "Sig Fine"},
+                    {id: 20, cols: "All 21", activ: "Sigmoid", lr: "0.005", epoch: "250", note: "Sig Long"}
+                ]
+            },
+            {
+                name: "Anggota 6 (Precip)",
+                role: "Role: Rain/Snow Focus",
+                features: "Precipitation, PrecipIntensity, CloudCover",
+                origin: "PrecipIntensity = Precip * WindSpeed",
+                guide: `
+                    <h4>Strategi:</h4>
+                    <p>Fokus mendeteksi hujan/salju. 20 Eksperimen (Split 10/10) untuk memaksimalkan deteksi cuaca basah.</p>
+                `,
+                experiments: [
+                    // 10 ReLU
+                    {id: 1, cols: "Precip", activ: "ReLU", lr: "0.01", epoch: "50", note: "Base Rain"},
+                    {id: 2, cols: "Precip", activ: "ReLU", lr: "0.02", epoch: "60", note: "Rain Boost"},
+                    {id: 3, cols: "Precip", activ: "ReLU", lr: "0.005", epoch: "100", note: "Rain Stable"},
+                    {id: 4, cols: "Precip", activ: "ReLU", lr: "0.001", epoch: "150", note: "Rain Detail"},
+                    {id: 5, cols: "Precip", activ: "ReLU", lr: "0.1", epoch: "30", note: "Rain Fast"},
+                    {id: 6, cols: "Precip", activ: "ReLU", lr: "0.01", epoch: "120", note: "Rain Deep"},
+                    {id: 7, cols: "Precip", activ: "ReLU", lr: "0.0005", epoch: "250", note: "Rain Slow"},
+                    {id: 8, cols: "Precip", activ: "ReLU", lr: "0.05", epoch: "40", note: "Rain Aggro"},
+                    {id: 9, cols: "Precip", activ: "ReLU", lr: "0.015", epoch: "80", note: "Rain Tune"},
+                    {id: 10, cols: "Precip", activ: "ReLU", lr: "0.01", epoch: "200", note: "Rain Max"},
+                    // 10 Sigmoid
+                    {id: 11, cols: "Precip", activ: "Sigmoid", lr: "0.01", epoch: "50", note: "Sig Base"},
+                    {id: 12, cols: "Precip", activ: "Sigmoid", lr: "0.05", epoch: "50", note: "Sig Boost"},
+                    {id: 13, cols: "Precip", activ: "Sigmoid", lr: "0.1", epoch: "30", note: "Sig Rush"},
+                    {id: 14, cols: "Precip", activ: "Sigmoid", lr: "0.005", epoch: "100", note: "Sig Stable"},
+                    {id: 15, cols: "Precip", activ: "Sigmoid", lr: "0.001", epoch: "200", note: "Sig Detail"},
+                    {id: 16, cols: "Precip", activ: "Sigmoid", lr: "0.02", epoch: "70", note: "Sig Mid"},
+                    {id: 17, cols: "Precip", activ: "Sigmoid", lr: "0.01", epoch: "150", note: "Sig Deep"},
+                    {id: 18, cols: "Precip", activ: "Sigmoid", lr: "0.002", epoch: "120", note: "Sig Fine"},
+                    {id: 19, cols: "Precip", activ: "Sigmoid", lr: "0.01", epoch: "250", note: "Sig Long"},
+                    {id: 20, cols: "Precip", activ: "Sigmoid", lr: "0.05", epoch: "80", note: "Sig Aggro"}
+                ]
+            },
+            {
+                name: "Anggota 7 (Minimal)",
+                role: "Role: Feature Selection",
+                features: "Temperature, Humidity, Precipitation",
+                origin: "Top 3 Korelasi Tertinggi",
+                guide: `
+                    <h4>Strategi:</h4>
+                    <p>Hanya menggunakan 3 fitur utama. 20 Eksperimen ini bertujuan membuktikan apakah model minimalis bisa bersaing dengan model kompleks.</p>
+                `,
+                experiments: [
+                    // 10 ReLU
+                    {id: 1, cols: "Top 3", activ: "ReLU", lr: "0.01", epoch: "50", note: "Mini Base"},
+                    {id: 2, cols: "Top 3", activ: "ReLU", lr: "0.01", epoch: "100", note: "Mini Ep+"},
+                    {id: 3, cols: "Top 3", activ: "ReLU", lr: "0.005", epoch: "150", note: "Mini Stable"},
+                    {id: 4, cols: "Top 3", activ: "ReLU", lr: "0.001", epoch: "200", note: "Mini Slow"},
+                    {id: 5, cols: "Top 3", activ: "ReLU", lr: "0.02", epoch: "50", note: "Mini Boost"},
+                    {id: 6, cols: "Top 3", activ: "ReLU", lr: "0.1", epoch: "30", note: "Mini Fast"},
+                    {id: 7, cols: "Top 3", activ: "ReLU", lr: "0.0005", epoch: "300", note: "Mini Deep"},
+                    {id: 8, cols: "Top 3", activ: "ReLU", lr: "0.01", epoch: "25", note: "Mini Quick"},
+                    {id: 9, cols: "Top 3", activ: "ReLU", lr: "0.05", epoch: "60", note: "Mini Aggro"},
+                    {id: 10, cols: "Top 3", activ: "ReLU", lr: "0.015", epoch: "80", note: "Mini Tune"},
+                    // 10 Sigmoid
+                    {id: 11, cols: "Top 3", activ: "Sigmoid", lr: "0.01", epoch: "50", note: "Sig Base"},
+                    {id: 12, cols: "Top 3", activ: "Sigmoid", lr: "0.05", epoch: "50", note: "Sig Boost"},
+                    {id: 13, cols: "Top 3", activ: "Sigmoid", lr: "0.1", epoch: "30", note: "Sig Fast"},
+                    {id: 14, cols: "Top 3", activ: "Sigmoid", lr: "0.005", epoch: "100", note: "Sig Stable"},
+                    {id: 15, cols: "Top 3", activ: "Sigmoid", lr: "0.001", epoch: "200", note: "Sig Slow"},
+                    {id: 16, cols: "Top 3", activ: "Sigmoid", lr: "0.02", epoch: "80", note: "Sig Mid"},
+                    {id: 17, cols: "Top 3", activ: "Sigmoid", lr: "0.01", epoch: "150", note: "Sig Deep"},
+                    {id: 18, cols: "Top 3", activ: "Sigmoid", lr: "0.002", epoch: "120", note: "Sig Fine"},
+                    {id: 19, cols: "Top 3", activ: "Sigmoid", lr: "0.01", epoch: "250", note: "Sig Long"},
+                    {id: 20, cols: "Top 3", activ: "Sigmoid", lr: "0.03", epoch: "60", note: "Sig Tune"}
+                ]
+            },
+            {
+                name: "Anggota 8 (Cat)",
+                role: "Role: Categorical Focus",
+                features: "WindDir (OneHot), CloudCover (OneHot)",
+                origin: "pd.get_dummies()",
+                guide: `
+                    <h4>Strategi:</h4>
+                    <p>Hanya menggunakan data kategorikal. 20 Eksperimen (10 ReLU, 10 Sigmoid) untuk menguji kemampuan model belajar dari input biner/sparse saja.</p>
+                `,
+                experiments: [
+                    // 10 ReLU
+                    {id: 1, cols: "Cat Only", activ: "ReLU", lr: "0.01", epoch: "50", note: "Sparse Base"},
+                    {id: 2, cols: "Cat Only", activ: "ReLU", lr: "0.01", epoch: "150", note: "Sparse Deep"},
+                    {id: 3, cols: "Cat Only", activ: "ReLU", lr: "0.005", epoch: "100", note: "Sparse Mid"},
+                    {id: 4, cols: "Cat Only", activ: "ReLU", lr: "0.001", epoch: "200", note: "Sparse Slow"},
+                    {id: 5, cols: "Cat Only", activ: "ReLU", lr: "0.05", epoch: "50", note: "Sparse Push"},
+                    {id: 6, cols: "Cat Only", activ: "ReLU", lr: "0.1", epoch: "30", note: "Sparse Fast"},
+                    {id: 7, cols: "Cat Only", activ: "ReLU", lr: "0.0001", epoch: "400", note: "Sparse Long"},
+                    {id: 8, cols: "Cat Only", activ: "ReLU", lr: "0.02", epoch: "80", note: "Sparse Tune"},
+                    {id: 9, cols: "Cat Only", activ: "ReLU", lr: "0.01", epoch: "25", note: "Sparse Quick"},
+                    {id: 10, cols: "Cat Only", activ: "ReLU", lr: "0.002", epoch: "120", note: "Sparse Fine"},
+                    // 10 Sigmoid
+                    {id: 11, cols: "Cat Only", activ: "Sigmoid", lr: "0.01", epoch: "50", note: "Sig Base"},
+                    {id: 12, cols: "Cat Only", activ: "Sigmoid", lr: "0.05", epoch: "50", note: "Sig Boost"},
+                    {id: 13, cols: "Cat Only", activ: "Sigmoid", lr: "0.1", epoch: "30", note: "Sig Fast"},
+                    {id: 14, cols: "Cat Only", activ: "Sigmoid", lr: "0.005", epoch: "100", note: "Sig Stable"},
+                    {id: 15, cols: "Cat Only", activ: "Sigmoid", lr: "0.001", epoch: "200", note: "Sig Slow"},
+                    {id: 16, cols: "Cat Only", activ: "Sigmoid", lr: "0.02", epoch: "80", note: "Sig Mid"},
+                    {id: 17, cols: "Cat Only", activ: "Sigmoid", lr: "0.01", epoch: "150", note: "Sig Deep"},
+                    {id: 18, cols: "Cat Only", activ: "Sigmoid", lr: "0.002", epoch: "120", note: "Sig Fine"},
+                    {id: 19, cols: "Cat Only", activ: "Sigmoid", lr: "0.01", epoch: "300", note: "Sig Long"},
+                    {id: 20, cols: "Cat Only", activ: "Sigmoid", lr: "0.03", epoch: "60", note: "Sig Tune"}
+                ]
+            },
+            {
+                name: "Anggota 9 (Hybrid)",
+                role: "Role: Selected Hybrid",
+                features: "Temp, WindPower, PressureTemp",
+                origin: "Kombinasi Raw & Engineered Terpilih",
+                guide: `
+                    <h4>Strategi:</h4>
+                    <p>Mengambil satu perwakilan terbaik dari setiap domain. 20 Eksperimen (10 ReLU, 10 Sigmoid) untuk mencari keseimbangan optimal.</p>
+                `,
+                experiments: [
+                    // 10 ReLU
+                    {id: 1, cols: "Hybrid", activ: "ReLU", lr: "0.01", epoch: "50", note: "Hybrid Base"},
+                    {id: 2, cols: "Hybrid", activ: "ReLU", lr: "0.01", epoch: "100", note: "Hybrid Ep+"},
+                    {id: 3, cols: "Hybrid", activ: "ReLU", lr: "0.005", epoch: "120", note: "Hybrid Mid"},
+                    {id: 4, cols: "Hybrid", activ: "ReLU", lr: "0.001", epoch: "200", note: "Hybrid Slow"},
+                    {id: 5, cols: "Hybrid", activ: "ReLU", lr: "0.05", epoch: "50", note: "Hybrid Push"},
+                    {id: 6, cols: "Hybrid", activ: "ReLU", lr: "0.1", epoch: "30", note: "Hybrid Fast"},
+                    {id: 7, cols: "Hybrid", activ: "ReLU", lr: "0.0005", epoch: "300", note: "Hybrid Long"},
+                    {id: 8, cols: "Hybrid", activ: "ReLU", lr: "0.02", epoch: "70", note: "Hybrid Tune"},
+                    {id: 9, cols: "Hybrid", activ: "ReLU", lr: "0.01", epoch: "250", note: "Hybrid Max"},
+                    {id: 10, cols: "Hybrid", activ: "ReLU", lr: "0.002", epoch: "150", note: "Hybrid Fine"},
+                    // 10 Sigmoid
+                    {id: 11, cols: "Hybrid", activ: "Sigmoid", lr: "0.01", epoch: "50", note: "Sig Base"},
+                    {id: 12, cols: "Hybrid", activ: "Sigmoid", lr: "0.05", epoch: "60", note: "Sig Boost"},
+                    {id: 13, cols: "Hybrid", activ: "Sigmoid", lr: "0.1", epoch: "30", note: "Sig Fast"},
+                    {id: 14, cols: "Hybrid", activ: "Sigmoid", lr: "0.005", epoch: "100", note: "Sig Stable"},
+                    {id: 15, cols: "Hybrid", activ: "Sigmoid", lr: "0.001", epoch: "200", note: "Sig Slow"},
+                    {id: 16, cols: "Hybrid", activ: "Sigmoid", lr: "0.02", epoch: "80", note: "Sig Mid"},
+                    {id: 17, cols: "Hybrid", activ: "Sigmoid", lr: "0.01", epoch: "150", note: "Sig Deep"},
+                    {id: 18, cols: "Hybrid", activ: "Sigmoid", lr: "0.002", epoch: "120", note: "Sig Fine"},
+                    {id: 19, cols: "Hybrid", activ: "Sigmoid", lr: "0.01", epoch: "250", note: "Sig Long"},
+                    {id: 20, cols: "Hybrid", activ: "Sigmoid", lr: "0.03", epoch: "70", note: "Sig Tune"}
+                ]
             }
         ];
 
@@ -696,16 +991,19 @@
             const data = teamData[index];
 
             const experimentsHTML = data.experiments.length > 0 ? 
-                data.experiments.map(exp => `
+                data.experiments.map(exp => {
+                    const activClass = exp.activ === 'ReLU' ? 'badge-step' : 'badge-sig';
+                    return `
                     <tr>
                         <td><strong>${exp.id}</strong></td>
                         <td style="font-size: 0.85rem;">${exp.cols}</td>
-                        <td><span class="badge badge-step">${exp.activ}</span></td>
+                        <td><span class="badge ${activClass}">${exp.activ}</span></td>
                         <td><code style="background: #fef3c7; padding: 4px 8px; border-radius: 3px;">${exp.lr}</code></td>
                         <td><strong>${exp.epoch}</strong></td>
                         <td>${exp.note}</td>
                     </tr>
-                `).join('') : 
+                    `
+                }).join('') : 
                 `<tr><td colspan="6" style="text-align:center; padding: 20px; color: #64748b;">Belum ada data eksperimen.</td></tr>`;
 
             contentDisplay.innerHTML = `
@@ -722,12 +1020,19 @@
 
                     <div id="tugas" class="tab-content active">
                         <div style="padding: 15px; background: #f0f9ff; border-left: 4px solid var(--accent); border-radius: 4px; margin-bottom: 20px;">
-                            <p style="margin: 0; color: #0f172a; font-weight: 600;">
-                                Fitur Konsisten: <code style="background: white; padding: 2px 8px; border-radius: 3px; color: #d946ef;">${data.features}</code>
-                            </p>
-                            <p style="margin: 8px 0 0 0; color: #64748b; font-size: 0.9rem;">
-                                Hanya LR dan Epoch yang diubah-ubah untuk melihat pengaruhnya
-                            </p>
+                            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+                                <div>
+                                    <p style="margin: 0; color: #0f172a; font-weight: 600;">
+                                        Fitur: <code style="background: white; padding: 2px 8px; border-radius: 3px; color: #d946ef;">${data.features}</code>
+                                    </p>
+                                    <p style="margin: 5px 0 0 0; color: #64748b; font-size: 0.9rem;">
+                                        Total 20 Eksperimen (10 ReLU + 10 Sigmoid).
+                                    </p>
+                                </div>
+                                <div style="background:white; padding:5px 10px; border-radius:4px; border:1px solid #cbd5e1; font-weight:bold; color:var(--text);">
+                                    Global Seed: 42
+                                </div>
+                            </div>
                         </div>
                         
                         <div class="table-container">
@@ -735,7 +1040,7 @@
                                 <thead>
                                     <tr>
                                         <th style="width:40px">No</th>
-                                        <th>Kolom / Fitur</th>
+                                        <th>Fokus Fitur</th>
                                         <th>Fungsi Aktivasi</th>
                                         <th>LR</th>
                                         <th>Epoch</th>
@@ -756,7 +1061,7 @@
                                 <div style="color: #0ea5e9;">${data.features}</div>
                             </div>
                             <div class="spec-item">
-                                <label>Rumus</label>
+                                <label>Logika / Rumus</label>
                                 <div class="formula-box">${data.origin}</div>
                             </div>
                         </div>
