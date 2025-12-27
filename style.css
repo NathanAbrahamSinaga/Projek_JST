@@ -12,6 +12,7 @@
     --btn-canva: #f87171;
     --btn-model: #8b5cf6;
     --btn-learn: #ec4899;
+    --btn-copy-all: #10b981; /* Warna hijau untuk tombol copy all */
 }
 
 body {
@@ -319,7 +320,7 @@ tr:hover {
     border: 1px solid #cbd5e1;
 }
 
-/* Style Baru untuk Code Block dan Copy Button */
+/* Style untuk Code Block */
 .exp-block {
     border: 1px solid #e2e8f0;
     border-radius: 8px;
@@ -371,6 +372,36 @@ tr:hover {
 .copy-btn:hover {
     background: var(--accent);
     border-color: var(--accent);
+}
+
+/* TOMBOL COPY ALL GABUNGAN */
+.btn-copy-all {
+    width: 100%;
+    background-color: var(--btn-copy-all);
+    color: white;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 6px rgba(16, 185, 129, 0.3);
+    transition: transform 0.2s, background-color 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-copy-all:hover {
+    background-color: #059669;
+    transform: translateY(-2px);
+}
+
+.btn-copy-all::before {
+    content: "📋";
+    font-size: 1.2rem;
 }
 
 .guide-text {

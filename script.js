@@ -51,12 +51,37 @@ function renderNav() {
     });
 }
 
+// Fungsi copy satu block
 function copyCode(elementId) {
     const codeText = document.getElementById(elementId).innerText;
     navigator.clipboard.writeText(codeText).then(() => {
         alert("Kode berhasil disalin!");
     }).catch(err => {
         console.error('Gagal menyalin: ', err);
+    });
+}
+
+// Fungsi BARU: Copy SEMUA eksperimen (1-10) sekaligus
+function copyAllExperiments(memberIndex) {
+    const data = cnnData[memberIndex];
+    let fullCode = `# ==========================================\n`;
+    fullCode += `# GABUNGAN 10 EKSPERIMEN - ${data.name.toUpperCase()}\n`;
+    fullCode += `# ==========================================\n\n`;
+
+    data.experiments.forEach(exp => {
+        fullCode += `# ------------------------------------------\n`;
+        fullCode += `# EKSPERIMEN ${exp.id}\n`;
+        fullCode += `# Deskripsi: ${exp.desc}\n`;
+        fullCode += `# ------------------------------------------\n`;
+        fullCode += `${exp.code}\n\n`;
+        fullCode += `print("Selesai Eksperimen ${exp.id}")\n`;
+        fullCode += `# ==========================================\n\n`;
+    });
+
+    navigator.clipboard.writeText(fullCode).then(() => {
+        alert(`Berhasil menyalin gabungan 10 Eksperimen untuk ${data.name}!`);
+    }).catch(err => {
+        console.error('Gagal menyalin all: ', err);
     });
 }
 
@@ -229,15 +254,22 @@ function loadMember(index) {
             </div>
         `;
     } else {
-        // RENDER CNN: Loop 10 experiments code blocks
-        contentHTML = data.experiments.map(exp => `
+        // Tombol COPY ALL
+        contentHTML += `
+            <button onclick="copyAllExperiments(${index})" class="btn-copy-all">
+                COPY SEMUA 10 EKSPERIMEN (GABUNGAN)
+            </button>
+        `;
+
+        // Render CNN blocks
+        contentHTML += data.experiments.map(exp => `
             <div class="exp-block">
                 <div class="exp-header">
                     <span>Eksperimen ${exp.id}</span>
                     <small style="color:#64748b; font-weight:normal;">${exp.desc}</small>
                 </div>
                 <div class="code-wrapper">
-                    <button class="copy-btn" onclick="copyCode('code-${exp.id}')">Copy Code</button>
+                    <button class="copy-btn" onclick="copyCode('code-${exp.id}')">Copy</button>
                     <pre class="code-block" id="code-${exp.id}">${exp.code}</pre>
                 </div>
             </div>
