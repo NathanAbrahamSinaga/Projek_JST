@@ -45,9 +45,18 @@ function renderNav() {
     data.forEach((member, index) => {
         const div = document.createElement('div');
         div.className = 'nav-item';
-        div.innerHTML = `<span>${member.name}</span> <small style="opacity:0.7">${currentContext === 'mlp' ? member.role.split(':')[1] || 'Anggota' : 'Varian'}</small>`;
+        div.innerHTML = `<span>${member.name}</span> <small style="opacity:0.7">${member.role.split(':')[1] || 'Anggota'}</small>`;
         div.onclick = () => loadMember(index);
         navContainer.appendChild(div);
+    });
+}
+
+function copyCode(elementId) {
+    const codeText = document.getElementById(elementId).innerText;
+    navigator.clipboard.writeText(codeText).then(() => {
+        alert("Kode berhasil disalin!");
+    }).catch(err => {
+        console.error('Gagal menyalin: ', err);
     });
 }
 
@@ -139,16 +148,6 @@ function renderLearning() {
                         Tonton Video Part 2
                     </a>
                 </div>
-
-                <div class="roadmap-item">
-                    <div>
-                        <span class="roadmap-number">3</span>
-                        <strong>Implementasi Praktis</strong>
-                    </div>
-                    <a href="https://youtu.be/Wg1kKLY7Lcg?si=F0G89ZHHTdKXMTrg" target="_blank" class="roadmap-link">
-                        Tonton Video Part 3
-                    </a>
-                </div>
             </div>
 
             <div class="learning-section">
@@ -168,39 +167,13 @@ function renderLearning() {
                 <div class="roadmap-item">
                     <div>
                         <span class="roadmap-number">2</span>
-                        <strong>Gradient Descent</strong>
-                    </div>
-                    <a href="https://youtu.be/IHZwWFHWa-w?si=gcA0-7zBDy-tW3bR" target="_blank" class="roadmap-link">
-                        Watch Chapter 2
-                    </a>
-                </div>
-
-                <div class="roadmap-item">
-                    <div>
-                        <span class="roadmap-number">3</span>
                         <strong>Backpropagation</strong>
                     </div>
                     <a href="https://youtu.be/Ilg3gGewQ5U?si=GiHceikzuAS3Ft6H" target="_blank" class="roadmap-link">
                         Watch Chapter 3
                     </a>
                 </div>
-
-                <div class="roadmap-item">
-                    <div>
-                        <span class="roadmap-number">4</span>
-                        <strong>Backpropagation Calculus</strong>
-                    </div>
-                    <a href="https://youtu.be/tIeHLnjs5U8?si=bOhGNBlHkIK7PvLH" target="_blank" class="roadmap-link">
-                        Watch Chapter 4
-                    </a>
-                </div>
             </div>
-        </div>
-
-        <div style="text-align: center; margin-top: 30px; padding: 20px; background: #fef3c7; border-radius: 8px;">
-            <p style="margin: 0; color: #92400e; font-weight: 600; font-size: 1.05rem;">
-                Tips: Tonton video Indonesia dulu untuk pemahaman dasar, lalu lanjut ke 3Blue1Brown untuk visualisasi yang lebih mendalam!
-            </p>
         </div>
     `;
 }
@@ -256,12 +229,19 @@ function loadMember(index) {
             </div>
         `;
     } else {
-        contentHTML = `
-            <div style="margin-bottom: 20px;">
-                <h4 style="margin-top:0; color:var(--text)">Konfigurasi Model:</h4>
-                <pre class="code-block"><code>${data.code}</code></pre>
+        // RENDER CNN: Loop 10 experiments code blocks
+        contentHTML = data.experiments.map(exp => `
+            <div class="exp-block">
+                <div class="exp-header">
+                    <span>Eksperimen ${exp.id}</span>
+                    <small style="color:#64748b; font-weight:normal;">${exp.desc}</small>
+                </div>
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode('code-${exp.id}')">Copy Code</button>
+                    <pre class="code-block" id="code-${exp.id}">${exp.code}</pre>
+                </div>
             </div>
-        `;
+        `).join('');
     }
 
     contentDisplay.innerHTML = `
@@ -272,22 +252,15 @@ function loadMember(index) {
 
         <div class="card">
             <div class="tabs">
-                <button class="tab-btn active" onclick="switchTab(event, 'tugas')">${currentContext === 'mlp' ? 'Tabel Eksperimen' : 'Kodingan Konfigurasi'}</button>
+                <button class="tab-btn active" onclick="switchTab(event, 'tugas')">${currentContext === 'mlp' ? 'Tabel Eksperimen' : '10 Variasi Kodingan'}</button>
                 <button class="tab-btn" onclick="switchTab(event, 'panduan')">Panduan</button>
             </div>
 
             <div id="tugas" class="tab-content active">
                 <div style="padding: 15px; background: #f0f9ff; border-left: 4px solid var(--accent); border-radius: 4px; margin-bottom: 20px;">
-                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-                        <div>
-                            <p style="margin: 0; color: #0f172a; font-weight: 600;">
-                                Fitur: <code style="background: white; padding: 2px 8px; border-radius: 3px; color: #d946ef;">${data.features}</code>
-                            </p>
-                            <p style="margin: 5px 0 0 0; color: #64748b; font-size: 0.9rem;">
-                                ${currentContext === 'mlp' ? 'Total 20 Eksperimen (10 ReLU + 10 Sigmoid)' : 'Eksperimen konfigurasi arsitektur CNN.'}
-                            </p>
-                        </div>
-                    </div>
+                    <p style="margin: 0; color: #0f172a; font-weight: 600;">
+                        Fitur: <code style="background: white; padding: 2px 8px; border-radius: 3px; color: #d946ef;">${data.features}</code>
+                    </p>
                 </div>
                 
                 ${contentHTML}
@@ -296,11 +269,11 @@ function loadMember(index) {
             <div id="panduan" class="tab-content">
                 <div class="spec-grid" style="margin-top:0; margin-bottom:20px;">
                     <div class="spec-item">
-                        <label>Dataset / Fitur</label>
+                        <label>Dataset</label>
                         <div style="color: #0ea5e9;">${data.features}</div>
                     </div>
                     <div class="spec-item">
-                        <label>Input Data</label>
+                        <label>Input</label>
                         <div class="formula-box">${data.origin}</div>
                     </div>
                 </div>

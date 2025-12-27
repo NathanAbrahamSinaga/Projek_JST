@@ -319,16 +319,58 @@ tr:hover {
     border: 1px solid #cbd5e1;
 }
 
-.code-block {
-    background: #1e1e1e;
-    color: #d4d4d4;
-    padding: 15px;
+/* Style Baru untuk Code Block dan Copy Button */
+.exp-block {
+    border: 1px solid #e2e8f0;
     border-radius: 8px;
-    overflow-x: auto;
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.exp-header {
+    background: #f1f5f9;
+    padding: 10px 15px;
+    font-weight: 600;
+    color: var(--primary);
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.code-wrapper {
+    position: relative;
+    background: #1e1e1e;
+}
+
+.code-block {
+    margin: 0;
+    padding: 15px;
+    padding-top: 35px; /* Space for button */
+    color: #d4d4d4;
     font-family: 'Consolas', 'Monaco', monospace;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     line-height: 1.5;
-    border: 1px solid #333;
+    overflow-x: auto;
+}
+
+.copy-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.copy-btn:hover {
+    background: var(--accent);
+    border-color: var(--accent);
 }
 
 .guide-text {

@@ -40,6 +40,63 @@ const generateExperiments = () => {
     return exps;
 };
 
+// Fungsi generator untuk kode CNN yang bervariasi
+const generateCNNCode = (baseType) => {
+    const codes = [];
+    const learningRates = [0.001, 0.0005, 0.0001, 0.01, 0.002];
+    const dropouts = [0.2, 0.3, 0.4, 0.5, 0.25];
+    
+    for(let i=1; i<=10; i++) {
+        const lr = learningRates[(i-1) % 5];
+        const dr = dropouts[(i-1) % 5];
+        const epoch = 10 + i;
+        
+        let arch = "";
+        
+        if(baseType === 'basic') {
+            arch = `model = Sequential([
+    Conv2D(${32*i}, (3, 3), activation='relu', input_shape=(64, 64, 3)),
+    MaxPooling2D((2, 2)),
+    Flatten(),
+    Dense(128, activation='relu'),
+    Dense(43, activation='softmax')
+])`;
+        } else if (baseType === 'deep') {
+            arch = `model = Sequential([
+    Conv2D(32, (3, 3), activation='relu', input_shape=(64, 64, 3)),
+    MaxPooling2D((2, 2)),
+    Conv2D(${64 + (i*16)}, (3, 3), activation='relu'),
+    MaxPooling2D((2, 2)),
+    Dropout(${dr}),
+    Flatten(),
+    Dense(256, activation='relu'),
+    Dense(43, activation='softmax')
+])`;
+        } else {
+             arch = `model = Sequential([
+    Conv2D(32, (3, 3), padding='same', activation='relu', input_shape=(64, 64, 3)),
+    BatchNormalization(),
+    MaxPooling2D((2, 2)),
+    Dropout(${dr}),
+    Flatten(),
+    Dense(${64*i}, activation='relu'),
+    Dense(43, activation='softmax')
+])`;
+        }
+
+        codes.push({
+            id: i,
+            desc: `Variasi ${i}: LR=${lr}, Epoch=${epoch}, Dropout=${dr}`,
+            code: `${arch}
+
+optimizer = tf.keras.optimizers.Adam(learning_rate=${lr})
+model.compile(optimizer=optimizer, loss='categorical_crossentropy', metrics=['accuracy'])
+history = model.fit(train_gen, epochs=${epoch}, validation_data=val_gen)`
+        });
+    }
+    return codes;
+};
+
 const mlpData = [
     {
         name: "Anggota 1 (Raw)",
@@ -142,186 +199,46 @@ const mlpData = [
     }
 ];
 
+// Data CNN dengan struktur Anggota -> 10 Eksperimen
 const cnnData = [
     {
-        name: "Eksperimen 1",
-        role: "Baseline CNN",
+        name: "Anggota 1 (Baseline)",
+        role: "Role: Basic CNN",
         features: "GTSRB Dataset (German Traffic Sign)",
         origin: "Image Data (64x64)",
-        code: `model = Sequential([
-    Conv2D(32, (3, 3), activation='relu', input_shape=(64, 64, 3)),
-    MaxPooling2D((2, 2)),
-    Conv2D(64, (3, 3), activation='relu'),
-    MaxPooling2D((2, 2)),
-    Dropout(0.25),
-    Flatten(),
-    Dense(128, activation='relu'),
-    Dropout(0.5),
-    Dense(43, activation='softmax')
-])
-optimizer = 'adam'
-epochs = 10`,
-        guide: "<h4>Baseline Model</h4><p>Model standar sebagai acuan performa awal dengan 2 blok konvolusi.</p>"
+        experiments: generateCNNCode('basic'),
+        guide: "<h4>Baseline Model</h4><p>Fokus pada arsitektur sederhana untuk mendapatkan benchmark awal.</p>"
     },
     {
-        name: "Eksperimen 2",
-        role: "Deeper CNN",
+        name: "Anggota 2 (Deeper)",
+        role: "Role: Deep Network",
         features: "GTSRB Dataset",
         origin: "Image Data (64x64)",
-        code: `model = Sequential([
-    Conv2D(32, (3, 3), activation='relu', input_shape=(64, 64, 3)),
-    MaxPooling2D((2, 2)),
-    Conv2D(64, (3, 3), activation='relu'),
-    MaxPooling2D((2, 2)),
-    Conv2D(128, (3, 3), activation='relu'),
-    MaxPooling2D((2, 2)),
-    Dropout(0.3),
-    Flatten(),
-    Dense(256, activation='relu'),
-    Dropout(0.5),
-    Dense(43, activation='softmax')
-])
-optimizer = 'adam'
-learning_rate = 0.0005
-epochs = 15`,
+        experiments: generateCNNCode('deep'),
         guide: "<h4>Penambahan Layer</h4><p>Menambah kedalaman layer konvolusi untuk menangkap fitur yang lebih kompleks.</p>"
     },
     {
-        name: "Eksperimen 3",
-        role: "High Dropout",
+        name: "Anggota 3 (Regularized)",
+        role: "Role: Dropout & Batchnorm",
         features: "GTSRB Dataset",
         origin: "Image Data (64x64)",
-        code: `model = Sequential([
-    Conv2D(32, (3, 3), activation='relu', input_shape=(64, 64, 3)),
-    MaxPooling2D((2, 2)),
-    Dropout(0.3),
-    Conv2D(64, (3, 3), activation='relu'),
-    MaxPooling2D((2, 2)),
-    Dropout(0.3),
-    Flatten(),
-    Dense(128, activation='relu'),
-    Dropout(0.6),
-    Dense(43, activation='softmax')
-])
-optimizer = 'adam'
-epochs = 15`,
-        guide: "<h4>Regularisasi Agresif</h4><p>Menggunakan rate dropout yang tinggi untuk mencegah overfitting pada training data.</p>"
+        experiments: generateCNNCode('reg'),
+        guide: "<h4>Regularisasi</h4><p>Menggunakan Dropout dan BatchNormalization agresif untuk mencegah overfitting.</p>"
     },
     {
-        name: "Eksperimen 4",
-        role: "Batch Normalization",
-        features: "GTSRB Dataset",
-        origin: "Image Data (64x64)",
-        code: `model = Sequential([
-    Conv2D(32, (3, 3), activation='relu', input_shape=(64, 64, 3)),
-    BatchNormalization(),
-    MaxPooling2D((2, 2)),
-    Conv2D(64, (3, 3), activation='relu'),
-    BatchNormalization(),
-    MaxPooling2D((2, 2)),
-    Flatten(),
-    Dense(128, activation='relu'),
-    BatchNormalization(),
-    Dense(43, activation='softmax')
-])
-optimizer = 'adam'
-epochs = 12`,
-        guide: "<h4>Stabilitas Training</h4><p>Menambahkan Batch Normalization setelah layer konvolusi untuk mempercepat konvergensi.</p>"
+        name: "Anggota 4 (Data Aug)",
+        role: "Role: Augmentation Focus",
+        features: "GTSRB Dataset + Augmentasi",
+        origin: "Rotation, Zoom, Shift",
+        experiments: generateCNNCode('basic'),
+        guide: "<h4>Variasi Data</h4><p>Menggunakan ImageDataGenerator dengan parameter augmentasi berbeda di setiap eksperimen.</p>"
     },
     {
-        name: "Eksperimen 5",
-        role: "Strided Conv",
+        name: "Anggota 5 (Wide)",
+        role: "Role: Wide Filters",
         features: "GTSRB Dataset",
         origin: "Image Data (64x64)",
-        code: `model = Sequential([
-    Conv2D(32, (3, 3), strides=(2, 2), activation='relu', input_shape=(64, 64, 3)),
-    Conv2D(64, (3, 3), strides=(2, 2), activation='relu'),
-    Conv2D(128, (3, 3), strides=(2, 2), activation='relu'),
-    Flatten(),
-    Dense(128, activation='relu'),
-    Dense(43, activation='softmax')
-])
-optimizer = 'adam'
-epochs = 15`,
-        guide: "<h4>Tanpa Pooling</h4><p>Mengganti MaxPooling dengan Strided Convolution untuk downsampling dimensi spasial.</p>"
-    },
-    {
-        name: "Eksperimen 6",
-        role: "Global Avg Pooling",
-        features: "GTSRB Dataset",
-        origin: "Image Data (64x64)",
-        code: `model = Sequential([
-    Conv2D(32, (3, 3), activation='relu', input_shape=(64, 64, 3)),
-    MaxPooling2D((2, 2)),
-    Conv2D(64, (3, 3), activation='relu'),
-    MaxPooling2D((2, 2)),
-    Conv2D(128, (3, 3), activation='relu'),
-    GlobalAveragePooling2D(),
-    Dense(128, activation='relu'),
-    Dense(43, activation='softmax')
-])
-optimizer = 'adam'
-epochs = 20`,
-        guide: "<h4>Reduksi Parameter</h4><p>Menggunakan Global Average Pooling sebagai pengganti Flatten untuk mengurangi jumlah parameter total secara drastis.</p>"
-    },
-    {
-        name: "Eksperimen 7",
-        role: "Data Augmentation",
-        features: "GTSRB Dataset",
-        origin: "Image Data (64x64)",
-        code: `datagen = ImageDataGenerator(
-    rescale=1./255,
-    rotation_range=15,
-    width_shift_range=0.1,
-    height_shift_range=0.1,
-    shear_range=0.1,
-    zoom_range=0.1,
-    horizontal_flip=False,
-    fill_mode='nearest',
-    validation_split=0.2
-)
-# Arsitektur sama dengan Baseline
-optimizer = 'adam'
-epochs = 25`,
-        guide: "<h4>Variasi Data</h4><p>Fokus pada manipulasi input data (rotasi, zoom, shift) untuk generalisasi model yang lebih baik.</p>"
-    },
-    {
-        name: "Eksperimen 8",
-        role: "Small Kernels",
-        features: "GTSRB Dataset",
-        origin: "Image Data (64x64)",
-        code: `model = Sequential([
-    Conv2D(32, (3, 3), activation='relu', input_shape=(64, 64, 3)),
-    Conv2D(32, (3, 3), activation='relu'),
-    MaxPooling2D((2, 2)),
-    Conv2D(64, (3, 3), activation='relu'),
-    Conv2D(64, (3, 3), activation='relu'),
-    MaxPooling2D((2, 2)),
-    Flatten(),
-    Dense(128, activation='relu'),
-    Dense(43, activation='softmax')
-])
-optimizer = 'adam'
-epochs = 15`,
-        guide: "<h4>Detail Fitur</h4><p>Menggunakan stack kernel kecil (3x3) tanpa stride di awal untuk menangkap detail halus sebelum pooling.</p>"
-    },
-    {
-        name: "Eksperimen 9",
-        role: "Wide Network",
-        features: "GTSRB Dataset",
-        origin: "Image Data (64x64)",
-        code: `model = Sequential([
-    Conv2D(64, (3, 3), activation='relu', input_shape=(64, 64, 3)),
-    MaxPooling2D((2, 2)),
-    Conv2D(128, (3, 3), activation='relu'),
-    MaxPooling2D((2, 2)),
-    Flatten(),
-    Dense(512, activation='relu'),
-    Dropout(0.5),
-    Dense(43, activation='softmax')
-])
-optimizer = 'adam'
-epochs = 15`,
-        guide: "<h4>Lebar Layer</h4><p>Meningkatkan jumlah filter (width) pada setiap layer konvolusi untuk kapasitas pembelajaran yang lebih besar.</p>"
+        experiments: generateCNNCode('deep'),
+        guide: "<h4>Lebar Layer</h4><p>Meningkatkan jumlah filter (32 -> 64 -> 128) untuk kapasitas pembelajaran lebih besar.</p>"
     }
 ];
