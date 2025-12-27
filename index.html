@@ -17,6 +17,11 @@
     <div class="overlay" onclick="toggleSidebar()"></div>
 
     <div class="sidebar" id="sidebar">
+        <div class="project-switcher">
+            <button id="btn-mlp" class="project-btn active" onclick="switchProject('mlp')">PROYEK MLP</button>
+            <button id="btn-cnn" class="project-btn" onclick="switchProject('cnn')">PROYEK CNN</button>
+        </div>
+        
         <h2 onclick="renderHome()" title="Klik untuk ke Home">Home</h2>
         <div id="navContainer"></div>
     </div>

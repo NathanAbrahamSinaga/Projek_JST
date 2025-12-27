@@ -1,21 +1,51 @@
-// File ini mengurus logika interaksi dan rendering HTML
-
 const navContainer = document.getElementById('navContainer');
 const contentDisplay = document.getElementById('contentDisplay');
 const sidebar = document.getElementById('sidebar');
 const overlay = document.querySelector('.overlay');
+
+let currentContext = 'mlp'; // 'mlp' or 'cnn'
+
+const linkConfig = {
+    mlp: {
+        drive: "https://drive.google.com/drive/folders/1j-D29WQCyklz4rO97xnlBkLzua_yYsNr?usp=drive_link",
+        sheet: "https://docs.google.com/spreadsheets/d/168b2HTbaESEmDoPbq3chFuffH62HEIM_ZI8S3iS0WDM/edit?usp=sharing",
+        colab: "https://colab.research.google.com/drive/17iGqg880tG-09JtiUt8Dz03Pktj1dBUw?usp=drive_link",
+        model: "https://colab.research.google.com/drive/1SuDJRL2hR3ti64F4GilhanFfEGZknuiX?usp=drive_link",
+        canva: "https://www.canva.com/design/DAG7NDv7tXg/KPqwkEIvn16RJSef-XaOAw/edit?utm_content=DAG7NDv7tXg&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton"
+    },
+    cnn: {
+        drive: "https://drive.google.com/drive/folders/1tEBcQqzKwvyhC3v8dd9QuaoPjT1_hxQc?usp=drive_link",
+        sheet: "https://docs.google.com/spreadsheets/d/1RGnyaLMXOrPhTUVHY1yWRj9SIOnHqvinldjD4sDvsu0/edit?usp=drive_link",
+        colab: "javascript:void(0)", 
+        model: "javascript:void(0)", 
+        canva: "https://www.canva.com/design/DAG8Ge8mlLs/uSVIAp8Le8c1aGbSC39zzQ/edit?utm_content=DAG8Ge8mlLs&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton"
+    }
+};
 
 function toggleSidebar() {
     sidebar.classList.toggle('active');
     overlay.classList.toggle('active');
 }
 
+function switchProject(type) {
+    currentContext = type;
+    
+    document.getElementById('btn-mlp').classList.remove('active');
+    document.getElementById('btn-cnn').classList.remove('active');
+    document.getElementById(`btn-${type}`).classList.add('active');
+
+    renderNav();
+    renderHome();
+}
+
 function renderNav() {
     navContainer.innerHTML = '';
-    teamData.forEach((member, index) => {
+    const data = currentContext === 'mlp' ? mlpData : cnnData;
+
+    data.forEach((member, index) => {
         const div = document.createElement('div');
         div.className = 'nav-item';
-        div.innerHTML = `<span>${member.name}</span> <small style="opacity:0.7">${member.role.split(':')[1] || 'Anggota'}</small>`;
+        div.innerHTML = `<span>${member.name}</span> <small style="opacity:0.7">${currentContext === 'mlp' ? member.role.split(':')[1] || 'Anggota' : 'Varian'}</small>`;
         div.onclick = () => loadMember(index);
         navContainer.appendChild(div);
     });
@@ -25,33 +55,37 @@ function renderHome() {
     document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
     if (window.innerWidth <= 850) toggleSidebar();
 
+    const links = linkConfig[currentContext];
+    const title = currentContext === 'mlp' ? 'Dashboard MLP' : 'Dashboard CNN';
+
     contentDisplay.innerHTML = `
         <div class="header-section" style="text-align:center; margin-top:20px;">
-            <h1>Dashboard JST</h1>
+            <h1>${title}</h1>
         </div>
 
         <div class="card" style="max-width:800px; margin: 0 auto;">
             <h3 style="margin-top:0; border-bottom:1px solid #e2e8f0; padding-bottom:15px; color:var(--primary);">
-                Link Penting
+                Link Penting (${currentContext.toUpperCase()})
             </h3>
             <div class="resource-grid">
-                <a href="https://drive.google.com/drive/folders/1j-D29WQCyklz4rO97xnlBkLzua_yYsNr?usp=drive_link" target="_blank" class="resource-btn btn-drive">
+                <a href="${links.drive}" target="_blank" class="resource-btn btn-drive">
                     Folder Drive
                 </a>
 
-                <a href="https://docs.google.com/spreadsheets/d/168b2HTbaESEmDoPbq3chFuffH62HEIM_ZI8S3iS0WDM/edit?usp=sharing" target="_blank" class="resource-btn btn-sheet">
+                <a href="${links.sheet}" target="_blank" class="resource-btn btn-sheet">
                     Google Sheet
                 </a>
 
-                <a href="https://colab.research.google.com/drive/17iGqg880tG-09JtiUt8Dz03Pktj1dBUw?usp=drive_link" target="_blank" class="resource-btn btn-colab">
+                ${currentContext === 'mlp' ? `
+                <a href="${links.colab}" target="_blank" class="resource-btn btn-colab">
                     Pre-processing Data
                 </a>
-
-                <a href="https://colab.research.google.com/drive/1SuDJRL2hR3ti64F4GilhanFfEGZknuiX?usp=drive_link" target="_blank" class="resource-btn btn-model">
+                <a href="${links.model}" target="_blank" class="resource-btn btn-model">
                     Referensi Kode
                 </a>
+                ` : ''}
                 
-                <a href="https://www.canva.com/design/DAG7NDv7tXg/KPqwkEIvn16RJSef-XaOAw/edit?utm_content=DAG7NDv7tXg&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton" target="_blank" class="resource-btn btn-canva">
+                <a href="${links.canva}" target="_blank" class="resource-btn btn-canva">
                     Presentasi Canva
                 </a>
             </div>
@@ -179,24 +213,56 @@ function loadMember(index) {
         toggleSidebar();
     }
 
-    const data = teamData[index];
+    const data = currentContext === 'mlp' ? mlpData[index] : cnnData[index];
 
-    const experimentsHTML = data.experiments.length > 0 ?
-        data.experiments.map(exp => {
-            const activClass = exp.activ === 'ReLU' ? 'badge-step' : 'badge-sig';
-            return `
-                <tr>
-                    <td><strong>${exp.id}</strong></td>
-                    <td><code class="layer-badge">${exp.layers}</code></td>
-                    <td><span class="badge ${activClass}">${exp.activ}</span></td>
-                    <td>${exp.lr}</td>
-                    <td>${exp.epoch}</td>
-                    <td>${exp.batch}</td>
-                    <td>${exp.seed}</td>
-                </tr>
-            `
-        }).join('') :
-        `<tr><td colspan="7" style="text-align:center; padding: 20px; color: #64748b;">Belum ada data eksperimen.</td></tr>`;
+    let contentHTML = '';
+
+    if (currentContext === 'mlp') {
+        const experimentsHTML = data.experiments.length > 0 ? 
+            data.experiments.map(exp => {
+                const activClass = exp.activ === 'ReLU' ? 'badge-step' : 'badge-sig';
+                return `
+                    <tr>
+                        <td><strong>${exp.id}</strong></td>
+                        <td><code class="layer-badge">${exp.layers}</code></td>
+                        <td><span class="badge ${activClass}">${exp.activ}</span></td>
+                        <td>${exp.lr}</td>
+                        <td>${exp.epoch}</td>
+                        <td>${exp.batch}</td>
+                        <td>${exp.seed}</td>
+                    </tr>
+                `
+            }).join('') : 
+            `<tr><td colspan="7" style="text-align:center; padding: 20px; color: #64748b;">Belum ada data eksperimen.</td></tr>`;
+
+        contentHTML = `
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width:40px">No</th>
+                            <th>Hidden Layers & Node</th>
+                            <th>Fungsi Aktivasi</th>
+                            <th>Learning Rate</th>
+                            <th>Epoch</th>
+                            <th>Batch Size</th>
+                            <th>Seed</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${experimentsHTML}
+                    </tbody>
+                </table>
+            </div>
+        `;
+    } else {
+        contentHTML = `
+            <div style="margin-bottom: 20px;">
+                <h4 style="margin-top:0; color:var(--text)">Konfigurasi Model:</h4>
+                <pre class="code-block"><code>${data.code}</code></pre>
+            </div>
+        `;
+    }
 
     contentDisplay.innerHTML = `
         <div class="header-section">
@@ -206,7 +272,7 @@ function loadMember(index) {
 
         <div class="card">
             <div class="tabs">
-                <button class="tab-btn active" onclick="switchTab(event, 'tugas')">Tabel Eksperimen</button>
+                <button class="tab-btn active" onclick="switchTab(event, 'tugas')">${currentContext === 'mlp' ? 'Tabel Eksperimen' : 'Kodingan Konfigurasi'}</button>
                 <button class="tab-btn" onclick="switchTab(event, 'panduan')">Panduan</button>
             </div>
 
@@ -218,43 +284,23 @@ function loadMember(index) {
                                 Fitur: <code style="background: white; padding: 2px 8px; border-radius: 3px; color: #d946ef;">${data.features}</code>
                             </p>
                             <p style="margin: 5px 0 0 0; color: #64748b; font-size: 0.9rem;">
-                                Total 20 Eksperimen (10 ReLU + 10 Sigmoid) dengan variasi konfigurasi.
+                                ${currentContext === 'mlp' ? 'Total 20 Eksperimen (10 ReLU + 10 Sigmoid)' : 'Eksperimen konfigurasi arsitektur CNN.'}
                             </p>
-                        </div>
-                        <div style="background:white; padding:5px 10px; border-radius:4px; border:1px solid #cbd5e1; font-weight:bold; color:var(--text);">
-                            Global Seed: 42
                         </div>
                     </div>
                 </div>
                 
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th style="width:40px">No</th>
-                                <th>Hidden Layers & Node</th>
-                                <th>Fungsi Aktivasi</th>
-                                <th>Learning Rate</th>
-                                <th>Epoch</th>
-                                <th>Batch Size</th>
-                                <th>Seed</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${experimentsHTML}
-                        </tbody>
-                    </table>
-                </div>
+                ${contentHTML}
             </div>
 
             <div id="panduan" class="tab-content">
                 <div class="spec-grid" style="margin-top:0; margin-bottom:20px;">
                     <div class="spec-item">
-                        <label>Fitur Digunakan</label>
+                        <label>Dataset / Fitur</label>
                         <div style="color: #0ea5e9;">${data.features}</div>
                     </div>
                     <div class="spec-item">
-                        <label>Logika / Rumus</label>
+                        <label>Input Data</label>
                         <div class="formula-box">${data.origin}</div>
                     </div>
                 </div>
@@ -273,6 +319,5 @@ function switchTab(evt, tabName) {
     evt.target.classList.add('active');
 }
 
-// Inisialisasi awal
 renderNav();
 renderHome();
