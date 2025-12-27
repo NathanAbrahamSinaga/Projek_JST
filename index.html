@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JST Dashboard - Final Project</title>
+    <title>Integrated AI Dashboard (MLP + CNN)</title>
     <style>
         :root {
             --primary: #0f172a;
             --sidebar-bg: #1e293b;
             --accent: #0ea5e9;
+            --accent-cnn: #8b5cf6; 
             --bg: #f8fafc;
             --text: #334155;
             --white: #ffffff;
@@ -19,6 +20,8 @@
             --btn-canva: #f87171;
             --btn-model: #8b5cf6;
             --btn-learn: #ec4899;
+            --code-bg: #1e1e1e;
+            --code-text: #d4d4d4;
         }
 
         body {
@@ -98,7 +101,7 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             text-align: center;
-            margin-bottom: 25px;
+            margin-bottom: 15px;
             padding-bottom: 15px;
             border-bottom: 1px solid #334155;
             color: #e2e8f0;
@@ -111,13 +114,26 @@
             text-shadow: 0 0 10px rgba(14, 165, 233, 0.3);
         }
 
+        .category-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: #94a3b8;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            padding-left: 5px;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 5px;
+        }
+
         .nav-item {
-            padding: 14px 15px;
-            margin-bottom: 8px;
+            padding: 12px 15px;
+            margin-bottom: 6px;
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.2s;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -130,8 +146,15 @@
             color: white;
         }
 
-        .nav-item.active {
+        .nav-item.active-mlp {
             background-color: var(--accent);
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-item.active-cnn {
+            background-color: var(--accent-cnn);
             color: white;
             font-weight: 600;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
@@ -165,6 +188,10 @@
             font-size: 0.85rem;
             font-weight: 600;
             margin-top: 8px;
+        }
+
+        .header-section .cnn-badge {
+            background-color: var(--accent-cnn);
         }
 
         .card {
@@ -393,16 +420,10 @@
             font-weight: 900;
             letter-spacing: 2px;
             text-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
-            box-shadow:
-                0 0 15px rgba(106, 17, 203, 0.5),
-                0 0 25px rgba(37, 117, 252, 0.4),
-                0 0 35px rgba(106, 17, 203, 0.3);
+            box-shadow: 0 0 15px rgba(106, 17, 203, 0.5), 0 0 25px rgba(37, 117, 252, 0.4), 0 0 35px rgba(106, 17, 203, 0.3);
             position: relative;
             overflow: hidden;
-            animation:
-                pulse 1.5s infinite alternate,
-                rainbowGlowDark 4s linear infinite,
-                shake 5s ease-in-out infinite;
+            animation: pulse 1.5s infinite alternate, rainbowGlowDark 4s linear infinite, shake 5s ease-in-out infinite;
             border: 2px dashed rgba(255, 255, 255, 0.2);
             transform: rotate(0.5deg);
             transition: all 0.4s ease;
@@ -410,10 +431,7 @@
 
         .btn-learn:hover {
             transform: scale(1.1) rotate(-1deg) !important;
-            box-shadow:
-                0 0 25px rgba(37, 31, 34, 0.8),
-                0 0 40px rgba(44, 43, 46, 0.7),
-                0 0 55px rgba(30, 144, 255, 0.6);
+            box-shadow: 0 0 25px rgba(37, 31, 34, 0.8), 0 0 40px rgba(44, 43, 46, 0.7), 0 0 55px rgba(30, 144, 255, 0.6);
             animation: none !important;
             background: linear-gradient(90deg, #8a2be2, #4b0082, #1e3a8a, #0d1b2a);
             letter-spacing: 5px;
@@ -421,31 +439,11 @@
         }
 
         @keyframes rainbowGlowDark {
-            0% {
-                box-shadow:
-                    0 0 15px rgba(138, 43, 226, 0.6),
-                    0 0 25px rgba(106, 17, 203, 0.5);
-            }
-            25% {
-                box-shadow:
-                    0 0 15px rgba(255, 105, 180, 0.6),
-                    0 0 25px rgba(199, 21, 133, 0.5);
-            }
-            50% {
-                box-shadow:
-                    0 0 15px rgba(30, 144, 255, 0.6),
-                    0 0 25px rgba(25, 25, 112, 0.4);
-            }
-            75% {
-                box-shadow:
-                    0 0 15px rgba(34, 139, 34, 0.6),
-                    0 0 25px rgba(0, 100, 0, 0.4);
-            }
-            100% {
-                box-shadow:
-                    0 0 15px rgba(138, 43, 226, 0.6),
-                    0 0 25px rgba(106, 17, 203, 0.5);
-            }
+            0% { box-shadow: 0 0 15px rgba(138, 43, 226, 0.6), 0 0 25px rgba(106, 17, 203, 0.5); }
+            25% { box-shadow: 0 0 15px rgba(255, 105, 180, 0.6), 0 0 25px rgba(199, 21, 133, 0.5); }
+            50% { box-shadow: 0 0 15px rgba(30, 144, 255, 0.6), 0 0 25px rgba(25, 25, 112, 0.4); }
+            75% { box-shadow: 0 0 15px rgba(34, 139, 34, 0.6), 0 0 25px rgba(0, 100, 0, 0.4); }
+            100% { box-shadow: 0 0 15px rgba(138, 43, 226, 0.6), 0 0 25px rgba(106, 17, 203, 0.5); }
         }
 
         @keyframes shake {
@@ -572,6 +570,25 @@
             margin-bottom: 15px;
         }
 
+        /* Styles khusus untuk CNN Code Block */
+        .code-container {
+            background-color: var(--code-bg);
+            border-radius: 8px;
+            padding: 20px;
+            overflow-x: auto;
+            border: 1px solid #333;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+            margin-top: 15px;
+        }
+
+        pre {
+            margin: 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: var(--code-text);
+        }
+
         @media (max-width: 850px) {
             body {
                 flex-direction: column;
@@ -641,7 +658,7 @@
 
     <div class="mobile-header">
         <button class="menu-toggle" onclick="toggleSidebar()">☰ Menu</button>
-        <div class="mobile-title">JST Dashboard</div>
+        <div class="mobile-title">AI Dashboard</div>
         <div style="width: 30px;"></div>
     </div>
 
@@ -649,7 +666,12 @@
 
     <div class="sidebar" id="sidebar">
         <h2 onclick="renderHome()" title="Klik untuk ke Home">Home</h2>
-        <div id="navContainer"></div>
+        
+        <div class="category-label">TIM MLP (Weather)</div>
+        <div id="navMLP"></div>
+
+        <div class="category-label">LAB CNN (Image)</div>
+        <div id="navCNN"></div>
     </div>
 
     <div class="main">
@@ -657,6 +679,9 @@
     </div>
 
     <script>
+        // ==============================
+        // DATA UNTUK MLP
+        // ==============================
         const baseConfigs = [
             { layers: "[64]", lr: "0.01", epoch: 100, batch: 32 },
             { layers: "[128, 64]", lr: "0.005", epoch: 200, batch: 16 },
@@ -801,7 +826,224 @@
             }
         ];
 
-        const navContainer = document.getElementById('navContainer');
+        // ==============================
+        // DATA UNTUK CNN
+        // ==============================
+        const cnnExperiments = [
+            {
+                id: "CNN-01",
+                name: "Baseline Simple",
+                desc: "Arsitektur dasar dengan 2 layer konvolusi standar.",
+                code: `
+{
+    'name': 'Baseline Simple',
+    'learning_rate': 0.001,
+    'epochs': 10,
+    'batch_size': 32,
+    'optimizer': 'adam',
+    'architecture': [
+        ('Conv2D', 32, (3, 3), 'relu'),
+        ('MaxPooling2D', (2, 2)),
+        ('Conv2D', 64, (3, 3), 'relu'),
+        ('MaxPooling2D', (2, 2)),
+        ('Flatten',),
+        ('Dense', 64, 'relu'),
+        ('Dense', num_classes, 'softmax')
+    ]
+}`
+            },
+            {
+                id: "CNN-02",
+                name: "Deeper Network",
+                desc: "Menambahkan layer ke-3 untuk menangkap fitur lebih kompleks.",
+                code: `
+{
+    'name': 'Deeper Network',
+    'learning_rate': 0.0005,
+    'epochs': 15,
+    'batch_size': 32,
+    'optimizer': 'adam',
+    'architecture': [
+        ('Conv2D', 32, (3, 3), 'relu'),
+        ('MaxPooling2D', (2, 2)),
+        ('Conv2D', 64, (3, 3), 'relu'),
+        ('MaxPooling2D', (2, 2)),
+        ('Conv2D', 128, (3, 3), 'relu'),
+        ('MaxPooling2D', (2, 2)),
+        ('Dropout', 0.3),
+        ('Flatten',),
+        ('Dense', 128, 'relu'),
+        ('Dense', num_classes, 'softmax')
+    ]
+}`
+            },
+            {
+                id: "CNN-03",
+                name: "High Regularization",
+                desc: "Menggunakan Dropout tinggi untuk mencegah overfitting.",
+                code: `
+{
+    'name': 'High Dropout',
+    'learning_rate': 0.001,
+    'epochs': 20,
+    'batch_size': 64,
+    'optimizer': 'adam',
+    'architecture': [
+        ('Conv2D', 32, (3, 3), 'relu'),
+        ('MaxPooling2D', (2, 2)),
+        ('Dropout', 0.25),
+        ('Conv2D', 64, (3, 3), 'relu'),
+        ('MaxPooling2D', (2, 2)),
+        ('Dropout', 0.25),
+        ('Flatten',),
+        ('Dense', 256, 'relu'),
+        ('Dropout', 0.5),
+        ('Dense', num_classes, 'softmax')
+    ]
+}`
+            },
+            {
+                id: "CNN-04",
+                name: "Large Kernels",
+                desc: "Menggunakan kernel 5x5 di layer awal untuk fitur global.",
+                code: `
+{
+    'name': 'Large Kernels',
+    'learning_rate': 0.001,
+    'epochs': 12,
+    'batch_size': 32,
+    'optimizer': 'adam',
+    'architecture': [
+        ('Conv2D', 32, (5, 5), 'relu'),
+        ('MaxPooling2D', (2, 2)),
+        ('Conv2D', 64, (5, 5), 'relu'),
+        ('MaxPooling2D', (2, 2)),
+        ('Flatten',),
+        ('Dense', 128, 'relu'),
+        ('Dense', num_classes, 'softmax')
+    ]
+}`
+            },
+            {
+                id: "CNN-05",
+                name: "Strided Conv",
+                desc: "Menggunakan stride convolutions sebagai pengganti pooling.",
+                code: `
+{
+    'name': 'Strided Only',
+    'learning_rate': 0.001,
+    'epochs': 15,
+    'batch_size': 32,
+    'optimizer': 'adam',
+    'architecture': [
+        ('Conv2D', 32, (3, 3), 'relu', 2),
+        ('Conv2D', 64, (3, 3), 'relu', 2),
+        ('Conv2D', 128, (3, 3), 'relu', 2),
+        ('Flatten',),
+        ('Dense', 128, 'relu'),
+        ('Dense', num_classes, 'softmax')
+    ]
+}`
+            },
+            {
+                id: "CNN-06",
+                name: "Wide Filters",
+                desc: "Jumlah filter yang lebih banyak di setiap layer.",
+                code: `
+{
+    'name': 'Wide Network',
+    'learning_rate': 0.0003,
+    'epochs': 20,
+    'batch_size': 16,
+    'optimizer': 'adam',
+    'architecture': [
+        ('Conv2D', 64, (3, 3), 'relu'),
+        ('MaxPooling2D', (2, 2)),
+        ('Conv2D', 128, (3, 3), 'relu'),
+        ('MaxPooling2D', (2, 2)),
+        ('Flatten',),
+        ('Dense', 512, 'relu'),
+        ('Dense', num_classes, 'softmax')
+    ]
+}`
+            },
+            {
+                id: "CNN-07",
+                name: "Global Average",
+                desc: "Menggunakan GlobalAveragePooling untuk mengurangi parameter.",
+                code: `
+{
+    'name': 'GAP Network',
+    'learning_rate': 0.001,
+    'epochs': 25,
+    'batch_size': 32,
+    'optimizer': 'rmsprop',
+    'architecture': [
+        ('Conv2D', 32, (3, 3), 'relu'),
+        ('Conv2D', 32, (3, 3), 'relu'),
+        ('MaxPooling2D', (2, 2)),
+        ('Conv2D', 64, (3, 3), 'relu'),
+        ('Conv2D', 64, (3, 3), 'relu'),
+        ('GlobalAveragePooling2D',),
+        ('Dense', num_classes, 'softmax')
+    ]
+}`
+            },
+            {
+                id: "CNN-08",
+                name: "Tanh Activation",
+                desc: "Menggunakan fungsi aktivasi Tanh bukan ReLU.",
+                code: `
+{
+    'name': 'Tanh Activation',
+    'learning_rate': 0.001,
+    'epochs': 15,
+    'batch_size': 32,
+    'optimizer': 'sgd',
+    'architecture': [
+        ('Conv2D', 32, (3, 3), 'tanh'),
+        ('MaxPooling2D', (2, 2)),
+        ('Conv2D', 64, (3, 3), 'tanh'),
+        ('MaxPooling2D', (2, 2)),
+        ('Flatten',),
+        ('Dense', 100, 'tanh'),
+        ('Dense', num_classes, 'softmax')
+    ]
+}`
+            },
+            {
+                id: "CNN-09",
+                name: "Mini VGG-Style",
+                desc: "Blok konvolusi ganda sebelum pooling.",
+                code: `
+{
+    'name': 'Mini VGG',
+    'learning_rate': 0.0005,
+    'epochs': 30,
+    'batch_size': 32,
+    'optimizer': 'adam',
+    'architecture': [
+        ('Conv2D', 32, (3, 3), 'relu'),
+        ('Conv2D', 32, (3, 3), 'relu'),
+        ('MaxPooling2D', (2, 2)),
+        ('Dropout', 0.2),
+        ('Conv2D', 64, (3, 3), 'relu'),
+        ('Conv2D', 64, (3, 3), 'relu'),
+        ('MaxPooling2D', (2, 2)),
+        ('Dropout', 0.3),
+        ('Flatten',),
+        ('Dense', 256, 'relu'),
+        ('Dense', num_classes, 'softmax')
+    ]
+}`
+            }
+        ];
+
+        // ==============================
+        // LOGIKA INTERFACE
+        // ==============================
+        const navMLP = document.getElementById('navMLP');
+        const navCNN = document.getElementById('navCNN');
         const contentDisplay = document.getElementById('contentDisplay');
         const sidebar = document.getElementById('sidebar');
         const overlay = document.querySelector('.overlay');
@@ -812,23 +1054,44 @@
         }
 
         function renderNav() {
-            navContainer.innerHTML = '';
+            // Render MLP Items
+            navMLP.innerHTML = '';
             teamData.forEach((member, index) => {
                 const div = document.createElement('div');
-                div.className = 'nav-item';
+                div.className = 'nav-item nav-item-mlp';
                 div.innerHTML = `<span>${member.name}</span> <small style="opacity:0.7">${member.role.split(':')[1] || 'Anggota'}</small>`;
                 div.onclick = () => loadMember(index);
-                navContainer.appendChild(div);
+                navMLP.appendChild(div);
+            });
+
+            // Render CNN Items
+            navCNN.innerHTML = '';
+            cnnExperiments.forEach((exp, index) => {
+                const div = document.createElement('div');
+                div.className = 'nav-item nav-item-cnn';
+                div.innerHTML = `<span>${exp.id}</span> <small style="opacity:0.8">${exp.name}</small>`;
+                div.onclick = () => loadCNN(index);
+                navCNN.appendChild(div);
             });
         }
 
+        function setActive(type, index) {
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active-mlp', 'active-cnn'));
+            if (type === 'MLP') {
+                document.querySelectorAll('.nav-item-mlp')[index].classList.add('active-mlp');
+            } else {
+                document.querySelectorAll('.nav-item-cnn')[index].classList.add('active-cnn');
+            }
+            if (window.innerWidth <= 850 && sidebar.classList.contains('active')) toggleSidebar();
+        }
+
         function renderHome() {
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active-mlp', 'active-cnn'));
             if (window.innerWidth <= 850) toggleSidebar();
 
             contentDisplay.innerHTML = `
                 <div class="header-section" style="text-align:center; margin-top:20px;">
-                    <h1>Dashboard JST</h1>
+                    <h1>Dashboard JST & CNN</h1>
                 </div>
 
                 <div class="card" style="max-width:800px; margin: 0 auto;">
@@ -836,24 +1099,24 @@
                         Link Penting
                     </h3>
                     <div class="resource-grid">
-                        <a href="https://drive.google.com/drive/folders/1j-D29WQCyklz4rO97xnlBkLzua_yYsNr?usp=drive_link" target="_blank" class="resource-btn btn-drive">
+                        <a href="#" class="resource-btn btn-drive">
                             Folder Drive
                         </a>
 
-                        <a href="https://docs.google.com/spreadsheets/d/168b2HTbaESEmDoPbq3chFuffH62HEIM_ZI8S3iS0WDM/edit?usp=sharing" target="_blank" class="resource-btn btn-sheet">
+                        <a href="#" class="resource-btn btn-sheet">
                             Google Sheet
                         </a>
 
-                        <a href="https://colab.research.google.com/drive/17iGqg880tG-09JtiUt8Dz03Pktj1dBUw?usp=drive_link" target="_blank" class="resource-btn btn-colab">
-                            Pre-processing Data
+                        <a href="#" class="resource-btn btn-colab">
+                            Pre-processing
                         </a>
 
-                        <a href="https://colab.research.google.com/drive/1SuDJRL2hR3ti64F4GilhanFfEGZknuiX?usp=drive_link" target="_blank" class="resource-btn btn-model">
-                            Referensi Kode
+                        <a href="#" class="resource-btn btn-model">
+                            Ref Model
                         </a>
                         
-                        <a href="https://www.canva.com/design/DAG7NDv7tXg/KPqwkEIvn16RJSef-XaOAw/edit?utm_content=DAG7NDv7tXg&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton" target="_blank" class="resource-btn btn-canva">
-                            Presentasi Canva
+                        <a href="#" class="resource-btn btn-canva">
+                            Presentasi
                         </a>
                     </div>
 
@@ -867,15 +1130,12 @@
         }
 
         function renderLearning() {
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            if (window.innerWidth <= 850 && sidebar.classList.contains('active')) {
-                toggleSidebar();
-            }
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active-mlp', 'active-cnn'));
 
             contentDisplay.innerHTML = `
                 <div class="header-section" style="text-align:center;">
-                    <h1>Panduan Belajar JST</h1>
-                    <p style="color: #64748b; margin-top: 10px;">Roadmap</p>
+                    <h1>Panduan Belajar AI</h1>
+                    <p style="color: #64748b; margin-top: 10px;">Roadmap Neural Network</p>
                 </div>
 
                 <div class="learning-layout">
@@ -883,38 +1143,21 @@
                         <span class="section-label">Bahasa Indonesia</span>
                         <h3>Tutorial Dasar JST</h3>
                         
-                        <a href="https://drive.google.com/file/d/1EGJnQFNFaH4Bs9II3sM1RVhBIT3JWBsy/view?usp=drive_link" target="_blank" class="pdf-download" style="margin-bottom: 25px;">
+                        <a href="#" class="pdf-download" style="margin-bottom: 25px;">
                             Materi MLP dari dosen
                         </a>
                         
                         <div class="roadmap-item">
-                            <div>
-                                <span class="roadmap-number">1</span>
-                                <strong>Pengenalan Neural Network</strong>
-                            </div>
-                            <a href="https://youtu.be/x2D-glFuKEA?si=gXHIDDFRsfJkTM9z" target="_blank" class="roadmap-link">
-                                Tonton Video Part 1
-                            </a>
+                            <div><span class="roadmap-number">1</span><strong>Pengenalan Neural Network</strong></div>
+                            <a href="#" class="roadmap-link">Tonton Video Part 1</a>
                         </div>
-
                         <div class="roadmap-item">
-                            <div>
-                                <span class="roadmap-number">2</span>
-                                <strong>Training dan Backpropagation</strong>
-                            </div>
-                            <a href="https://youtu.be/qePUhs34qA8?si=ie7kl57JrEw74MOr" target="_blank" class="roadmap-link">
-                                Tonton Video Part 2
-                            </a>
+                            <div><span class="roadmap-number">2</span><strong>Training dan Backpropagation</strong></div>
+                            <a href="#" class="roadmap-link">Tonton Video Part 2</a>
                         </div>
-
                         <div class="roadmap-item">
-                            <div>
-                                <span class="roadmap-number">3</span>
-                                <strong>Implementasi Praktis</strong>
-                            </div>
-                            <a href="https://youtu.be/Wg1kKLY7Lcg?si=F0G89ZHHTdKXMTrg" target="_blank" class="roadmap-link">
-                                Tonton Video Part 3
-                            </a>
+                            <div><span class="roadmap-number">3</span><strong>Implementasi Praktis</strong></div>
+                            <a href="#" class="roadmap-link">Tonton Video Part 3</a>
                         </div>
                     </div>
 
@@ -923,43 +1166,20 @@
                         <h3>3Blue1Brown Series</h3>
                         
                         <div class="roadmap-item">
-                            <div>
-                                <span class="roadmap-number">1</span>
-                                <strong>What is a Neural Network?</strong>
-                            </div>
-                            <a href="https://youtu.be/aircAruvnKk?si=Bt4NukDi3kv5t928" target="_blank" class="roadmap-link">
-                                Watch Chapter 1
-                            </a>
+                            <div><span class="roadmap-number">1</span><strong>What is a Neural Network?</strong></div>
+                            <a href="#" class="roadmap-link">Watch Chapter 1</a>
                         </div>
-
                         <div class="roadmap-item">
-                            <div>
-                                <span class="roadmap-number">2</span>
-                                <strong>Gradient Descent</strong>
-                            </div>
-                            <a href="https://youtu.be/IHZwWFHWa-w?si=gcA0-7zBDy-tW3bR" target="_blank" class="roadmap-link">
-                                Watch Chapter 2
-                            </a>
+                            <div><span class="roadmap-number">2</span><strong>Gradient Descent</strong></div>
+                            <a href="#" class="roadmap-link">Watch Chapter 2</a>
                         </div>
-
                         <div class="roadmap-item">
-                            <div>
-                                <span class="roadmap-number">3</span>
-                                <strong>Backpropagation</strong>
-                            </div>
-                            <a href="https://youtu.be/Ilg3gGewQ5U?si=GiHceikzuAS3Ft6H" target="_blank" class="roadmap-link">
-                                Watch Chapter 3
-                            </a>
+                            <div><span class="roadmap-number">3</span><strong>Backpropagation</strong></div>
+                            <a href="#" class="roadmap-link">Watch Chapter 3</a>
                         </div>
-
                         <div class="roadmap-item">
-                            <div>
-                                <span class="roadmap-number">4</span>
-                                <strong>Backpropagation Calculus</strong>
-                            </div>
-                            <a href="https://youtu.be/tIeHLnjs5U8?si=bOhGNBlHkIK7PvLH" target="_blank" class="roadmap-link">
-                                Watch Chapter 4
-                            </a>
+                            <div><span class="roadmap-number">4</span><strong>Backpropagation Calculus</strong></div>
+                            <a href="#" class="roadmap-link">Watch Chapter 4</a>
                         </div>
                     </div>
                 </div>
@@ -972,14 +1192,9 @@
             `;
         }
 
+        // FUNGSI LOAD MLP (Original Logic)
         function loadMember(index) {
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.nav-item')[index].classList.add('active');
-
-            if (window.innerWidth <= 850 && sidebar.classList.contains('active')) {
-                toggleSidebar();
-            }
-
+            setActive('MLP', index);
             const data = teamData[index];
 
             const experimentsHTML = data.experiments.length > 0 ?
@@ -1061,6 +1276,30 @@
                         </div>
                         
                         <div class="guide-text">${data.guide}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // FUNGSI LOAD CNN (New Logic)
+        function loadCNN(index) {
+            setActive('CNN', index);
+            const exp = cnnExperiments[index];
+            
+            contentDisplay.innerHTML = `
+                <div class="header-section">
+                    <h1 style="color: var(--accent-cnn)">${exp.id}: ${exp.name}</h1>
+                    <span class="role-badge cnn-badge">CNN Experiment</span>
+                </div>
+                
+                <div class="card">
+                    <div style="margin-bottom: 20px; padding: 15px; background: #f3f4f6; border-left: 4px solid var(--accent-cnn); border-radius: 4px;">
+                        <strong>Deskripsi:</strong> ${exp.desc}
+                    </div>
+
+                    <h3 style="margin-top:0; color:#333;">Konfigurasi Kode (Python/Keras)</h3>
+                    <div class="code-container">
+                        <pre><code>${exp.code.trim()}</code></pre>
                     </div>
                 </div>
             `;
