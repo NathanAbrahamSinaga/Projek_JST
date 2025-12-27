@@ -17,7 +17,8 @@ const linkConfig = {
         drive: "https://drive.google.com/drive/folders/1tEBcQqzKwvyhC3v8dd9QuaoPjT1_hxQc?usp=drive_link",
         sheet: "https://docs.google.com/spreadsheets/d/1RGnyaLMXOrPhTUVHY1yWRj9SIOnHqvinldjD4sDvsu0/edit?usp=drive_link",
         colab: "javascript:void(0)", 
-        model: "javascript:void(0)", 
+        // Update Link Referensi Kode CNN disini
+        model: "https://colab.research.google.com/drive/1mbF2jCa6irB6oW3w8-wYMtGC4ikDwQVN?usp=drive_link", 
         canva: "https://www.canva.com/design/DAG8Ge8mlLs/uSVIAp8Le8c1aGbSC39zzQ/edit?utm_content=DAG8Ge8mlLs&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton"
     }
 };
@@ -61,7 +62,7 @@ function copyCode(elementId) {
     });
 }
 
-// Fungsi BARU: Copy SEMUA eksperimen dalam format Dictionary EXPERIMENT_CONFIG
+// Fungsi Copy SEMUA eksperimen dalam format Dictionary EXPERIMENT_CONFIG
 function copyAllExperiments(memberIndex) {
     const data = cnnData[memberIndex];
     
@@ -114,90 +115,15 @@ function renderHome() {
                 <a href="${links.colab}" target="_blank" class="resource-btn btn-colab">
                     Pre-processing Data
                 </a>
+                ` : ''}
+
                 <a href="${links.model}" target="_blank" class="resource-btn btn-model">
                     Referensi Kode
                 </a>
-                ` : ''}
                 
                 <a href="${links.canva}" target="_blank" class="resource-btn btn-canva">
                     Presentasi Canva
                 </a>
-            </div>
-
-            <div style="margin-top: 30px;">
-                <a href="javascript:void(0)" onclick="renderLearning()" class="resource-btn btn-learn">
-                    TOLONG BELAJAR
-                </a>
-            </div>
-        </div>
-    `;
-}
-
-function renderLearning() {
-    document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-    if (window.innerWidth <= 850 && sidebar.classList.contains('active')) {
-        toggleSidebar();
-    }
-
-    contentDisplay.innerHTML = `
-        <div class="header-section" style="text-align:center;">
-            <h1>Panduan Belajar JST</h1>
-            <p style="color: #64748b; margin-top: 10px;">Roadmap</p>
-        </div>
-
-        <div class="learning-layout">
-            <div class="learning-section">
-                <span class="section-label">Bahasa Indonesia</span>
-                <h3>Tutorial Dasar JST</h3>
-                
-                <a href="https://drive.google.com/file/d/1EGJnQFNFaH4Bs9II3sM1RVhBIT3JWBsy/view?usp=drive_link" target="_blank" class="pdf-download" style="margin-bottom: 25px;">
-                    Materi MLP dari dosen
-                </a>
-                
-                <div class="roadmap-item">
-                    <div>
-                        <span class="roadmap-number">1</span>
-                        <strong>Pengenalan Neural Network</strong>
-                    </div>
-                    <a href="https://youtu.be/x2D-glFuKEA?si=gXHIDDFRsfJkTM9z" target="_blank" class="roadmap-link">
-                        Tonton Video Part 1
-                    </a>
-                </div>
-
-                <div class="roadmap-item">
-                    <div>
-                        <span class="roadmap-number">2</span>
-                        <strong>Training dan Backpropagation</strong>
-                    </div>
-                    <a href="https://youtu.be/qePUhs34qA8?si=ie7kl57JrEw74MOr" target="_blank" class="roadmap-link">
-                        Tonton Video Part 2
-                    </a>
-                </div>
-            </div>
-
-            <div class="learning-section">
-                <span class="section-label">English (Visual Terbaik)</span>
-                <h3>3Blue1Brown Series</h3>
-                
-                <div class="roadmap-item">
-                    <div>
-                        <span class="roadmap-number">1</span>
-                        <strong>What is a Neural Network?</strong>
-                    </div>
-                    <a href="https://youtu.be/aircAruvnKk?si=Bt4NukDi3kv5t928" target="_blank" class="roadmap-link">
-                        Watch Chapter 1
-                    </a>
-                </div>
-
-                <div class="roadmap-item">
-                    <div>
-                        <span class="roadmap-number">2</span>
-                        <strong>Backpropagation</strong>
-                    </div>
-                    <a href="https://youtu.be/Ilg3gGewQ5U?si=GiHceikzuAS3Ft6H" target="_blank" class="roadmap-link">
-                        Watch Chapter 3
-                    </a>
-                </div>
             </div>
         </div>
     `;
