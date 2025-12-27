@@ -55,31 +55,31 @@ function renderNav() {
 function copyCode(elementId) {
     const codeText = document.getElementById(elementId).innerText;
     navigator.clipboard.writeText(codeText).then(() => {
-        alert("Kode berhasil disalin!");
+        alert("Kode config berhasil disalin!");
     }).catch(err => {
         console.error('Gagal menyalin: ', err);
     });
 }
 
-// Fungsi BARU: Copy SEMUA eksperimen (1-10) sekaligus
+// Fungsi BARU: Copy SEMUA eksperimen dalam format Dictionary EXPERIMENT_CONFIG
 function copyAllExperiments(memberIndex) {
     const data = cnnData[memberIndex];
-    let fullCode = `# ==========================================\n`;
-    fullCode += `# GABUNGAN 10 EKSPERIMEN - ${data.name.toUpperCase()}\n`;
-    fullCode += `# ==========================================\n\n`;
-
+    
+    // Mulai pembentukan dictionary Python
+    let fullCode = `EXPERIMENT_CONFIG = {\n`;
+    
     data.experiments.forEach(exp => {
-        fullCode += `# ------------------------------------------\n`;
-        fullCode += `# EKSPERIMEN ${exp.id}\n`;
-        fullCode += `# Deskripsi: ${exp.desc}\n`;
-        fullCode += `# ------------------------------------------\n`;
-        fullCode += `${exp.code}\n\n`;
-        fullCode += `print("Selesai Eksperimen ${exp.id}")\n`;
-        fullCode += `# ==========================================\n\n`;
+        // Hapus koma trailing di akhir string jika ada, lalu tambah indentasi
+        let cleanCode = exp.code.trim();
+        // Indentasi manual agar rapi saat dipaste di Python
+        let indentedCode = cleanCode.replace(/^/gm, "    "); 
+        fullCode += `${indentedCode}\n`;
     });
 
+    fullCode += `}`;
+
     navigator.clipboard.writeText(fullCode).then(() => {
-        alert(`Berhasil menyalin gabungan 10 Eksperimen untuk ${data.name}!`);
+        alert(`Berhasil menyalin EXPERIMENT_CONFIG lengkap untuk ${data.name}!`);
     }).catch(err => {
         console.error('Gagal menyalin all: ', err);
     });
@@ -257,7 +257,7 @@ function loadMember(index) {
         // Tombol COPY ALL
         contentHTML += `
             <button onclick="copyAllExperiments(${index})" class="btn-copy-all">
-                COPY SEMUA 10 EKSPERIMEN (GABUNGAN)
+                COPY EXPERIMENT_CONFIG (FULL DICTIONARY)
             </button>
         `;
 
@@ -265,11 +265,11 @@ function loadMember(index) {
         contentHTML += data.experiments.map(exp => `
             <div class="exp-block">
                 <div class="exp-header">
-                    <span>Eksperimen ${exp.id}</span>
+                    <span>${exp.id}</span>
                     <small style="color:#64748b; font-weight:normal;">${exp.desc}</small>
                 </div>
                 <div class="code-wrapper">
-                    <button class="copy-btn" onclick="copyCode('code-${exp.id}')">Copy</button>
+                    <button class="copy-btn" onclick="copyCode('code-${exp.id}')">Copy Item</button>
                     <pre class="code-block" id="code-${exp.id}">${exp.code}</pre>
                 </div>
             </div>
@@ -284,7 +284,7 @@ function loadMember(index) {
 
         <div class="card">
             <div class="tabs">
-                <button class="tab-btn active" onclick="switchTab(event, 'tugas')">${currentContext === 'mlp' ? 'Tabel Eksperimen' : '10 Variasi Kodingan'}</button>
+                <button class="tab-btn active" onclick="switchTab(event, 'tugas')">${currentContext === 'mlp' ? 'Tabel Eksperimen' : 'Config Dictionary'}</button>
                 <button class="tab-btn" onclick="switchTab(event, 'panduan')">Panduan</button>
             </div>
 
