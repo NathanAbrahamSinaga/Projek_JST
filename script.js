@@ -3,7 +3,7 @@ const contentDisplay = document.getElementById('contentDisplay');
 const sidebar = document.getElementById('sidebar');
 const overlay = document.querySelector('.overlay');
 
-let currentContext = 'mlp'; // 'mlp' or 'cnn'
+let currentContext = 'mlp';
 
 const linkConfig = {
     mlp: {
@@ -17,9 +17,15 @@ const linkConfig = {
         drive: "https://drive.google.com/drive/folders/1tEBcQqzKwvyhC3v8dd9QuaoPjT1_hxQc?usp=drive_link",
         sheet: "https://docs.google.com/spreadsheets/d/1RGnyaLMXOrPhTUVHY1yWRj9SIOnHqvinldjD4sDvsu0/edit?usp=drive_link",
         colab: "javascript:void(0)", 
-        // Update Link Referensi Kode CNN disini
         model: "https://colab.research.google.com/drive/1mbF2jCa6irB6oW3w8-wYMtGC4ikDwQVN?usp=drive_link", 
         canva: "https://www.canva.com/design/DAG8Ge8mlLs/uSVIAp8Le8c1aGbSC39zzQ/edit?utm_content=DAG8Ge8mlLs&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton"
+    },
+    rnn: {
+        drive: "https://drive.google.com/drive/folders/1_FiTReqYJHupsLFOKUwI0hPJ-iYDhAvH?usp=sharing",
+        sheet: "https://docs.google.com/spreadsheets/d/1HRXr4dcqGNESY_ETKbZ5MOyk9qSUyONrByHF5mE_-ng/edit?usp=drive_link",
+        colab: "javascript:void(0)",
+        model: "https://colab.research.google.com/drive/15bOYL140iU8_7xhM75Bg61sxfO4P9b_7?usp=drive_link",
+        canva: "javascript:alert('Link Canva belum tersedia')"
     }
 };
 
@@ -31,8 +37,7 @@ function toggleSidebar() {
 function switchProject(type) {
     currentContext = type;
     
-    document.getElementById('btn-mlp').classList.remove('active');
-    document.getElementById('btn-cnn').classList.remove('active');
+    document.querySelectorAll('.project-btn').forEach(btn => btn.classList.remove('active'));
     document.getElementById(`btn-${type}`).classList.add('active');
 
     renderNav();
@@ -41,7 +46,11 @@ function switchProject(type) {
 
 function renderNav() {
     navContainer.innerHTML = '';
-    const data = currentContext === 'mlp' ? mlpData : cnnData;
+    let data;
+    
+    if (currentContext === 'mlp') data = mlpData;
+    else if (currentContext === 'cnn') data = cnnData;
+    else data = rnnData;
 
     data.forEach((member, index) => {
         const div = document.createElement('div');
@@ -52,7 +61,6 @@ function renderNav() {
     });
 }
 
-// Fungsi copy satu block
 function copyCode(elementId) {
     const codeText = document.getElementById(elementId).innerText;
     navigator.clipboard.writeText(codeText).then(() => {
@@ -62,25 +70,31 @@ function copyCode(elementId) {
     });
 }
 
-// Fungsi Copy SEMUA eksperimen dalam format Dictionary EXPERIMENT_CONFIG
 function copyAllExperiments(memberIndex) {
-    const data = cnnData[memberIndex];
+    let data;
+    if (currentContext === 'cnn') data = cnnData[memberIndex];
+    else data = rnnData[memberIndex];
     
-    // Mulai pembentukan dictionary Python
-    let fullCode = `EXPERIMENT_CONFIG = {\n`;
+    let varName = currentContext === 'cnn' ? 'EXPERIMENT_CONFIG' : 'experiments';
+    let startChar = currentContext === 'cnn' ? '{' : '[';
+    let endChar = currentContext === 'cnn' ? '}' : ']';
+
+    let fullCode = `${varName} = ${startChar}\n`;
     
     data.experiments.forEach(exp => {
-        // Hapus koma trailing di akhir string jika ada, lalu tambah indentasi
         let cleanCode = exp.code.trim();
-        // Indentasi manual agar rapi saat dipaste di Python
+        if (currentContext === 'cnn') {
+            cleanCode = cleanCode.replace(/,$/, ''); 
+            cleanCode += ',';
+        }
         let indentedCode = cleanCode.replace(/^/gm, "    "); 
         fullCode += `${indentedCode}\n`;
     });
 
-    fullCode += `}`;
+    fullCode += `${endChar}`;
 
     navigator.clipboard.writeText(fullCode).then(() => {
-        alert(`Berhasil menyalin EXPERIMENT_CONFIG lengkap untuk ${data.name}!`);
+        alert(`Berhasil menyalin semua konfigurasi untuk ${data.name}!`);
     }).catch(err => {
         console.error('Gagal menyalin all: ', err);
     });
@@ -91,7 +105,10 @@ function renderHome() {
     if (window.innerWidth <= 850) toggleSidebar();
 
     const links = linkConfig[currentContext];
-    const title = currentContext === 'mlp' ? 'Dashboard MLP' : 'Dashboard CNN';
+    let title = 'Dashboard Project';
+    if (currentContext === 'mlp') title = 'Dashboard MLP';
+    else if (currentContext === 'cnn') title = 'Dashboard CNN';
+    else title = 'Dashboard RNN';
 
     contentDisplay.innerHTML = `
         <div class="header-section" style="text-align:center; margin-top:20px;">
@@ -137,7 +154,10 @@ function loadMember(index) {
         toggleSidebar();
     }
 
-    const data = currentContext === 'mlp' ? mlpData[index] : cnnData[index];
+    let data;
+    if (currentContext === 'mlp') data = mlpData[index];
+    else if (currentContext === 'cnn') data = cnnData[index];
+    else data = rnnData[index];
 
     let contentHTML = '';
 
@@ -180,18 +200,17 @@ function loadMember(index) {
             </div>
         `;
     } else {
-        // Tombol COPY ALL
+        const varName = currentContext === 'cnn' ? 'EXPERIMENT_CONFIG' : 'experiments';
         contentHTML += `
             <button onclick="copyAllExperiments(${index})" class="btn-copy-all">
-                COPY EXPERIMENT_CONFIG (FULL DICTIONARY)
+                COPY FULL LIST (${varName})
             </button>
         `;
 
-        // Render CNN blocks
         contentHTML += data.experiments.map(exp => `
             <div class="exp-block">
                 <div class="exp-header">
-                    <span>${exp.id}</span>
+                    <span>Eksperimen ${exp.id}</span>
                     <small style="color:#64748b; font-weight:normal;">${exp.desc}</small>
                 </div>
                 <div class="code-wrapper">
@@ -210,14 +229,14 @@ function loadMember(index) {
 
         <div class="card">
             <div class="tabs">
-                <button class="tab-btn active" onclick="switchTab(event, 'tugas')">${currentContext === 'mlp' ? 'Tabel Eksperimen' : 'Config Dictionary'}</button>
+                <button class="tab-btn active" onclick="switchTab(event, 'tugas')">${currentContext === 'mlp' ? 'Tabel Eksperimen' : 'Konfigurasi'}</button>
                 <button class="tab-btn" onclick="switchTab(event, 'panduan')">Panduan</button>
             </div>
 
             <div id="tugas" class="tab-content active">
                 <div style="padding: 15px; background: #f0f9ff; border-left: 4px solid var(--accent); border-radius: 4px; margin-bottom: 20px;">
                     <p style="margin: 0; color: #0f172a; font-weight: 600;">
-                        Fitur: <code style="background: white; padding: 2px 8px; border-radius: 3px; color: #d946ef;">${data.features}</code>
+                        Fitur/Data: <code style="background: white; padding: 2px 8px; border-radius: 3px; color: #d946ef;">${data.features}</code>
                     </p>
                 </div>
                 
@@ -231,7 +250,7 @@ function loadMember(index) {
                         <div style="color: #0ea5e9;">${data.features}</div>
                     </div>
                     <div class="spec-item">
-                        <label>Input</label>
+                        <label>Input/Source</label>
                         <div class="formula-box">${data.origin}</div>
                     </div>
                 </div>

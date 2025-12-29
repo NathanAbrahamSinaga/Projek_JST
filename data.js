@@ -662,3 +662,219 @@ const cnnData = [
     `
 }
 ];
+
+
+const generateRNNConfig = (strategy) => {
+    const codes = [];
+    
+    const variations = {
+        lstm_baseline: [
+            { type: 'LSTM', units: [50, 50], drop: 0.2, lr: 0.001, epoch: 50, batch: 32, seq: 15 },
+            { type: 'LSTM', units: [100, 50], drop: 0.2, lr: 0.001, epoch: 50, batch: 64, seq: 15 },
+            { type: 'LSTM', units: [50], drop: 0.1, lr: 0.005, epoch: 40, batch: 32, seq: 10 },
+            { type: 'LSTM', units: [128, 64], drop: 0.3, lr: 0.001, epoch: 60, batch: 32, seq: 20 },
+            { type: 'LSTM', units: [64, 32], drop: 0.2, lr: 0.0005, epoch: 80, batch: 16, seq: 15 }
+        ],
+        gru_focus: [
+            { type: 'GRU', units: [64, 32], drop: 0.2, lr: 0.001, epoch: 50, batch: 32, seq: 15 },
+            { type: 'GRU', units: [128, 64], drop: 0.25, lr: 0.0005, epoch: 60, batch: 32, seq: 20 },
+            { type: 'GRU', units: [50], drop: 0.1, lr: 0.01, epoch: 40, batch: 64, seq: 10 },
+            { type: 'GRU', units: [256, 128], drop: 0.3, lr: 0.001, epoch: 45, batch: 32, seq: 30 },
+            { type: 'GRU', units: [64, 64], drop: 0.2, lr: 0.002, epoch: 50, batch: 16, seq: 15 }
+        ],
+        simplernn: [
+            { type: 'SimpleRNN', units: [50, 50], drop: 0.1, lr: 0.001, epoch: 40, batch: 32, seq: 10 },
+            { type: 'SimpleRNN', units: [128, 64], drop: 0.2, lr: 0.0001, epoch: 60, batch: 16, seq: 15 },
+            { type: 'SimpleRNN', units: [64], drop: 0.0, lr: 0.005, epoch: 30, batch: 32, seq: 5 },
+            { type: 'SimpleRNN', units: [100, 100], drop: 0.2, lr: 0.001, epoch: 50, batch: 64, seq: 12 },
+            { type: 'SimpleRNN', units: [32, 16], drop: 0.1, lr: 0.01, epoch: 40, batch: 32, seq: 10 }
+        ],
+        bidirectional: [
+            { type: 'Bidirectional-LSTM', units: [64, 32], drop: 0.2, lr: 0.001, epoch: 50, batch: 32, seq: 15 },
+            { type: 'Bidirectional-GRU', units: [50], drop: 0.1, lr: 0.005, epoch: 40, batch: 64, seq: 10 },
+            { type: 'Bidirectional-LSTM', units: [128, 64], drop: 0.3, lr: 0.0005, epoch: 60, batch: 32, seq: 30 },
+            { type: 'Bidirectional-GRU', units: [64, 64], drop: 0.2, lr: 0.001, epoch: 50, batch: 16, seq: 20 },
+            { type: 'Bidirectional-LSTM', units: [256, 128], drop: 0.4, lr: 0.0001, epoch: 70, batch: 32, seq: 45 }
+        ],
+        deep_stacked: [
+            { type: 'LSTM', units: [128, 64, 32], drop: 0.2, lr: 0.001, epoch: 80, batch: 32, seq: 20 },
+            { type: 'GRU', units: [128, 128, 64], drop: 0.3, lr: 0.0005, epoch: 100, batch: 32, seq: 25 },
+            { type: 'LSTM', units: [64, 64, 64, 32], drop: 0.2, lr: 0.001, epoch: 120, batch: 16, seq: 30 },
+            { type: 'GRU', units: [256, 128, 64], drop: 0.4, lr: 0.0001, epoch: 80, batch: 64, seq: 40 },
+            { type: 'LSTM', units: [50, 50, 50], drop: 0.2, lr: 0.002, epoch: 60, batch: 32, seq: 15 }
+        ],
+        regularization: [
+            { type: 'LSTM', units: [128, 64], drop: 0.4, lr: 0.001, epoch: 60, batch: 32, seq: 15 },
+            { type: 'GRU', units: [128, 64], drop: 0.5, lr: 0.001, epoch: 70, batch: 32, seq: 15 },
+            { type: 'LSTM', units: [256, 128], drop: 0.4, lr: 0.0005, epoch: 60, batch: 64, seq: 20 },
+            { type: 'Bidirectional-LSTM', units: [64, 32], drop: 0.5, lr: 0.002, epoch: 50, batch: 16, seq: 10 },
+            { type: 'GRU', units: [64, 32], drop: 0.35, lr: 0.001, epoch: 60, batch: 32, seq: 15 }
+        ],
+        long_sequence: [
+            { type: 'LSTM', units: [64, 32], drop: 0.2, lr: 0.001, epoch: 50, batch: 32, seq: 30 },
+            { type: 'LSTM', units: [128, 64], drop: 0.2, lr: 0.0005, epoch: 60, batch: 32, seq: 45 },
+            { type: 'GRU', units: [64, 64], drop: 0.2, lr: 0.001, epoch: 50, batch: 16, seq: 60 },
+            { type: 'Bidirectional-LSTM', units: [128, 64], drop: 0.3, lr: 0.0001, epoch: 80, batch: 32, seq: 90 },
+            { type: 'LSTM', units: [256], drop: 0.2, lr: 0.001, epoch: 50, batch: 64, seq: 40 }
+        ],
+        optimization: [
+            { type: 'LSTM', units: [64, 32], drop: 0.2, lr: 0.01, epoch: 30, batch: 128, seq: 15 },
+            { type: 'LSTM', units: [64, 32], drop: 0.2, lr: 0.0001, epoch: 100, batch: 16, seq: 15 },
+            { type: 'GRU', units: [64, 32], drop: 0.2, lr: 0.005, epoch: 40, batch: 256, seq: 15 },
+            { type: 'GRU', units: [64, 32], drop: 0.2, lr: 0.001, epoch: 50, batch: 32, seq: 15 },
+            { type: 'LSTM', units: [64, 32], drop: 0.2, lr: 0.002, epoch: 60, batch: 64, seq: 15 }
+        ],
+        hybrid: [
+            { type: 'Bidirectional-LSTM', units: [128, 64, 32], drop: 0.3, lr: 0.001, epoch: 80, batch: 32, seq: 30 },
+            { type: 'LSTM', units: [256, 128, 64], drop: 0.4, lr: 0.0005, epoch: 100, batch: 32, seq: 60 },
+            { type: 'Bidirectional-GRU', units: [128, 128], drop: 0.3, lr: 0.001, epoch: 70, batch: 64, seq: 45 },
+            { type: 'LSTM', units: [512, 256], drop: 0.5, lr: 0.0001, epoch: 120, batch: 32, seq: 90 },
+            { type: 'GRU', units: [256, 128, 64, 32], drop: 0.3, lr: 0.001, epoch: 150, batch: 16, seq: 30 }
+        ],
+        mixed: [
+            { type: 'LSTM', units: [128, 64], drop: 0.2, lr: 0.001, epoch: 50, batch: 32, seq: 15 },
+            { type: 'GRU', units: [64, 32], drop: 0.1, lr: 0.005, epoch: 40, batch: 64, seq: 20 },
+            { type: 'SimpleRNN', units: [32], drop: 0.0, lr: 0.001, epoch: 30, batch: 16, seq: 10 },
+            { type: 'Bidirectional-LSTM', units: [64, 64], drop: 0.3, lr: 0.0005, epoch: 60, batch: 32, seq: 30 },
+            { type: 'LSTM', units: [256, 128], drop: 0.25, lr: 0.002, epoch: 45, batch: 32, seq: 15 }
+        ]
+    };
+
+    const config = variations[strategy] || variations.lstm_baseline;
+
+    for(let i = 0; i < 5; i++) {
+        const v = config[i];
+        
+        const codeString = `{
+    'name': 'Experiment ${i+1} (${v.type})',
+    'model_type': '${v.type}',
+    'units': [${v.units.join(', ')}],
+    'dropout': ${v.drop},
+    'learning_rate': ${v.lr},
+    'epochs': ${v.epoch},
+    'batch_size': ${v.batch},
+    'sequence_length': ${v.seq},
+    'seed': 42
+},`;
+
+        codes.push({
+            id: i+1,
+            desc: `${v.type} | Units: ${v.units} | Seq: ${v.seq} | Drop: ${v.drop}`,
+            code: codeString
+        });
+    }
+    return codes;
+};
+
+const rnnData = [
+    {
+        name: "Anggota 1 (LSTM Base)",
+        role: "Role: LSTM Baseline",
+        features: "NVDA Stock Price (Close)",
+        origin: "Time Series (Seq Length 15)",
+        experiments: generateRNNConfig('lstm_baseline'),
+        guide: `
+            <h4>Strategi: LSTM Standard</h4>
+            <p>Pengujian baseline menggunakan Long Short-Term Memory (LSTM) standar untuk memprediksi harga saham. Fokus pada konfigurasi umum (units 50-100) untuk menetapkan patokan performa.</p>
+        `
+    },
+    {
+        name: "Anggota 2 (GRU Focus)",
+        role: "Role: GRU Efficiency",
+        features: "NVDA Stock Price (Close)",
+        origin: "Time Series (Seq Length 15-30)",
+        experiments: generateRNNConfig('gru_focus'),
+        guide: `
+            <h4>Strategi: Gated Recurrent Unit</h4>
+            <p>Menggunakan arsitektur GRU yang lebih efisien secara komputasi dibandingkan LSTM. Menguji apakah simplifikasi gate pada GRU mengurangi akurasi atau justru mempercepat training tanpa loss signifikan.</p>
+        `
+    },
+    {
+        name: "Anggota 3 (SimpleRNN)",
+        role: "Role: Vanilla RNN",
+        features: "NVDA Stock Price (Close)",
+        origin: "Time Series (Seq Length 5-15)",
+        experiments: generateRNNConfig('simplernn'),
+        guide: `
+            <h4>Strategi: Basic Recurrent Network</h4>
+            <p>Menggunakan SimpleRNN (Vanilla) untuk melihat masalah vanishing gradient pada sequence panjang. Eksperimen ini membandingkan seberapa buruk performa RNN biasa dibanding LSTM/GRU.</p>
+        `
+    },
+    {
+        name: "Anggota 4 (Bidirectional)",
+        role: "Role: Two-way Context",
+        features: "NVDA Stock Price (Close)",
+        origin: "Time Series (Seq Length 10-45)",
+        experiments: generateRNNConfig('bidirectional'),
+        guide: `
+            <h4>Strategi: Bidirectional Layers</h4>
+            <p>Memproses sequence dari dua arah (masa lalu ke masa depan dan sebaliknya). Sangat berguna jika pola masa depan memiliki korelasi kuat dengan gap masa lalu.</p>
+        `
+    },
+    {
+        name: "Anggota 5 (Deep Stack)",
+        role: "Role: Deep Architecture",
+        features: "NVDA Stock Price (Close)",
+        origin: "Time Series (Seq Length 20-40)",
+        experiments: generateRNNConfig('deep_stacked'),
+        guide: `
+            <h4>Strategi: Stacked Layers (Deep Learning)</h4>
+            <p>Menumpuk 3 sampai 4 layer LSTM/GRU untuk menangkap fitur yang lebih abstrak dan kompleks dari pergerakan harga saham. Waspadai overfitting.</p>
+        `
+    },
+    {
+        name: "Anggota 6 (Regularization)",
+        role: "Role: Dropout & Stability",
+        features: "NVDA Stock Price (Close)",
+        origin: "Time Series (Seq Length 10-20)",
+        experiments: generateRNNConfig('regularization'),
+        guide: `
+            <h4>Strategi: High Dropout</h4>
+            <p>Fokus pada penggunaan dropout rate yang tinggi (0.4 - 0.5) untuk mencegah overfitting pada dataset saham yang noisy. Menguji generalisasi model.</p>
+        `
+    },
+    {
+        name: "Anggota 7 (Long Seq)",
+        role: "Role: Long Dependencies",
+        features: "NVDA Stock Price (Close)",
+        origin: "Time Series (Seq Length 30-90)",
+        experiments: generateRNNConfig('long_sequence'),
+        guide: `
+            <h4>Strategi: Long Sequence Input</h4>
+            <p>Memperbesar 'window' input (Sequence Length) hingga 90 hari ke belakang. Menguji kemampuan LSTM mengingat pola jangka panjang (quarterly trends).</p>
+        `
+    },
+    {
+        name: "Anggota 8 (Optimization)",
+        role: "Role: Hyperparam Tuning",
+        features: "NVDA Stock Price (Close)",
+        origin: "Time Series (Seq Length 15)",
+        experiments: generateRNNConfig('optimization'),
+        guide: `
+            <h4>Strategi: Learning Rate & Batch</h4>
+            <p>Memvariasikan Learning Rate secara ekstrem dan Batch Size (kecil vs besar) untuk melihat dampaknya terhadap konvergensi loss function.</p>
+        `
+    },
+    {
+        name: "Anggota 9 (Hybrid)",
+        role: "Role: Complex Models",
+        features: "NVDA Stock Price (Close)",
+        origin: "Time Series (Seq Length 30-90)",
+        experiments: generateRNNConfig('hybrid'),
+        guide: `
+            <h4>Strategi: Heavy Models</h4>
+            <p>Kombinasi Bidirectional, Stacked layers yang dalam, dan unit yang sangat besar (hingga 512). Mencari batas maksimal performa model.</p>
+        `
+    },
+    {
+        name: "Anggota 10 (Mixed)",
+        role: "Role: Varied Approaches",
+        features: "NVDA Stock Price (Close)",
+        origin: "Time Series (Seq Length Varied)",
+        experiments: generateRNNConfig('mixed'),
+        guide: `
+            <h4>Strategi: Eksplorasi Acak</h4>
+            <p>Campuran dari berbagai tipe model (Simple, GRU, LSTM) dalam satu anggota untuk melihat perbandingan langsung dengan parameter moderat.</p>
+        `
+    }
+];
