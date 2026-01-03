@@ -25,7 +25,7 @@ const linkConfig = {
         sheet: "https://docs.google.com/spreadsheets/d/1HRXr4dcqGNESY_ETKbZ5MOyk9qSUyONrByHF5mE_-ng/edit?usp=drive_link",
         colab: "javascript:void(0)",
         model: "https://colab.research.google.com/drive/15bOYL140iU8_7xhM75Bg61sxfO4P9b_7?usp=drive_link",
-        canva: "javascript:alert('Link Canva belum tersedia')"
+        canva: "https://www.canva.com/design/DAG9VH4rhHU/cKk9s0qdNOZag0c2UK-LYQ/edit?utm_content=DAG9VH4rhHU&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton')"
     }
 };
 
